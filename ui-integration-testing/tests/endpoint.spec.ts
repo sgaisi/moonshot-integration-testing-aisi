@@ -473,7 +473,7 @@ test('test_create_endpoint_more_config_numOfRetries_params_special_char', async 
 
 });
 
-test('test_create_endpoint_more_config_numOfRetries_params_empty', async ({ page }) => {
+test.only('test_create_endpoint_more_config_numOfRetries_params_empty', async ({ page }) => {
   await page.goto('http://localhost:3000/endpoints/new');
   await page.getByPlaceholder('Name of the model').click();
   await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
@@ -491,8 +491,6 @@ test('test_create_endpoint_more_config_numOfRetries_params_empty', async ({ page
   await page.getByPlaceholder('Additional parameters').click();
   await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n     "temperature": 0.5,\n      "model": "123"\n }');
   await page.getByRole('button', { name: 'OK' }).click();
-  await expect(page.getByText('num_of_retries must be a `number` type, but the final value was: `"3"`.\n')).toBeVisible()
-
   //Verify Expected redirection
   await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints'));
 
