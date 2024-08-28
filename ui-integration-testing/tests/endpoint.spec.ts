@@ -250,3 +250,250 @@ test('test_create_endpoint_more_config_model_params_special_character', async ({
   await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints/new'));
 
 });
+
+test('test_create_endpoint_more_config_model_params_empty', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": ""\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('Parameter "Model" is required')).toBeVisible()
+
+  //Verify Expected to remain on the same page
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints/new'));
+
+});
+test('test_create_endpoint_more_config_timeout_params_string', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": "300",\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('timeout must be a `number` type, but the final value was: `"300"`.\n')).toBeVisible()
+
+  //Verify Expected to remain on the same page
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints/new'));
+
+});
+
+test('test_create_endpoint_more_config_timeout_params_decimal', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 1.1,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+
+  //Verify Expected to remain on the same page
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints'));
+
+});
+
+test('test_create_endpoint_more_config_timeout_params_special_char', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": -300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('Timeout must be a positive number\n')).toBeVisible()
+
+  //Verify Expected to remain on the same page
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints/new'));
+
+});
+
+test('test_create_endpoint_more_config_timeout_params_empty', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+
+  //Verify Expected to remain on the same page
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints'));
+
+});
+
+test('test_create_endpoint_more_config_numOfRetries_params_string', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": "3",\n      "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('num_of_retries must be a `number` type, but the final value was: `"3"`.\n')).toBeVisible()
+
+  //Verify Expected redirection
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints/new'));
+
+});
+
+test('test_create_endpoint_more_config_numOfRetries_params_decimal', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3.3,\n      "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+
+  //Verify Expected redirection
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints'));
+
+});
+
+test('test_create_endpoint_more_config_numOfRetries_params_special_char', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": @3,\n      "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+   // Use getByText to locate the element by its text
+  const expectedErrorMsg1 = page.getByText('Unexpected token \'@\', ..."retries": @3, "... is not valid JSON\n')
+  const expectedErrorMsg2 = page.getByText('JSON.parse: unexpected character at line 4 column 25 of the JSON data\n')
+  const expectedErrorMsg3 = page.getByText('JSON Parse error: Unrecognized token \'@\'\n')
+
+  if (await expectedErrorMsg1.count() > 0) {
+    // Error message is found
+    console.log("Error message found.");
+    await expect(page.getByText('Unexpected token \'@\', ..."retries": @3, "... is not valid JSON\n')).toBeVisible()
+
+  }else if (await expectedErrorMsg2.count() > 0) {
+    // Error message is found
+    console.log("Error message found.");
+    await expect(page.getByText('JSON.parse: unexpected character at line 4 column 25 of the JSON data\n')).toBeVisible()
+
+  }else if (await expectedErrorMsg3.count() > 0) {
+    // Element is found
+    console.log("Error message found.");
+    await expect(page.getByText('JSON Parse error: Unrecognized token \'@\'\n')).toBeVisible()
+
+  }else
+  {
+    console.log("Error message Not found.");
+    //Explicitly Fail
+    await page.waitForSelector('text=Error message not found', { state: 'visible', timeout: 5000 });
+  }
+
+  //Verify Expected redirection
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints/new'));
+
+
+});
+
+test('test_create_endpoint_more_config_numOfRetries_params_empty', async ({ page }) => {
+  await page.goto('http://localhost:3000/endpoints/new');
+  await page.getByPlaceholder('Name of the model').click();
+  await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');
+  await page.locator('.aiv__input-container').click();
+  await page.getByRole('option', { name: 'azure-openai-connector', exact: true }).click();
+  await page.getByPlaceholder('URI of the remote model').click();
+  await page.getByPlaceholder('URI of the remote model').fill('uri');
+  await page.getByPlaceholder('Access token for the remote').click();
+  await page.getByPlaceholder('Access token for the remote').fill('token');
+  await page.getByText('More Configs').click();
+  await page.locator('.aiv__input-container').first().click();
+  await page.getByRole('option', { name: '3'}).click();
+  await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
+  await page.getByRole('option', {name: '2'}).click();
+  await page.getByPlaceholder('Additional parameters').click();
+  await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n     "temperature": 0.5,\n      "model": "123"\n }');
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('num_of_retries must be a `number` type, but the final value was: `"3"`.\n')).toBeVisible()
+
+  //Verify Expected redirection
+  await expect.soft(page).toHaveURL(new RegExp('^http://localhost:3000/endpoints'));
+
+});
