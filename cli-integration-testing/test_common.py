@@ -1,14 +1,9 @@
 import random
-
-import pytest
 import subprocess
 from dotenv import load_dotenv
-import os
 
 load_dotenv()  # Load environment variables from .env file
 
-AZURE_OPENAI_URI = os.getenv('URI')
-AZURE_OPENAI_TOKEN = os.getenv('TOKEN')
 CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
 def test_cli_benchmark():
     command = (

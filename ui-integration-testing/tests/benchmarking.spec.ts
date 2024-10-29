@@ -7,7 +7,7 @@ import fs from "fs/promises";
 // Read from ".env" file.
 dotenv.config({path: path.resolve(__dirname, '.env')});
 
-export async function create_endpoint_steps(page, name, uri, token, connectorType, maxCallPerSec, maxConcurr, otherParams, uriSkipCheck?: boolean) {
+export async function create_endpoint_steps(page, name, uri, token, connectorType, maxCallPerSec, maxConcurr, model, otherParams, uriSkipCheck?: boolean) {
     await page.goto('http://localhost:3000/endpoints/new');
     await page.getByPlaceholder('Name of the model').click();
     await page.getByPlaceholder('Name of the model').fill(name);
@@ -19,13 +19,20 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     await page.getByPlaceholder('Access token for the remote').fill(token);
     await page.getByText('More Configs').click();
     if (maxCallPerSec != '') {
-        await page.locator('.aiv__input-container').first().click();
+        const maxCallPerSecDropDownLocator = page.locator('.aiv__input-container')
+        await maxCallPerSecDropDownLocator.first().click();
         await page.getByRole('option', {name: maxCallPerSec}).click();
+        const dropdownLocator = page.locator('div.dropdown-selector'); // Your dropdown selector
+        await maxCallPerSecDropDownLocator.locator('text="' + maxCallPerSec + '"'); // The specific option
+
     }
     if (maxConcurr != '') {
-        await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
-        await page.getByRole('option', {name: maxConcurr}).click();
+        const maxConcurrDropDownLocator = page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container')
+        await maxConcurrDropDownLocator.click();
+        await maxConcurrDropDownLocator.locator('text="' + maxConcurr + '"'); // The specific option
     }
+    await page.getByPlaceholder('Model of the model endpoint').click();
+    await page.getByPlaceholder('Model of the model endpoint').fill(model);
     await page.getByPlaceholder('Additional parameters').click();
     await page.getByPlaceholder('Additional parameters').fill(otherParams);
     await page.getByRole('button', {name: 'OK'}).click();
@@ -43,7 +50,6 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
             await expect(page.getByText('Not set').first()).toBeVisible();
         }
     }
-
     if (maxCallPerSec != '') {
         await page.getByText(maxCallPerSec, {exact: true}).isVisible();
     } else {
@@ -54,13 +60,15 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     } else {
         await expect(page.getByText('1', {exact: true})).toBeVisible()
     }
-    await expect(page.getByText(otherParams)).toBeVisible()
+    // Check for display of addtional parameters @ http://localhost:3000/endpoints page
+    await expect(page.locator('pre')).toContainText(otherParams);
+
 }
 
 export async function create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME) {
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -154,11 +162,11 @@ test('test_benchmarking_one_endpoint_cookbook_singapore-context', async ({browse
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Facts About Singapore " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
@@ -191,11 +199,11 @@ test('test_benchmarking_one_endpoint_cookbook_medical-llm-leaderboard', async ({
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Medical " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select medical-llm-leaderboard').check();
@@ -228,11 +236,11 @@ test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({bro
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Leaderboard " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select leaderboard-cookbook').check();
@@ -265,11 +273,11 @@ test('test_benchmarking_one_endpoint_cookbook_tamil-language-cookbook', async ({
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Tamil " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select tamil-language-cookbook').check();
@@ -302,11 +310,11 @@ test('test_benchmarking_one_endpoint_cookbook_legal-summarisation', async ({brow
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Legal Summarization " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select legal-summarisation').check();
@@ -339,11 +347,11 @@ test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserNam
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test MLC " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -384,11 +392,11 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browser
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Hard CookBook " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -422,11 +430,11 @@ test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Clcc " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -461,7 +469,7 @@ test('test_benchmarking_with_invalid_endpoint', async ({browserName, page}) => {
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 1,\n      "temperature": 0.5,\n      "model": "123"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', 'gpt-4o', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 1,\n      "temperature": 0.5\n  }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -536,7 +544,7 @@ test('test_benchmarking_runner_name_input_empty', async ({browserName, page}) =>
     const RUNNER_NAME: string = ""
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -563,7 +571,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -594,7 +602,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     const NOOFPROMPT: string = "Test ";
 //     // Benchmarking
 //     console.log('Benchmarking')
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
 //     await page.getByRole('listitem').nth(1).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -621,7 +629,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     const NOOFPROMPT: string = "@Test ";
 //     // Benchmarking
 //     console.log('Benchmarking')
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
 //     await page.getByRole('listitem').nth(1).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -649,7 +657,7 @@ test('test_benchmarking_runner_no0fPrompt_input_decimal', async ({browserName, p
     const NOOFPROMPT: string = "1.1";
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -679,7 +687,7 @@ test('test_benchmarking_runner_no0fPrompt_input_empty', async ({browserName, pag
     const NOOFPROMPT: string = "";
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -706,8 +714,8 @@ test('test_benchmarking_two_endpoint', async ({browserName, page}) => {
     const ENDPOINT_NAME_2: string = "Azure OpenAI 2" + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
-    await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI2, process.env.TOKEN2, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI2, process.env.TOKEN2, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -736,8 +744,8 @@ test('test_benchmarking_two_endpoint_invalid', async ({browserName, page}) => {
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, "URI", "Token123", 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "123"\n  }', true)
-    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "123"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5\n  }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -769,8 +777,8 @@ test('test_benchmarking_two_endpoint_mixed_valid&invalid', async ({browserName, 
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
-    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "123"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5\n }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -801,7 +809,7 @@ test('test_benchmarking_zero_endpoint_selected', async ({browserName, page}) => 
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -819,7 +827,7 @@ test('test_benchmarking_edit_endpoint_step', async ({browserName, page}) => {
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, "URI", process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, "URI", process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -877,7 +885,9 @@ test('test_benchmarking_create_new_endpoint_step', async ({browserName, page}) =
     await page.getByPlaceholder('Access token for the remote').click();
     await page.getByPlaceholder('Access token for the remote').fill(TOKEN);
     await page.getByText('More Configs').click();
-    await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }');
+    await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
+    await page.getByPlaceholder('Model of the model endpoint').click();
+    await page.getByPlaceholder('Model of the model endpoint').fill('gpt-4o');
     await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
@@ -928,7 +938,9 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
     await page.getByPlaceholder('Access token for the remote').click();
     await page.getByPlaceholder('Access token for the remote').fill(TOKEN);
     await page.getByText('More Configs').click();
-    await page.getByPlaceholder('Additional parameters').fill('{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }');
+    await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
+    await page.getByPlaceholder('Model of the model endpoint').click();
+    await page.getByPlaceholder('Model of the model endpoint').fill('gpt-4o');
     await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
@@ -956,7 +968,7 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
 //     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
 //     // Benchmarking
 //     console.log('Benchmarking')
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
 //     await page.getByRole('listitem').nth(1).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByRole('button', {name: 'Hard test sets for Common'}).click();
@@ -1146,7 +1158,7 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const COOKBOOK_NAME: string = "test-i2p-" + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test AzureAi I2P " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
@@ -1209,7 +1221,7 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const COOKBOOK_NAME: string = "test-i2p-" + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test OpenAi I2P " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
@@ -1282,7 +1294,7 @@ test.only('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
         await page.waitForTimeout(30000)
     await page.goto('http://localhost:3000');
     const ENDPOINT_NAME: string = "Amazon Bedrock - Anthropic Claude 3 Sonnet";
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Amazon Bedrock " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
     await page.getByRole('listitem').nth(1).click();
@@ -1359,7 +1371,7 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
 
     //Create Azure endpoint as target model
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     //Edit llm-judge-azure endpoint
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
@@ -1449,58 +1461,10 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
 
 });
 
-test('test_benchmarking_one_endpoint_cookbook_', async ({browserName, page}) => {
-    test.setTimeout(1200000); //set test timeout to 1 hour
-
-    // // Check if the browser is WebKit
-    // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    // // Check if the browser is FireFox
-    // test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
-    if (browserName == 'webkit')
-        await page.waitForTimeout(60000)
-    else if (browserName == 'firefox')
-        await page.waitForTimeout(30000)
-    await page.goto('http://localhost:3000');
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    // Benchmarking
-    console.log('Benchmarking')
-    await page.getByRole('listitem').nth(1).click();
-
-////////////////////////////////////////////////
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
-    await page.getByLabel('Next View').click();
-//Edit Dependency Endpoints
-    await page.locator('section').filter({hasText: /^google-gemini-flash-15Added/}).locator('button').click();
-    await page.getByPlaceholder('Access token for the remote').click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.GOOGLE_TOKEN);
-    await page.getByRole('button', {name: 'Save'}).click();
-    //////////////////////////////////////////////////
-    await page.getByLabel('Select google-gemini-flash-15').check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Details
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forgoogle-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bias-occupation', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bias-occupation', async ({
+                                                                                                           browserName,
+                                                                                                           page
+                                                                                                       }) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
