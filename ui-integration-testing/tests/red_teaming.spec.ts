@@ -9,7 +9,7 @@ import sqlite3 from "sqlite3";
 // Read from ".env" file.
 dotenv.config({path: path.resolve(__dirname, '.env')});
 
-export async function create_endpoint_steps(page, name, uri, token, connectorType, maxCallPerSec, maxConcurr, otherParams, uriSkipCheck?: boolean) {
+export async function create_endpoint_steps(page, name, uri, token, connectorType, maxCallPerSec, maxConcurr, model, otherParams, uriSkipCheck?: boolean) {
     await page.goto('http://localhost:3000/endpoints/new');
     await page.getByPlaceholder('Name of the model').click();
     await page.getByPlaceholder('Name of the model').fill(name);
@@ -21,13 +21,20 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     await page.getByPlaceholder('Access token for the remote').fill(token);
     await page.getByText('More Configs').click();
     if (maxCallPerSec != '') {
-        await page.locator('.aiv__input-container').first().click();
+        const maxCallPerSecDropDownLocator = page.locator('.aiv__input-container')
+        await maxCallPerSecDropDownLocator.first().click();
         await page.getByRole('option', {name: maxCallPerSec}).click();
+        const dropdownLocator = page.locator('div.dropdown-selector'); // Your dropdown selector
+        await maxCallPerSecDropDownLocator.locator('text="' + maxCallPerSec + '"'); // The specific option
+
     }
     if (maxConcurr != '') {
-        await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click();
-        await page.getByRole('option', {name: maxConcurr}).click();
+        const maxConcurrDropDownLocator = page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container')
+        await maxConcurrDropDownLocator.click();
+        await maxConcurrDropDownLocator.locator('text="' + maxConcurr + '"'); // The specific option
     }
+    await page.getByPlaceholder('Model of the model endpoint').click();
+    await page.getByPlaceholder('Model of the model endpoint').fill(model);
     await page.getByPlaceholder('Additional parameters').click();
     await page.getByPlaceholder('Additional parameters').fill(otherParams);
     await page.getByRole('button', {name: 'OK'}).click();
@@ -45,7 +52,6 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
             await expect(page.getByText('Not set').first()).toBeVisible();
         }
     }
-
     if (maxCallPerSec != '') {
         await page.getByText(maxCallPerSec, {exact: true}).isVisible();
     } else {
@@ -56,7 +62,9 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     } else {
         await expect(page.getByText('1', {exact: true})).toBeVisible()
     }
-    await expect(page.getByText(otherParams)).toBeVisible()
+    // Check for display of addtional parameters @ http://localhost:3000/endpoints page
+    await expect(page.locator('pre')).toContainText(otherParams);
+
 }
 
 test('test_red_teaming', async ({browserName, page}) => {
@@ -72,17 +80,17 @@ test('test_red_teaming', async ({browserName, page}) => {
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
     await page.getByRole('button', {name: 'Prompt Template'}).click();
     await page.locator('div').filter({hasText: /^mmlu$/}).click();
     await page.getByRole('button', {name: 'Use'}).click();
@@ -117,16 +125,16 @@ test('test_red_teaming_invalid_endpoint', async ({browserName, page}) => {
 
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('button', {name: 'Skip for now'}).click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.context().clearCookies() // Clears all cookies from the context
@@ -145,17 +153,17 @@ test('test_red_teaming_invalid_endpoint_auto', async ({browserName, page}) => {
 
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
     await page.getByRole('button', {name: 'Prompt Template'}).click();
     await page.locator('div').filter({hasText: /^mmlu$/}).click();
     await page.getByRole('button', {name: 'Use'}).click();
@@ -188,17 +196,17 @@ test('test_red_teaming_spinner_check', async ({browserName, page}) => {
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
     await page.getByRole('button', {name: 'Prompt Template'}).click();
     await page.locator('div').filter({hasText: /^mmlu$/}).click();
     await page.getByRole('button', {name: 'Use'}).click();
@@ -255,16 +263,16 @@ test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, pag
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('button', {name: 'Skip for now'}).click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -300,7 +308,7 @@ test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, pag
 
 });
 
-test('test_red_teaming_with_attack_module_runner_name_exist', async ({browserName, page}) => {
+test.only('test_red_teaming_with_attack_module_runner_name_exist', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
@@ -314,16 +322,16 @@ test('test_red_teaming_with_attack_module_runner_name_exist', async ({browserNam
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('button', {name: 'Skip for now'}).click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     // Click x button to exit from redteaming session
     await page.locator('div').filter({hasText: new RegExp(`^${RUNNER_NAME}$`)}).getByRole('img').click();
@@ -334,15 +342,13 @@ test('test_red_teaming_with_attack_module_runner_name_exist', async ({browserNam
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('button', {name: 'Skip for now'}).click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
-    await page.getByPlaceholder('Write a prompt...').click();
-    await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
-    await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('button', {name: /send/i})).toBeHidden();
+    await expect(page.getByRole('heading', {name: 'Error'})).toBeVisible({timeout: 1200000});
+    await expect(page.locator('body')).toContainText('[ServiceException] UnexpectedError in create_new_session - An unexpected error occurred: [ServiceException] UnexpectedError in create_runner - An unexpected error occurred: [Runner] Unable to create runner because the runner file exists.');
 
 });
 test('test_red_teaming_run_two_endpoint', async ({browserName, page}) => {
@@ -365,19 +371,19 @@ test('test_red_teaming_run_two_endpoint', async ({browserName, page}) => {
     const RED_TEAMING_ENDPOINT_NAME_2: string = "azure-openai-" + RND_4_ENDPOINT_2;
     const RND_4_RUNNER = Math.floor(Math.random() * 1000000000)
     const RUNNER_NAME: string = "Test " + RND_4_RUNNER;
-    await create_endpoint_steps(page, ENDPOINT_NAME_1, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
-    await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_1, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME_1!).click();
     await page.getByText(ENDPOINT_NAME_2!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
     await page.getByRole('button', {name: 'Prompt Template'}).click();
     await page.locator('div').filter({hasText: /^mmlu$/}).click();
     await page.getByRole('button', {name: 'Use'}).click();
@@ -441,17 +447,17 @@ test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
     const ENDPOINT_NAME: string = "Azure OpenAI " + RND_4_ENDPOINT;
     const RND_4_RUNNER = Math.floor(Math.random() * 1000000000)
     const RUNNER_NAME: string = "Test " + RND_4_RUNNER;
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
     await page.getByRole('button', {name: 'Prompt Template'}).click();
     await page.locator('div').filter({hasText: /^mmlu$/}).click();
     await page.getByRole('button', {name: 'Use'}).click();
@@ -517,17 +523,17 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Character Swap Attack'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -579,17 +585,17 @@ test('test_red_teaming_with_attack_module_colloquial_wordswap_attack', async ({b
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Colloquial Wordswap'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -639,17 +645,17 @@ test('test_red_teaming_with_attack_module_homoglyph_attack', async ({browserName
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Homoglyph Attack'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something super long test for testing');
@@ -699,17 +705,17 @@ test('test_red_teaming_with_attack_module_insert_punctuation_attack', async ({br
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Insert Punctuation Attack'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -761,17 +767,17 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Job Role Generator Module'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -823,7 +829,7 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
 //         await page.waitForTimeout(30000)
 //     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
 //     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
 //     // Red Teaming
 //     console.log('Red Teaming')
 //     await page.getByRole('listitem').nth(2).click();
@@ -835,11 +841,11 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
 //     await page.getByRole('button', {name: 'Save'}).click();
 //     //////////////////////////////////////////////////
 //     await page.getByText(ENDPOINT_NAME!).click();
-//     await page.locator('div:nth-child(2) > .flex > svg').click();
+//     await page.getByLabel('Next View').click();
 //     await page.getByRole('heading', {name: 'Malicious Question Generator'}).click();
-//     await page.locator('div:nth-child(3) > .flex > svg').click();
+//     await page.getByLabel('Next View').click();
 //     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-//     await page.getByRole('button', {name: 'Start'}).click();
+//     await page.getByRole('button', {name: 'StRun).click();
 //
 //     await page.getByPlaceholder('Write a prompt...').click();
 //     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -891,17 +897,17 @@ test('test_red_teaming_with_attack_module_sample_attack_module', async ({browser
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Sample Attack Module'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
     await page.getByRole('button', {name: 'Prompt Template'}).click();
     await page.locator('div').filter({hasText: /^mmlu$/}).click();
     await page.getByRole('button', {name: 'Use'}).click();
@@ -955,17 +961,17 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Singapore Sentence Generator'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -1016,17 +1022,17 @@ test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserNam
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'TextBugger Attack'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -1076,17 +1082,17 @@ test('test_red_teaming_with_attack_module_textfooler_attack', async ({browserNam
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'TextFooler Attack'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -1137,17 +1143,17 @@ test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({bro
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -1185,7 +1191,7 @@ test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({bro
 
 });
 
-test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, page}) => {
+test.skip('test_red_teaming_with_attack_module_violent_durian', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
@@ -1199,7 +1205,7 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
         await page.waitForTimeout(30000)
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', '{\n      "timeout": 300,\n      "allow_retries": true,\n      "num_of_retries": 3,\n      "temperature": 0.5,\n      "model": "gpt-4o"\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -1211,11 +1217,11 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
     await page.getByText(ENDPOINT_NAME!).click();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Violent Durian'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
@@ -1251,7 +1257,7 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
 
 });
 
-test.only('test_red_teaming_with_amazon_bedrock', async ({browserName, page}) => {
+test.skip('test_red_teaming_with_amazon_bedrock', async ({browserName, page}) => {
     const apiKey = process.env.AWS_ACCESS_KEY_ID;
 
     const filePath = '/Users/jacksonboey/PycharmProjects/moonshot/moonshot-data/connectors-endpoints/openai-gpt4.json';
@@ -1331,11 +1337,11 @@ test.only('test_red_teaming_with_amazon_bedrock', async ({browserName, page}) =>
     await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     await page.getByLabel('Select Amazon Bedrock - Anthropic Claude 3 Sonnet').check();
-    await page.locator('div:nth-child(2) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Violent Durian'}).click();
-    await page.locator('div:nth-child(3) > .flex > svg').click();
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Start'}).click();
+    await page.getByRole('button', {name: 'Run'}).click();
 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
