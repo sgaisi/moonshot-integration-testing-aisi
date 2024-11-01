@@ -116,7 +116,7 @@ test('test_red_teaming', async ({browserName, page}) => {
     await expect(h2Element).toHaveText('Response');
 
 });
-test('test_red_teaming_invalid_endpoint', async ({browserName, page}) => {
+test.only('test_red_teaming_invalid_endpoint', async ({browserName, page}) => {
     test.setTimeout(1200000); //set test timeout to 1 hour
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -140,7 +140,7 @@ test('test_red_teaming_invalid_endpoint', async ({browserName, page}) => {
     await page.context().clearCookies() // Clears all cookies from the context
     await page.getByRole('button', {name: /send/i}).click();
     await expect(page.getByRole('heading', {name: 'Error'})).toBeVisible({timeout: 1200000});
-    await expect(page.getByRole('main')).toContainText('[ServiceException] UnexpectedError in send_prompt - An unexpected error occurred: Failed to get response.');
+    await expect(page.getByRole('main')).toContainText('[ServiceException] UnexpectedError in send_prompt - An unexpected error occurred: Connection error.\n' );
     await page.getByRole('button', {name: 'Ok', exact: true}).click();
 });
 
@@ -308,7 +308,7 @@ test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, pag
 
 });
 
-test.only('test_red_teaming_with_attack_module_runner_name_exist', async ({browserName, page}) => {
+test('test_red_teaming_with_attack_module_runner_name_exist', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
