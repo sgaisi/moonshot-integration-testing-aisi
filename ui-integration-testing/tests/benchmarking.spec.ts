@@ -15,6 +15,8 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     await page.getByRole('option', {name: connectorType, exact: true}).click();
     await page.getByPlaceholder('URI of the remote model').click();
     await page.getByPlaceholder('URI of the remote model').fill(uri);
+    await page.getByPlaceholder('Model of the model endpoint').click();
+    await page.getByPlaceholder('Model of the model endpoint').fill(model);
     await page.getByPlaceholder('Access token for the remote').click();
     await page.getByPlaceholder('Access token for the remote').fill(token);
     await page.getByText('More Configs').click();
@@ -31,8 +33,6 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
         await maxConcurrDropDownLocator.click();
         await maxConcurrDropDownLocator.locator('text="' + maxConcurr + '"'); // The specific option
     }
-    await page.getByPlaceholder('Model of the model endpoint').click();
-    await page.getByPlaceholder('Model of the model endpoint').fill(model);
     await page.getByPlaceholder('Additional parameters').click();
     await page.getByPlaceholder('Additional parameters').fill(otherParams);
     await page.getByRole('button', {name: 'OK'}).click();
@@ -884,10 +884,10 @@ test('test_benchmarking_create_new_endpoint_step', async ({browserName, page}) =
     await page.getByPlaceholder('URI of the remote model').fill(URI);
     await page.getByPlaceholder('Access token for the remote').click();
     await page.getByPlaceholder('Access token for the remote').fill(TOKEN);
-    await page.getByText('More Configs').click();
-    await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
     await page.getByPlaceholder('Model of the model endpoint').click();
     await page.getByPlaceholder('Model of the model endpoint').fill('gpt-4o');
+    await page.getByText('More Configs').click();
+    await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
     await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
@@ -937,10 +937,10 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
     await page.getByPlaceholder('URI of the remote model').fill(URI);
     await page.getByPlaceholder('Access token for the remote').click();
     await page.getByPlaceholder('Access token for the remote').fill(TOKEN);
-    await page.getByText('More Configs').click();
-    await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
     await page.getByPlaceholder('Model of the model endpoint').click();
     await page.getByPlaceholder('Model of the model endpoint').fill('gpt-4o');
+    await page.getByText('More Configs').click();
+    await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
     await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
@@ -1275,7 +1275,7 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
 
 });
 
-test.only('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({browserName, page}) => {
     const apiKey = process.env.AWS_ACCESS_KEY_ID;
 
     // Use the environment variables
