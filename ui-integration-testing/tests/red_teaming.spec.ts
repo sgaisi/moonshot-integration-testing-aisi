@@ -1323,8 +1323,7 @@ test.skip('test_red_teaming_with_amazon_bedrock', async ({browserName, page}) =>
     await page.locator('section').filter({hasText: /^Amazon Bedrock - Anthropic Claude 3 SonnetAdded/}).locator('button').click();
     let otherParams = '{\n' +
         '    "timeout": 300,\n' +
-        '    "allow_retries": true,\n' +
-        '    "num_of_retries": 3,\n' +
+        '    "max_attempts": 3,\n' +
         '    "temperature": 0.5,\n' +
         '    "model": "anthropic.claude-3-sonnet-20240229-v1:0",\n' +
         '    "session": {\n' +

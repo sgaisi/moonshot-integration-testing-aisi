@@ -469,7 +469,7 @@ test('test_benchmarking_with_invalid_endpoint', async ({browserName, page}) => {
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', 'gpt-4o', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 1,\n      "temperature": 0.5\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', 'gpt-4o', '{\n      "timeout": 300,\n   "max_attempts": 1,\n      "temperature": 0.5\n  }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -744,8 +744,8 @@ test('test_benchmarking_two_endpoint_invalid', async ({browserName, page}) => {
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5\n  }', true)
-    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n "max_attempts": 3,\n      "temperature": 0.5\n  }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n    "max_attempts": 3,\n      "temperature": 0.5\n  }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -778,7 +778,7 @@ test('test_benchmarking_two_endpoint_mixed_valid&invalid', async ({browserName, 
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n      "allow_retries": false,\n      "num_of_retries": 3,\n      "temperature": 0.5\n }', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n    "max_attempts": 3,\n      "temperature": 0.5\n }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -1308,8 +1308,7 @@ test('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({browserNa
     await page.locator('section').filter({hasText: /^Amazon Bedrock - Anthropic Claude 3 SonnetAdded/}).locator('button').click();
     let otherParams = '{\n' +
         '    "timeout": 300,\n' +
-        '    "allow_retries": true,\n' +
-        '    "num_of_retries": 3,\n' +
+        '    "max_attempts": 3,\n' +
         '    "temperature": 0.5,\n' +
         '    "model": "anthropic.claude-3-sonnet-20240229-v1:0",\n' +
         '    "session": {\n' +
