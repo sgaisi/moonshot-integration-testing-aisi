@@ -837,7 +837,7 @@ test.skip('test_red_teaming_with_attack_module_malicious_question_generator', as
     //Edit Dependency Endpoint
     const OPENAI_ENDPOINT_NAME: string = "OpenAI GPT4";
     await page.getByLabel('Edit '+OPENAI_ENDPOINT_NAME).click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.OPENAI_TOKEN);
+    await page.getByPlaceholder('Access token for the removvllte').fill(process.env.OPENAI_TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
     await page.getByText(ENDPOINT_NAME!).click();
