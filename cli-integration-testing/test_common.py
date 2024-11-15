@@ -2,14 +2,12 @@ import subprocess
 from dotenv import load_dotenv
 import os
 import time
+import shutil
 load_dotenv()  # Load environment variables from .env file
 
 AZURE_OPENAI_URI = os.getenv('URI')
 AZURE_OPENAI_TOKEN = os.getenv('TOKEN')
 CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
-
-import shutil
-import os
 
 
 def copy_file(file_path):
@@ -543,7 +541,7 @@ def test_cli_delete_prompt_template():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Copy file
-    copy_file('/Users/jacksonboey/PycharmProjects/moonshot/moonshot-data/prompt-templates/squad-shifts.json')
+    copy_file(CLI_DIR+'/moonshot-data/prompt-templates/squad-shifts.json')
 
     command = 'delete_prompt_template squad-shifts \n'
 
@@ -570,7 +568,7 @@ def test_cli_delete_prompt_template():
     last_line = output_lines[11]
     print('=========================Output Last Line:', last_line)
     # Restore file
-    current_path = "/Users/jacksonboey/PycharmProjects/moonshot/moonshot-data/prompt-templates/copy_of_squad-shifts.json"  # Replace with the current file path
+    current_path = CLI_DIR+"/moonshot-data/prompt-templates/copy_of_squad-shifts.json"  # Replace with the current file path
     new_name = "squad-shifts.json"  # Specify the new file name
     rename_file(current_path, new_name)
     assert last_line.replace(" ", "") == "Areyousureyouwanttodeletetheprompttemplate(y/N)?[delete_prompt_template]:Prompttemplatedeleted."
