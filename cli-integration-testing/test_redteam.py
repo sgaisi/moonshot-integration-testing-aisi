@@ -1198,3 +1198,137 @@ def test_cli_view_bookmark():
 
         if (index == len(output_lines) - 1) & (line.replace(" ", "") != 'BookmarkList'):
             pytest.fail()
+
+def test_cli_clear_context_strategy():
+    command = (
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
+        'python3 -m moonshot cli interactive'
+    )
+    process = subprocess.Popen(
+        command,
+        shell=True,  # Allows for complex shell commands
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        text=True,
+        cwd=str(CLI_DIR),
+    )
+
+    # Ensure process.stdin is not None
+    if process.stdin is None:
+        raise RuntimeError("Failed to create stdin for the subprocess")
+
+    # Generate a random number between 0 and 999,999,999 (inclusive)
+    random_number = int(random.random() * 1000000000)
+    nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
+    file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
+
+    # # Example command to send to the process
+    # process.stdin.write('use_session "my-runner"\n')
+    # process.stdin.flush()
+
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
+
+    process.stdin.write('use_context_strategy add_previous_prompt\n')
+    process.stdin.flush()
+
+    process.stdin.write('clear_context_strategy\n')
+    process.stdin.flush()
+
+    process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
+    process.stdin.flush()
+
+    # Capture the output and errors
+    stdout, stderr = process.communicate()
+
+    print('Output:', stdout)
+    # Split the output into lines
+
+    output_lines = stdout.splitlines()
+
+    # Get the fourth line of the output
+    last_line = output_lines[23]
+    print('=========================Output Last Line:', last_line)
+    # Assert that '1' is present in the string
+    assert 'Cleared context strategy.' == last_line
+
+    if os.path.exists(file_path):
+        print(f"File exists: {file_path}")
+        assert True
+
+
+    else:
+        print(f"File does not exist: {file_path}")
+        pytest.fail()
+
+def test_cli_clear_prompt_template():
+    command = (
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
+        'python3 -m moonshot cli interactive'
+    )
+    process = subprocess.Popen(
+        command,
+        shell=True,  # Allows for complex shell commands
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        text=True,
+        cwd=str(CLI_DIR),
+    )
+
+    # Ensure process.stdin is not None
+    if process.stdin is None:
+        raise RuntimeError("Failed to create stdin for the subprocess")
+
+    # Generate a random number between 0 and 999,999,999 (inclusive)
+    random_number = int(random.random() * 1000000000)
+    nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
+    file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
+
+    # # Example command to send to the process
+    # process.stdin.write('use_session "my-runner"\n')
+    # process.stdin.flush()
+
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
+
+    process.stdin.write('use_prompt_template \'analogical-similarity\'\n')
+    process.stdin.flush()
+
+    process.stdin.write('clear_prompt_template\n')
+    process.stdin.flush()
+
+    process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
+    process.stdin.flush()
+
+    # Capture the output and errors
+    stdout, stderr = process.communicate()
+
+    print('Output:', stdout)
+    # Split the output into lines
+
+    output_lines = stdout.splitlines()
+
+    # Get the fourth line of the output
+    last_line = output_lines[23]
+    print('=========================Output Last Line:', last_line)
+    # Assert that '1' is present in the string
+    assert 'Cleared prompt template.' == last_line
+
+    if os.path.exists(file_path):
+        print(f"File exists: {file_path}")
+        assert True
+
+
+    else:
+        print(f"File does not exist: {file_path}")
+        pytest.fail()
