@@ -2,7 +2,6 @@ import {test} from '@playwright/test';
 import {expect} from "@playwright/test";
 // import {create_endpoint_steps} from './endpoint.spec';
 import dotenv from 'dotenv';
-dotenv.config({path: path.resolve(__dirname, '.env')});
 import path from 'path';
 import fs from "fs/promises";
 // Read from ".env" file.
