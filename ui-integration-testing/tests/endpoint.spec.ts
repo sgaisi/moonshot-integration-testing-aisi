@@ -246,7 +246,7 @@ test('test_create_endpoint_more_config_model_params_decimal', async ({page}) => 
 
 });
 
-test.only('test_create_endpoint_more_config_model_params_special_character', async ({page}) => {
+test('test_create_endpoint_more_config_model_params_special_character', async ({page}) => {
     await page.goto('http://localhost:3000/endpoints/new');
     await page.getByPlaceholder('Name of the model').click();
     await page.getByPlaceholder('Name of the model').fill('name_azure-openai-connector');

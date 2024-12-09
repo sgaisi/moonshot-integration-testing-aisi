@@ -1275,7 +1275,7 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
 
 });
 
-test.only('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({browserName, page}) => {
     const apiKey = process.env.AWS_ACCESS_KEY_ID;
 
     // Use the environment variables
