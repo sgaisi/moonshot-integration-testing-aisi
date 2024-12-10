@@ -1425,6 +1425,7 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     const RUNNER_NAME: string = "Test Google Gemini " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
+
     await page.getByRole('listitem').nth(1).click();
 
 ////////////////////////////////////////////////
@@ -1437,6 +1438,7 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     await page.locator('section').filter({hasText: /^google-gemini-flash-15Added/}).locator('button').click();
     await page.getByPlaceholder('Access token for the remote').click();
     await page.getByPlaceholder('Access token for the remote').fill(process.env.GOOGLE_TOKEN);
+    console.log(process.env.GOOGLE_TOKEN.toString())
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
     await page.getByLabel('Select google-gemini-flash-15').check();
