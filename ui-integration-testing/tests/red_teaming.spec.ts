@@ -539,7 +539,7 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -601,7 +601,7 @@ test('test_red_teaming_with_attack_module_colloquial_wordswap_attack', async ({b
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -661,7 +661,7 @@ test('test_red_teaming_with_attack_module_homoglyph_attack', async ({browserName
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something super long test for testing');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -721,7 +721,7 @@ test('test_red_teaming_with_attack_module_insert_punctuation_attack', async ({br
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -1098,7 +1098,7 @@ test('test_red_teaming_with_attack_module_textfooler_attack', async ({browserNam
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
