@@ -1449,6 +1449,8 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
+
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1200000})
     const html = await page.content()
 console.log(html)
         // Listen to network responses
@@ -1470,8 +1472,6 @@ page.on('response', async (response) => {
         console.log('Response Body:', body.toString());
     }
 });
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1200000})
-
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
