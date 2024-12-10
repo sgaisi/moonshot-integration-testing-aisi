@@ -1410,7 +1410,7 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
 
 });
 
-test.only('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page}) => {
     test.setTimeout(1200000); //set test timeout to 1 hour
 
     // // Check if the browser is WebKit
