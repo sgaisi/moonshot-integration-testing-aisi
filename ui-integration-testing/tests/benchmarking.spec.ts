@@ -1437,7 +1437,7 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
 //Edit Dependency Endpoints
     await page.locator('section').filter({hasText: /^google-gemini-flash-15Added/}).locator('button').click();
     await page.getByPlaceholder('Access token for the remote').click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.GOOGLE_TOKEN);
+    await page.getByPlaceholder('Access token for the remote').fill("" + process.env.GOOGLE_TOKEN + "");
     console.log(process.env.GOOGLE_TOKEN.toString())
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
@@ -1449,6 +1449,27 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
+    const html = await page.content()
+console.log(html)
+        // Listen to network responses
+page.on('response', async (response) => {
+    const url = response.url();
+    const status = response.status();
+
+    console.log(`Response URL: ${url}, Status: ${status}`);
+
+    try {
+        // Try to get the response body as JSON
+        const json = await response.json();  // Parse the response body as JSON
+        console.log('Response JSON:', JSON.stringify(json, null, 2));
+    } catch (e) {
+        console.error('Error parsing JSON response:', e.message);
+
+        // Fallback: Log the raw response body if not JSON
+        const body = await response.body();
+        console.log('Response Body:', body.toString());
+    }
+});
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1200000})
 
     //Check Details
