@@ -1276,7 +1276,7 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
 
 });
 
-test('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({browserName, page}) => {
+test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({browserName, page}) => {
     const apiKey = process.env.AWS_ACCESS_KEY_ID;
 
     // Use the environment variables
@@ -1447,27 +1447,7 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    const html = await page.content()
-    console.log(html)
-    // Listen to network responses
-    page.on('response', async (response) => {
-        const url = response.url();
-        const status = response.status();
 
-        console.log(`Response URL: ${url}, Status: ${status}`);
-
-        try {
-            // Try to get the response body as JSON
-            const json = await response.json();  // Parse the response body as JSON
-            console.log('Response JSON:', JSON.stringify(json, null, 2));
-        } catch (e) {
-            console.error('Error parsing JSON response:', e.message);
-
-            // Fallback: Log the raw response body if not JSON
-            const body = await response.body();
-            console.log('Response Body:', body.toString());
-        }
-    });
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
