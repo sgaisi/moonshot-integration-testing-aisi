@@ -510,66 +510,66 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
 //     await expect(page.locator('section').getByRole('heading', {name: 'bookmark_mark' + RND_4_ENDPOINT})).toBeVisible();
 // });
 
-test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-   await page.setViewportSize({ width: 1440, height: 900 });
-    test.setTimeout(1200000); //set test timeout to 1 hour
-    const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
-    // // Check if the browser is WebKit
-    // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    // // Check if the browser is FireFox
-    // test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
-    if (browserName == 'webkit')
-        await page.waitForTimeout(60000)
-    else if (browserName == 'firefox')
-        await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    // Red Teaming
-    console.log('Red Teaming')
-    await page.getByRole('listitem').nth(2).click();
-    await page.getByRole('button', {name: 'Start New Session'}).click();
-    await page.getByText(ENDPOINT_NAME!).click();
-    await page.getByLabel('Next View').click();
-    await page.locator('li').filter({ hasText: 'Character Swap AttackThis' }).click();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    await page.getByPlaceholder('Write a prompt...').click();
-    await page.getByPlaceholder('Write a prompt...').fill('Generate Something\n');
-    await page.getByRole('button', { name: 'Send' }).click();
-
-    // Create the locator for the element
-    const elementLocator = page.locator('.waitspinner').first();
-
-    // Wait for the element to appear with a custom timeout
-    await elementLocator.waitFor({state: 'visible'}); // 60 seconds
-
-    // Optionally, perform any actions or wait for the element to disappear
-    await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
-
-
-    // Assert that the element is no longer visible
-    const isVisible = await elementLocator.isVisible();
-    expect(isVisible).toBeFalsy();
-
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
-    // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
-    const h1Element = page.locator('h1.text-right').nth(0);
-
-    // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
-    await expect(h1Element).toBeVisible({timeout: 1200000});
-    await expect(h1Element).toHaveText('Automated red teaming agent');
-    // Locate the <h1> element with class "text-left" and text "Response"
-    const h2Element = page.locator('h1.text-left').nth(0);
-
-    await expect(h2Element).toBeVisible({timeout: 1200000})
-    await expect(h2Element).toHaveText('Response');
-
-});
+// test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
+//     // test.setTimeout(3600000); //set test timeout to 1 hour
+//    await page.setViewportSize({ width: 1440, height: 900 });
+//     test.setTimeout(1200000); //set test timeout to 1 hour
+//     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
+//     // // Check if the browser is WebKit
+//     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     // // Check if the browser is FireFox
+//     // test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
+//     if (browserName == 'webkit')
+//         await page.waitForTimeout(60000)
+//     else if (browserName == 'firefox')
+//         await page.waitForTimeout(30000)
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     // Red Teaming
+//     console.log('Red Teaming')
+//     await page.getByRole('listitem').nth(2).click();
+//     await page.getByRole('button', {name: 'Start New Session'}).click();
+//     await page.getByText(ENDPOINT_NAME!).click();
+//     await page.getByLabel('Next View').click();
+//     await page.locator('li').filter({ hasText: 'Character Swap AttackThis' }).click();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     await page.getByPlaceholder('Write a prompt...').click();
+//     await page.getByPlaceholder('Write a prompt...').fill('Generate Something\n');
+//     await page.getByRole('button', { name: 'Send' }).click();
+//
+//     // Create the locator for the element
+//     const elementLocator = page.locator('.waitspinner').first();
+//
+//     // Wait for the element to appear with a custom timeout
+//     await elementLocator.waitFor({state: 'visible'}); // 60 seconds
+//
+//     // Optionally, perform any actions or wait for the element to disappear
+//     await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
+//
+//
+//     // Assert that the element is no longer visible
+//     const isVisible = await elementLocator.isVisible();
+//     expect(isVisible).toBeFalsy();
+//
+//     await expect(page.locator('div > li').nth(2)).toBeVisible();
+//     await expect(page.locator('div > li').nth(4)).toBeVisible();
+//     await expect(page.locator('div > li').nth(7)).toBeVisible();
+//     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
+//     const h1Element = page.locator('h1.text-right').nth(0);
+//
+//     // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
+//     await expect(h1Element).toBeVisible({timeout: 1200000});
+//     await expect(h1Element).toHaveText('Automated red teaming agent');
+//     // Locate the <h1> element with class "text-left" and text "Response"
+//     const h2Element = page.locator('h1.text-left').nth(0);
+//
+//     await expect(h2Element).toBeVisible({timeout: 1200000})
+//     await expect(h2Element).toHaveText('Response');
+//
+// });
 //
 // test('test_red_teaming_with_attack_module_colloquial_wordswap_attack', async ({browserName, page}) => {
 //     // test.setTimeout(3600000); //set test timeout to 1 hour
@@ -947,67 +947,67 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
 //
 // });
 //
-// test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browserName, page}) => {
-//     // test.setTimeout(3600000); //set test timeout to 1 hour
-//     test.setTimeout(1200000); //set test timeout to 1 hour
-//     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
-//     // // Check if the browser is WebKit
-//     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-//     // // Check if the browser is FireFox
-//     // test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
-//     if (browserName == 'webkit')
-//         await page.waitForTimeout(60000)
-//     else if (browserName == 'firefox')
-//         await page.waitForTimeout(30000)
-//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-//     // Red Teaming
-//     console.log('Red Teaming')
-//     await page.getByRole('listitem').nth(2).click();
-//     await page.getByRole('button', {name: 'Start New Session'}).click();
-//     await page.getByText(ENDPOINT_NAME!).click();
-//     await page.getByLabel('Next View').click();
-//     await page.getByRole('heading', {name: 'Singapore Sentence Generator'}).click();
-//     await page.getByLabel('Next View').click();
-//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-//     await page.getByRole('button', {name: 'Run'}).click();
-//
-//     await page.getByPlaceholder('Write a prompt...').click();
-//     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
-//     await page.getByRole('button', {name: /send/i}).click();
-//     await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
-//
-//     // Create the locator for the element
-//     const elementLocator = page.getByRole('status').locator('div').nth(1);
-//
-//     // Wait for the element to appear with a custom timeout
-//     await elementLocator.waitFor({state: 'visible'}); // 60 seconds
-//
-//     // Optionally, perform any actions or wait for the element to disappear
-//     await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
-//
-//
-//     // Assert that the element is no longer visible
-//     const isVisible = await elementLocator.isVisible();
-//     expect(isVisible).toBeFalsy();
-//
-//     await expect(page.locator('div > li').nth(2)).toBeVisible();
-//     await expect(page.locator('div > li').nth(4)).toBeVisible();
-//     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
-//     const h1Element = page.locator('h1.text-right').nth(0);
-//
-//     // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
-//     await expect(h1Element).toBeVisible({timeout: 1200000});
-//     await expect(h1Element).toHaveText('Automated red teaming agent');
-//     // Locate the <h1> element with class "text-left" and text "Response"
-//     const h2Element = page.locator('h1.text-left').nth(0);
-//
-//     await expect(h2Element).toBeVisible({timeout: 1200000})
-//     await expect(h2Element).toHaveText('Response');
-//
-// });
-//
+test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browserName, page}) => {
+    // test.setTimeout(3600000); //set test timeout to 1 hour
+    test.setTimeout(1200000); //set test timeout to 1 hour
+    const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
+    // // Check if the browser is WebKit
+    // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+    // // Check if the browser is FireFox
+    // test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
+    if (browserName == 'webkit')
+        await page.waitForTimeout(60000)
+    else if (browserName == 'firefox')
+        await page.waitForTimeout(30000)
+    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    // Red Teaming
+    console.log('Red Teaming')
+    await page.getByRole('listitem').nth(2).click();
+    await page.getByRole('button', {name: 'Start New Session'}).click();
+    await page.getByText(ENDPOINT_NAME!).click();
+    await page.getByLabel('Next View').click();
+    await page.getByRole('heading', {name: 'Singapore Sentence Generator'}).click();
+    await page.getByLabel('Next View').click();
+    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+    await page.getByRole('button', {name: 'Run'}).click();
+
+    await page.getByPlaceholder('Write a prompt...').click();
+    await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
+    await page.getByRole('button', {name: /send/i}).click();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+
+    // Create the locator for the element
+    const elementLocator = page.getByRole('status').locator('div').nth(1);
+
+    // Wait for the element to appear with a custom timeout
+    await elementLocator.waitFor({state: 'visible'}); // 60 seconds
+
+    // Optionally, perform any actions or wait for the element to disappear
+    await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
+
+
+    // Assert that the element is no longer visible
+    const isVisible = await elementLocator.isVisible();
+    expect(isVisible).toBeFalsy();
+
+    await expect(page.locator('div > li').nth(2)).toBeVisible();
+    await expect(page.locator('div > li').nth(4)).toBeVisible();
+    // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
+    const h1Element = page.locator('h1.text-right').nth(0);
+
+    // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
+    await expect(h1Element).toBeVisible({timeout: 1200000});
+    await expect(h1Element).toHaveText('Automated red teaming agent');
+    // Locate the <h1> element with class "text-left" and text "Response"
+    const h2Element = page.locator('h1.text-left').nth(0);
+
+    await expect(h2Element).toBeVisible({timeout: 1200000})
+    await expect(h2Element).toHaveText('Response');
+
+});
+
 // test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserName, page}) => {
 //     // test.setTimeout(3600000); //set test timeout to 1 hour
 //     test.setTimeout(1200000); //set test timeout to 1 hour
