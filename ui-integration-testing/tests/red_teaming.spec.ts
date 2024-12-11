@@ -545,8 +545,6 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
 
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
-
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
 
@@ -555,6 +553,11 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
 
     // Optionally, perform any actions or wait for the element to disappear
     await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
+
+
+    // Assert that the element is no longer visible
+    const isVisible = await elementLocator.isVisible();
+    expect(isVisible).toBeFalsy();
 
     await expect(page.locator('div > li').nth(2)).toBeVisible();
     await expect(page.locator('div > li').nth(4)).toBeVisible();
