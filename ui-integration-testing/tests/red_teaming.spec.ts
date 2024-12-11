@@ -512,6 +512,7 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
 
 test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
+   await page.setViewportSize({ width: 1440, height: 900 });
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
