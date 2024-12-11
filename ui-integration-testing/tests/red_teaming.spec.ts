@@ -968,7 +968,7 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
     await page.getByLabel('Next View').click();
-    await page.getByRole('heading', {name: 'Singapore Sentence Generator'}).click();
+    await page.getByRole('heading', {name: 'Character Swap Attack'}).click();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
