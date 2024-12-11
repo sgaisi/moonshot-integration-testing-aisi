@@ -431,84 +431,84 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
 // //     // Close the SQLite connection after each test
 // //     db.close();
 // // });
-// test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
-//     console.log(path.resolve(__dirname, '.env'))
-//     test.setTimeout(1200000); //set test timeout to 1 hour
-//     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
-//     // Check if the browser is WebKit
-//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-//     // Check if the browser is FireFox
-//     test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
-//     const RND_4_ENDPOINT = Math.floor(Math.random() * 1000000000)
-//     const RED_TEAMING_ENDPOINT_NAME: string = "azure-openai-" + RND_4_ENDPOINT;
-//     // if (browserName == 'webkit')
-//     //     await page.waitForTimeout(60000)
-//     // else if (browserName == 'firefox')
-//     //     await page.waitForTimeout(30000)
-//     const ENDPOINT_NAME: string = "Azure OpenAI " + RND_4_ENDPOINT;
-//     const RND_4_RUNNER = Math.floor(Math.random() * 1000000000)
-//     const RUNNER_NAME: string = "Test " + RND_4_RUNNER;
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-//     // Red Teaming
-//     console.log('Red Teaming')
-//     await page.getByRole('listitem').nth(2).click();
-//     await page.getByRole('button', {name: 'Start New Session'}).click();
-//     await page.getByText(ENDPOINT_NAME!).click();
-//     await page.getByLabel('Next View').click();
-//     await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
-//     await page.getByLabel('Next View').click();
-//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-//     await page.getByRole('button', {name: 'Run'}).click();
-//     await page.getByRole('button', {name: 'Prompt Template'}).click();
-//     await page.locator('div').filter({hasText: /^mmlu$/}).click();
-//     await page.getByRole('button', {name: 'Use'}).click();
-//     await page.getByRole('button', {name: 'Context Strategy'}).click();
-//     await page.locator('div').filter({hasText: /^Add Previous Prompt$/}).first().click();
-//     await page.getByRole('button', {name: 'Use'}).click();
-//     await page.getByPlaceholder('Write a prompt...').click();
-//     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
-//     await page.getByRole('button', {name: /send/i}).click();
-//
-//     // Create the locator for the element
-//     const elementLocator = page.getByRole('status').locator('div').nth(1);
-//
-//     // Wait for the element to appear with a custom timeout
-//     await elementLocator.waitFor({state: 'visible'}); // 60 seconds
-//
-//     // Optionally, perform any actions or wait for the element to disappear
-//     await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
-//
-//
-//     // Assert that the element is no longer visible
-//     const isVisible = await elementLocator.isVisible();
-//     expect(isVisible).toBeFalsy();
-//
-//
-//     await expect(page.locator('div > li').nth(2)).toBeVisible();
-//     await expect(page.locator('div > li').nth(4)).toBeVisible();
-//     await expect(page.locator('div > li').nth(7)).toBeVisible();
-//     // Locate the <h1> element with class "text-right" and text "You"
-//     const h1Element = page.locator('h1.text-right').nth(0);
-//
-//     // Assert that the <h1> element with class "text-right" contains the text "You"
-//     await expect(h1Element).toBeVisible();
-//     await expect(h1Element).toHaveText('Automated red teaming agent');
-//     // Locate the <h1> element with class "text-right" and text "You"
-//     const h2Element = page.locator('h1.text-left').nth(0);
-//
-//     await expect(h2Element).toBeVisible()
-//     await expect(h2Element).toHaveText('Response');
-//
-//     await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible();
-//     await page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME + ' > div > div.custom-scrollbar > div#chatContainer > li:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(1) > div > div[role="button"]').click();
-//     await page.getByPlaceholder('Give this bookmark a unique').click();
-//     await page.getByPlaceholder('Give this bookmark a unique').fill('bookmark_mark' + RND_4_ENDPOINT);
-//     await page.getByRole('button', {name: 'Save'}).click();
-//     await expect(page.getByText('Bookmark ' + 'bookmark_mark' + RND_4_ENDPOINT + ' was')).toBeVisible();
-//     await page.getByRole('button', {name: 'View Bookmarks'}).click();
-//     await page.locator('li').filter({hasText: 'bookmark_mark' + RND_4_ENDPOINT}).click();
-//     await expect(page.locator('section').getByRole('heading', {name: 'bookmark_mark' + RND_4_ENDPOINT})).toBeVisible();
-// });
+test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
+    console.log(path.resolve(__dirname, '.env'))
+    test.setTimeout(1200000); //set test timeout to 1 hour
+    const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
+    // Check if the browser is WebKit
+    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+    // Check if the browser is FireFox
+    test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
+    const RND_4_ENDPOINT = Math.floor(Math.random() * 1000000000)
+    const RED_TEAMING_ENDPOINT_NAME: string = "azure-openai-" + RND_4_ENDPOINT;
+    // if (browserName == 'webkit')
+    //     await page.waitForTimeout(60000)
+    // else if (browserName == 'firefox')
+    //     await page.waitForTimeout(30000)
+    const ENDPOINT_NAME: string = "Azure OpenAI " + RND_4_ENDPOINT;
+    const RND_4_RUNNER = Math.floor(Math.random() * 1000000000)
+    const RUNNER_NAME: string = "Test " + RND_4_RUNNER;
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    // Red Teaming
+    console.log('Red Teaming')
+    await page.getByRole('listitem').nth(2).click();
+    await page.getByRole('button', {name: 'Start New Session'}).click();
+    await page.getByText(ENDPOINT_NAME!).click();
+    await page.getByLabel('Next View').click();
+    await page.getByRole('heading', {name: 'Toxic Sentence Generator'}).click();
+    await page.getByLabel('Next View').click();
+    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+    await page.getByRole('button', {name: 'Run'}).click();
+    await page.getByRole('button', {name: 'Prompt Template'}).click();
+    await page.locator('div').filter({hasText: /^mmlu$/}).click();
+    await page.getByRole('button', {name: 'Use'}).click();
+    await page.getByRole('button', {name: 'Context Strategy'}).click();
+    await page.locator('div').filter({hasText: /^Add Previous Prompt$/}).first().click();
+    await page.getByRole('button', {name: 'Use'}).click();
+    await page.getByPlaceholder('Write a prompt...').click();
+    await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
+    await page.getByRole('button', {name: /send/i}).click();
+
+    // Create the locator for the element
+    const elementLocator = page.getByRole('status').locator('div').nth(1);
+
+    // Wait for the element to appear with a custom timeout
+    await elementLocator.waitFor({state: 'visible'}); // 60 seconds
+
+    // Optionally, perform any actions or wait for the element to disappear
+    await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
+
+
+    // Assert that the element is no longer visible
+    const isVisible = await elementLocator.isVisible();
+    expect(isVisible).toBeFalsy();
+
+
+    await expect(page.locator('div > li').nth(2)).toBeVisible();
+    await expect(page.locator('div > li').nth(4)).toBeVisible();
+    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    // Locate the <h1> element with class "text-right" and text "You"
+    const h1Element = page.locator('h1.text-right').nth(0);
+
+    // Assert that the <h1> element with class "text-right" contains the text "You"
+    await expect(h1Element).toBeVisible();
+    await expect(h1Element).toHaveText('Automated red teaming agent');
+    // Locate the <h1> element with class "text-right" and text "You"
+    const h2Element = page.locator('h1.text-left').nth(0);
+
+    await expect(h2Element).toBeVisible()
+    await expect(h2Element).toHaveText('Response');
+
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible();
+    await page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME + ' > div > div.custom-scrollbar > div#chatContainer > li:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(1) > div > div[role="button"]').click();
+    await page.getByPlaceholder('Give this bookmark a unique').click();
+    await page.getByPlaceholder('Give this bookmark a unique').fill('bookmark_mark' + RND_4_ENDPOINT);
+    await page.getByRole('button', {name: 'Save'}).click();
+    await expect(page.getByText('Bookmark ' + 'bookmark_mark' + RND_4_ENDPOINT + ' was')).toBeVisible();
+    await page.getByRole('button', {name: 'View Bookmarks'}).click();
+    await page.locator('li').filter({hasText: 'bookmark_mark' + RND_4_ENDPOINT}).click();
+    await expect(page.locator('section').getByRole('heading', {name: 'bookmark_mark' + RND_4_ENDPOINT})).toBeVisible();
+});
 
 test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
@@ -535,7 +535,12 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
-
+    await page.getByRole('button', {name: 'Prompt Template'}).click();
+    await page.locator('div').filter({hasText: /^mmlu$/}).click();
+    await page.getByRole('button', {name: 'Use'}).click();
+    await page.getByRole('button', {name: 'Context Strategy'}).click();
+    await page.locator('div').filter({hasText: /^Add Previous Prompt$/}).first().click();
+    await page.getByRole('button', {name: 'Use'}).click();
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
@@ -550,32 +555,6 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
 
     // Optionally, perform any actions or wait for the element to disappear
     await elementLocator.waitFor({state: 'hidden'}); // 60 seconds
-
-
-    // Assert that the element is no longer visible
-    const isVisible = await elementLocator.isVisible();
-    expect(isVisible).toBeFalsy();
-    const html = await page.content()
-console.log(html)
-        // Listen to network responses
-page.on('response', async (response) => {
-    const url = response.url();
-    const status = response.status();
-
-    console.log(`Response URL: ${url}, Status: ${status}`);
-
-    try {
-        // Try to get the response body as JSON
-        const json = await response.json();  // Parse the response body as JSON
-        console.log('Response JSON:', JSON.stringify(json, null, 2));
-    } catch (e) {
-        console.error('Error parsing JSON response:', e.message);
-
-        // Fallback: Log the raw response body if not JSON
-        const body = await response.body();
-        console.log('Response Body:', body.toString());
-    }
-});
 
     await expect(page.locator('div > li').nth(2)).toBeVisible();
     await expect(page.locator('div > li').nth(4)).toBeVisible();
