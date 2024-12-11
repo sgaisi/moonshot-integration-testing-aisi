@@ -510,7 +510,7 @@ test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
     await expect(page.locator('section').getByRole('heading', {name: 'bookmark_mark' + RND_4_ENDPOINT})).toBeVisible();
 });
 
-test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
+test.only('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
@@ -531,18 +531,12 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
     await page.getByRole('button', {name: 'Start New Session'}).click();
     await page.getByText(ENDPOINT_NAME!).click();
     await page.getByLabel('Next View').click();
-    await page.getByRole('heading', {name: 'Character Swap Attack'}).click();
+    await page.locator('li').filter({ hasText: 'Character Swap AttackThis' }).click();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
-    await page.getByRole('button', {name: 'Prompt Template'}).click();
-    await page.locator('div').filter({hasText: /^mmlu$/}).click();
-    await page.getByRole('button', {name: 'Use'}).click();
-    await page.getByRole('button', {name: 'Context Strategy'}).click();
-    await page.locator('div').filter({hasText: /^Add Previous Prompt$/}).first().click();
-    await page.getByRole('button', {name: 'Use'}).click();
     await page.getByPlaceholder('Write a prompt...').click();
-    await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
+    await page.getByPlaceholder('Write a prompt...').fill('Generate Something\\n');
     await page.getByRole('button', {name: /send/i}).click();
 
     // Create the locator for the element
