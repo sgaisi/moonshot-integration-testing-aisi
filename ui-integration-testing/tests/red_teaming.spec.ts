@@ -510,7 +510,7 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
 //     await expect(page.locator('section').getByRole('heading', {name: 'bookmark_mark' + RND_4_ENDPOINT})).toBeVisible();
 // });
 
-test.only('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
+test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
