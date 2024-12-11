@@ -536,11 +536,11 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     await page.getByPlaceholder('Write a prompt...').click();
-    await page.getByPlaceholder('Write a prompt...').fill('Generate Something\\n');
+    await page.getByPlaceholder('Write a prompt...').fill('Generate Something\n');
     await page.getByRole('button', { name: 'Send' }).click();
 
     // Create the locator for the element
-    const elementLocator = page.getByRole('status').locator('div').nth(1);
+    const elementLocator = page.locator('.waitspinner').first();
 
     // Wait for the element to appear with a custom timeout
     await elementLocator.waitFor({state: 'visible'}); // 60 seconds
