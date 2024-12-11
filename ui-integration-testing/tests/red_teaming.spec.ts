@@ -562,6 +562,7 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
         }
     });
 
+    await page.waitForLoadState("load")
     await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
 
     // Create the locator for the element
