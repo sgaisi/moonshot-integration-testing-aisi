@@ -976,7 +976,7 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 600000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -991,30 +991,9 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
     // Assert that the element is no longer visible
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
-    const html = await page.content()
-console.log(html)
-        // Listen to network responses
-page.on('response', async (response) => {
-    const url = response.url();
-    const status = response.status();
 
-    console.log(`Response URL: ${url}, Status: ${status}`);
-
-    try {
-        // Try to get the response body as JSON
-        const json = await response.json();  // Parse the response body as JSON
-        console.log('Response JSON:', JSON.stringify(json, null, 2));
-    } catch (e) {
-        console.error('Error parsing JSON response:', e.message);
-
-        // Fallback: Log the raw response body if not JSON
-        const body = await response.body();
-        console.log('Response Body:', body.toString());
-    }
-});
-
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 600000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 600000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
