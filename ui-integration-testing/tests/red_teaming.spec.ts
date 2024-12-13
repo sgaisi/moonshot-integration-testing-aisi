@@ -1008,7 +1008,7 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
 
 });
 
-test.only('test_red_teaming_with_attack_module_textbugger_attack', async ({browserName, page}) => {
+test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
