@@ -1008,7 +1008,7 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
 
 });
 
-test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserName, page}) => {
+test.only('test_red_teaming_with_attack_module_textbugger_attack', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
@@ -1053,7 +1053,7 @@ test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserNam
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
+    await expect(page.locator('div > li').nth(1)).toBeVisible();
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
