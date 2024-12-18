@@ -1217,7 +1217,7 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
 
 });
 
-test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, page}) => {
+test.only('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
