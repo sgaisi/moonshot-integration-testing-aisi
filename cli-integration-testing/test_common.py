@@ -7,7 +7,8 @@ load_dotenv()  # Load environment variables from .env file
 
 AZURE_OPENAI_URI = os.getenv('URI')
 AZURE_OPENAI_TOKEN = os.getenv('TOKEN')
-CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
+# CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
+CLI_DIR = os.getenv('CLI_DIR')
 
 
 def copy_file(file_path):
@@ -400,7 +401,8 @@ def test_cli_convert_dataset():
 
     timestamp = time.time()  # Get the current timestamp in seconds
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
-    csvFilePath= '/Users/jacksonboey/PycharmProjects/moonshot-integration-testing/cli-integration-testing/your_dataset.csv'
+    # csvFilePath= '/Users/jacksonboey/PycharmProjects/moonshot-integration-testing/cli-integration-testing/your_dataset.csv'
+    csvFilePath= '/home/runner/work/moonshot-integration-testing/cli-integration-testing/your_dataset.csv'
     command = 'convert_dataset \'dataset-name-'+timestamp_int+'\' \'A brief description\' \'http://reference.com\' \'MIT\' \''+csvFilePath+'\'\n'
 
     print('Command:', command)
