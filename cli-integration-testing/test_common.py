@@ -7,8 +7,8 @@ load_dotenv()  # Load environment variables from .env file
 
 AZURE_OPENAI_URI = os.getenv('URI')
 AZURE_OPENAI_TOKEN = os.getenv('TOKEN')
-CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
-
+# CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
+CLI_DIR = os.getenv('CLI_DIR')
 
 def copy_file(file_path):
     # Get the file name and directory path
