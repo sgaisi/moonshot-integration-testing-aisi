@@ -111,9 +111,9 @@ def test_cli_red_teaming():
 
 def test_cli_list_attack_modules():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -155,9 +155,9 @@ def test_cli_list_attack_modules():
 
 def test_cli_list_bookmarks():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -199,9 +199,9 @@ def test_cli_list_bookmarks():
 
 def test_cli_list_context_strategies():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -243,9 +243,9 @@ def test_cli_list_context_strategies():
 
 def test_cli_list_sessions():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -470,9 +470,9 @@ def test_cli_delete_bookmark():
 
 def test_cli_delete_attack_module():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -529,9 +529,9 @@ def test_cli_delete_attack_module():
 
 def test_cli_delete_context_strategy():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 

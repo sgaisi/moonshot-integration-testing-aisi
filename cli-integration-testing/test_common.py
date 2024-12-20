@@ -42,9 +42,9 @@ def rename_file(current_path, new_name):
 
 def test_cli_list_endpoints():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -86,9 +86,9 @@ def test_cli_list_endpoints():
 
 def test_cli_list_prompt_templates():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -130,9 +130,9 @@ def test_cli_list_prompt_templates():
 
 def test_cli_list_connector_types():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -174,10 +174,10 @@ def test_cli_list_connector_types():
 
 def test_cli_view_endpoint():
         command = (
-            'cd .. &&'
-            'source venv/bin/activate &&'
-            'cd moonshot &&'
-            'python3 -m moonshot cli interactive'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
+        'python3 -m moonshot cli interactive'
         )
 
         process = subprocess.Popen(
@@ -219,9 +219,9 @@ def test_cli_view_endpoint():
 
 def test_cli_view_endpoint():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -263,9 +263,9 @@ def test_cli_view_endpoint():
 
 def test_cli_add_endpoints():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -313,9 +313,9 @@ def test_cli_add_endpoints():
 
 def test_cli_delete_endpoint():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -376,9 +376,9 @@ def test_cli_delete_endpoint():
 
 def test_cli_convert_dataset():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -424,9 +424,9 @@ def test_cli_convert_dataset():
 
 def test_cli_download_dataset_hf():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -519,9 +519,9 @@ def test_cli_download_dataset_hf():
 
 def test_cli_delete_prompt_template():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -577,9 +577,9 @@ def test_cli_delete_prompt_template():
 
 def test_cli_update_endpoint():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 

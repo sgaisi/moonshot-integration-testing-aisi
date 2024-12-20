@@ -46,9 +46,9 @@ def rename_file(current_path, new_name):
 
 def test_cli_run_cookbook():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -102,9 +102,9 @@ def test_cli_run_cookbook():
 
 def test_cli_run_recipe():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -158,9 +158,9 @@ def test_cli_run_recipe():
 
 def test_cli_add_cookbook():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -206,9 +206,9 @@ def test_cli_add_cookbook():
 
 def test_cli_add_recipe():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -253,9 +253,9 @@ def test_cli_add_recipe():
 
 def test_cli_delete_recipe():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -312,9 +312,9 @@ def test_cli_delete_recipe():
 
 def test_cli_delete_metric():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -371,9 +371,9 @@ def test_cli_delete_metric():
 
 def test_cli_delete_metric():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -430,9 +430,9 @@ def test_cli_delete_metric():
 
 def test_cli_delete_result():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -504,9 +504,9 @@ def test_cli_delete_result():
 
 def test_cli_delete_runner():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -578,9 +578,9 @@ def test_cli_delete_runner():
 
 def test_cli_delete_runner():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -648,9 +648,9 @@ def test_cli_delete_runner():
 
 def test_cli_list_cookbooks():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -694,9 +694,9 @@ def test_cli_list_cookbooks():
 
 def test_cli_list_datasets():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -740,9 +740,9 @@ def test_cli_list_datasets():
 
 def test_cli_list_metrics():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -786,9 +786,9 @@ def test_cli_list_metrics():
 
 def test_cli_list_recipes():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -832,9 +832,9 @@ def test_cli_list_recipes():
 
 def test_cli_list_results():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -893,9 +893,9 @@ def test_cli_list_results():
 
 def test_cli_list_runs():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -954,9 +954,9 @@ def test_cli_list_runs():
 
 def test_cli_update_cookbook():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1009,9 +1009,9 @@ def test_cli_update_cookbook():
 
 def test_cli_update_recipe():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1062,9 +1062,9 @@ def test_cli_update_recipe():
 
 def test_cli_view_cookbook():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1115,9 +1115,9 @@ def test_cli_view_cookbook():
 
 def test_cli_view_recipe():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1167,9 +1167,9 @@ def test_cli_view_recipe():
 
 def test_cli_view_dataset():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1210,9 +1210,9 @@ def test_cli_view_dataset():
 
 def test_cli_view_metric():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1253,9 +1253,9 @@ def test_cli_view_metric():
 
 def test_cli_view_metric():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1296,9 +1296,9 @@ def test_cli_view_metric():
 
 def test_cli_view_result():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1356,9 +1356,9 @@ def test_cli_view_result():
 
 def test_cli_view_run():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
@@ -1416,9 +1416,9 @@ def test_cli_view_run():
 
 def test_cli_view_runner():
     command = (
-        'cd .. &&'
-        'source venv/bin/activate &&'
-        'cd moonshot &&'
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
         'python3 -m moonshot cli interactive'
     )
 
