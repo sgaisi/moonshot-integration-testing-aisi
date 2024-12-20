@@ -78,11 +78,16 @@ def test_cli_red_teaming():
 
     file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -314,11 +319,16 @@ def test_cli_show_prompts():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -373,11 +383,16 @@ def test_cli_add_bookmark():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -385,7 +400,7 @@ def test_cli_add_bookmark():
     process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
     process.stdin.flush()
 
-    process.stdin.write('add_bookmark ollama-llama3 1 my-bookmarked-prompt' + str(random_number))
+    process.stdin.write('add_bookmark azure-openai-gpt4o 1 my-bookmarked-prompt' + str(random_number))
     process.stdin.flush()
 
     # Capture the output and errors
@@ -432,11 +447,16 @@ def test_cli_delete_bookmark():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -444,7 +464,7 @@ def test_cli_delete_bookmark():
     process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
     process.stdin.flush()
 
-    process.stdin.write('add_bookmark ollama-llama3 1 my-bookmarked-prompt' + str(random_number) + '\n')
+    process.stdin.write('add_bookmark azure-openai-gpt4o 1 my-bookmarked-prompt' + str(random_number) + '\n')
     process.stdin.flush()
 
     process.stdin.write('delete_bookmark my-bookmarked-prompt' + str(random_number) + '\n')
@@ -607,15 +627,20 @@ def test_cli_delete_session():
     if process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
 
-    # # Example command to send to the process
-    # process.stdin.write('list_cookbooks\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -662,15 +687,20 @@ def test_cli_end_session():
     if process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
 
-    # # Example command to send to the process
-    # process.stdin.write('list_cookbooks\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -694,62 +724,6 @@ def test_cli_end_session():
 
     print('=========================Output Last Line:', last_line)
     assert last_line == "There is no active session. Activate a session to send a prompt with a context strategy."
-
-
-def test_cli_end_session():
-    command = (
-        # 'cd .. &&'
-        # 'source venv/bin/activate &&'
-        # 'cd moonshot &&'
-        'python3 -m moonshot cli interactive'
-    )
-    process = subprocess.Popen(
-        command,
-        shell=True,  # Allows for complex shell commands
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        text=True,
-        cwd=str(CLI_DIR),
-    )
-
-    # Ensure process.stdin is not None
-    if process.stdin is None:
-        raise RuntimeError("Failed to create stdin for the subprocess")
-
-    # # Example command to send to the process
-    # process.stdin.write('list_cookbooks\n')
-    # process.stdin.flush()
-
-    # Generate a random number between 0 and 999,999,999 (inclusive)
-    random_number = int(random.random() * 1000000000)
-    nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
-
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
-
-    # Example command to send to the process
-    process.stdin.write('end_session \n')
-    process.stdin.flush()
-
-    process.stdin.write('clear_context_strategy\n')
-    process.stdin.flush()
-
-    # Capture the output and errors
-    stdout, stderr = process.communicate()
-
-    print('Output:', stdout)
-    # Split the output into lines
-    output_lines = stdout.splitlines()
-
-    # Get the last line of the output
-    last_line = output_lines[-2]
-
-    print('=========================Output Last Line:', last_line)
-    assert last_line == "There is no active session. Activate a session to send a prompt with a context strategy."
-
 
 def test_cli_export_bookmarks():
     command = (
@@ -780,11 +754,16 @@ def test_cli_export_bookmarks():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -792,7 +771,7 @@ def test_cli_export_bookmarks():
     process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
     process.stdin.flush()
 
-    process.stdin.write('add_bookmark ollama-llama3 1 my-bookmarked-prompt' + str(random_number) + '\n')
+    process.stdin.write('add_bookmark azure-openai-gpt4o 1 my-bookmarked-prompt' + str(random_number) + '\n')
     process.stdin.flush()
 
     Export_File_Name = 'my_list_of_exported_bookmarks_' + str(random_number)
@@ -843,11 +822,16 @@ def test_cli_use_bookmark():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -855,7 +839,7 @@ def test_cli_use_bookmark():
     process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
     process.stdin.flush()
 
-    process.stdin.write('add_bookmark ollama-llama3 1 my-bookmarked-prompt' + str(random_number) + '\n')
+    process.stdin.write('add_bookmark azure-openai-gpt4o 1 my-bookmarked-prompt' + str(random_number) + '\n')
     process.stdin.flush()
 
     process.stdin.write('use_bookmark my-bookmarked-prompt' + str(random_number))
@@ -905,11 +889,16 @@ def test_cli_use_bookmark():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -917,7 +906,7 @@ def test_cli_use_bookmark():
     process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
     process.stdin.flush()
 
-    process.stdin.write('add_bookmark ollama-llama3 1 my-bookmarked-prompt' + str(random_number) + '\n')
+    process.stdin.write('add_bookmark azure-openai-gpt4o 1 my-bookmarked-prompt' + str(random_number) + '\n')
     process.stdin.flush()
 
     process.stdin.write('use_bookmark my-bookmarked-prompt' + str(random_number))
@@ -964,11 +953,16 @@ def test_cli_use_context_strategy():
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
     file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1029,11 +1023,16 @@ def test_cli_use_prompt_template():
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
     file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1094,11 +1093,16 @@ def test_cli_use_session():
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
     file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1164,11 +1168,16 @@ def test_cli_view_bookmark():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1176,7 +1185,7 @@ def test_cli_view_bookmark():
     process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
     process.stdin.flush()
 
-    process.stdin.write('add_bookmark ollama-llama3 1 my-bookmarked-prompt' + str(random_number) + '\n')
+    process.stdin.write('add_bookmark azure-openai-gpt4o 1 my-bookmarked-prompt' + str(random_number) + '\n')
     process.stdin.flush()
 
     process.stdin.write('view_bookmark my-bookmarked-prompt' + str(random_number) + '\n')
@@ -1226,11 +1235,16 @@ def test_cli_clear_context_strategy():
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
     file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1293,11 +1307,16 @@ def test_cli_clear_prompt_template():
     nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
     file_path = str(CLI_DIR) + "/moonshot-data/generated-outputs/runners/" + nameOfRunnerFileName + ".json"
 
-    # # Example command to send to the process
-    # process.stdin.write('use_session "my-runner"\n')
-    # process.stdin.flush()
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
 
-    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'ollama-llama3\']" -c add_previous_prompt -p mmlu \n'
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()

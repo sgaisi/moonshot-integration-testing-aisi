@@ -600,13 +600,13 @@ def test_cli_update_endpoint():
     if process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
 
-    # Add Endpoints
+    # Update Endpoints
     AZURE_MODEL='gpt-4o'
     timestamp = time.time()  # Get the current timestamp in seconds
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
     command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
         AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'params\', {\'timeout\': 300, \'allow_retries\': True, \'num_of_retries\': 3, \'temperature\': 0.5, \'model\': \'gpt-4o\'})]"\n'
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
