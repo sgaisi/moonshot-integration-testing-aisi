@@ -1158,7 +1158,7 @@ def test_cli_use_session():
     output_lines = stdout.splitlines()
 
     # Get the fourth line of the output
-    last_line = output_lines[22]
+    last_line = output_lines[23]
     print('=========================Output Last Line:', last_line)
     assert "Usingsession:" + nameOfRunnerFileName + "." == last_line.replace(" ", "")
 
@@ -1300,7 +1300,7 @@ def test_cli_clear_context_strategy():
     output_lines = stdout.splitlines()
 
     # Get the fourth line of the output
-    last_line = output_lines[23]
+    last_line = output_lines[24]
     print('=========================Output Last Line:', last_line)
     # Assert that '1' is present in the string
     assert 'Cleared context strategy.' == last_line
