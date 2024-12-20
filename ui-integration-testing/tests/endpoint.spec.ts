@@ -99,9 +99,9 @@ test('test_create_endpoint_with_connectorType_together_connector', async ({page}
     //Create new endpoints
     await create_endpoint_steps(page, 'name_together-connector', 'uri', 'token123', 'gpt-4o', 'together-connector', '3', '2', '{\n      "timeout": 300,\n      "max_attempts": 3,\n      "temperature": 0.5\n        }')
 });
-test('test_create_endpoint_with_connectorType_claude2_connector', async ({page}) => {
+test('test_create_endpoint_with_connectorType_anthropic_connector', async ({page}) => {
     //Create new endpoints
-    await create_endpoint_steps(page, 'name_claude2-connector', 'uri', 'token123', 'gpt-4o', 'claude2-connector', '3', '2', '{\n      "timeout": 300,\n      "max_attempts": 3,\n      "temperature": 0.5\n        }')
+    await create_endpoint_steps(page, 'name_anthropic-connector', 'uri', 'token123', 'gpt-4o', 'anthropic-connector', '3', '2', '{\n      "timeout": 300,\n      "max_attempts": 3,\n      "temperature": 0.5\n        }')
 });
 test('test_create_endpoint_with_connectorType_huggingface_connector', async ({page}) => {
     //Create new endpoints
