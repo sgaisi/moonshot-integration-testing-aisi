@@ -402,7 +402,7 @@ def test_cli_convert_dataset():
     timestamp = time.time()  # Get the current timestamp in seconds
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
     # csvFilePath= '/Users/jacksonboey/PycharmProjects/moonshot-integration-testing/cli-integration-testing/your_dataset.csv'
-    csvFilePath= '/home/runner/work/moonshot-integration-testing/cli-integration-testing/your_dataset.csv'
+    csvFilePath= '/home/runner/work/moonshot/moonshot-integration-testing/cli-integration-testing/your_dataset.csv'
     command = 'convert_dataset \'dataset-name-'+timestamp_int+'\' \'A brief description\' \'http://reference.com\' \'MIT\' \''+csvFilePath+'\'\n'
 
     print('Command:', command)
@@ -606,7 +606,7 @@ def test_cli_update_endpoint():
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
     command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
         AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
