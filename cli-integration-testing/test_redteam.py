@@ -183,6 +183,30 @@ def test_cli_list_bookmarks():
     if process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
 
+    # Generate a random number between 0 and 999,999,999 (inclusive)
+    random_number = int(random.random() * 1000000000)
+    nameOfRunnerFileName = "my-red-teaming-runner-" + str(random_number)
+
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
+
+    command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
+
+    process.stdin.write('run_attack_module charswap_attack "this is my prompt"\n')
+    process.stdin.flush()
+
+    process.stdin.write('add_bookmark azure-openai-gpt4o 1 my-bookmarked-prompt' + str(random_number) + '\n')
+    process.stdin.flush()
+
     command = ('list_bookmarks\n')
     print('Command:', command)
     # Example command to send to the process
@@ -196,10 +220,18 @@ def test_cli_list_bookmarks():
     # Split the output into lines
     output_lines = stdout.splitlines()
 
-    # Get the last line of the output
-    last_line = output_lines[11]
-    print('=========================Output Last Line:', last_line)
-    assert last_line.replace(" ", "") == "BookmarkList"
+    # Check if "Bookmark List" exists
+    bookmark_keyword_found = False
+    for line in output_lines:
+        if "Bookmark List" in line:
+            bookmark_keyword_found = True
+            print("Found 'Bookmark List' in line:", line)
+            break
+
+    if not bookmark_keyword_found:
+        print("'Bookmark List' not found.")
+
+    assert bookmark_keyword_found == True
 
 
 def test_cli_list_context_strategies():
@@ -329,6 +361,7 @@ def test_cli_show_prompts():
     process.stdin.flush()
 
     command = 'new_session ' + nameOfRunnerFileName + ' -e "[\'azure-openai-gpt4o\']" -c add_previous_prompt -p mmlu \n'
+    print('command2:', command)
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -348,7 +381,7 @@ def test_cli_show_prompts():
     output_lines = stdout.splitlines()
 
     # Get the last line of the output
-    last_line = output_lines[29]
+    last_line = output_lines[30]
     print('=========================Output Last Line:', last_line)
     # Assert that '1' is present in the string
     assert '1' in last_line
@@ -1052,7 +1085,7 @@ def test_cli_use_prompt_template():
     output_lines = stdout.splitlines()
 
     # Get the fourth line of the output
-    last_line = output_lines[22]
+    last_line = output_lines[23]
     print('=========================Output Last Line:', last_line)
     # Assert that '1' is present in the string
     assert 'Updated session: ' + nameOfRunnerFileName + '. Prompt Template: analogical-similarity.' == last_line
@@ -1339,7 +1372,7 @@ def test_cli_clear_prompt_template():
     output_lines = stdout.splitlines()
 
     # Get the fourth line of the output
-    last_line = output_lines[23]
+    last_line = output_lines[24]
     print('=========================Output Last Line:', last_line)
     # Assert that '1' is present in the string
     assert 'Cleared prompt template.' == last_line
