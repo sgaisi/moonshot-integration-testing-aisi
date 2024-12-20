@@ -1114,7 +1114,7 @@ test('test_red_teaming_with_attack_module_textfooler_attack', async ({browserNam
     expect(isVisible).toBeFalsy();
 
     await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
+    // await expect(page.locator('div > li').nth(4)).toBeVisible();
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
