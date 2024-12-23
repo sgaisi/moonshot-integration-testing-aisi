@@ -36,7 +36,6 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     }
     await page.getByPlaceholder('Additional parameters').click();
     await page.getByPlaceholder('Additional parameters').fill(otherParams);
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
 
     //Verify Expected redirection
@@ -74,7 +73,6 @@ export async function create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -95,7 +93,7 @@ export async function download_validation_steps(page) {
 }
 
 
-test('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browserName, page}) => {
+test.only('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -171,7 +169,6 @@ test('test_benchmarking_one_endpoint_cookbook_singapore-context', async ({browse
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -208,7 +205,6 @@ test('test_benchmarking_one_endpoint_cookbook_medical-llm-leaderboard', async ({
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select medical-llm-leaderboard').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -245,7 +241,6 @@ test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({bro
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select leaderboard-cookbook').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -282,7 +277,6 @@ test('test_benchmarking_one_endpoint_cookbook_tamil-language-cookbook', async ({
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select tamil-language-cookbook').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -319,7 +313,6 @@ test('test_benchmarking_one_endpoint_cookbook_legal-summarisation', async ({brow
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select legal-summarisation').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -357,7 +350,6 @@ test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserNam
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select mlc-ai-safety').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     //Edit Endpoint
     const TOGETHER_ENDPOINT_NAME: string = "Together Llama Guard 7B Assistant";
@@ -402,7 +394,6 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browser
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-hard').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -440,7 +431,6 @@ test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select chinese-safety-cookbook').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -475,7 +465,6 @@ test('test_benchmarking_with_invalid_endpoint', async ({browserName, page}) => {
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -550,7 +539,6 @@ test('test_benchmarking_runner_name_input_empty', async ({browserName, page}) =>
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -577,7 +565,6 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -608,7 +595,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByRole('button', {name: 'Trust & Safety'}).click();
 //     await page.getByLabel('Select common-risk-easy').check();
-//     await page.getByRole('button', {name: 'OK'}).click();
+//
 //     await page.getByLabel('Next View').click();
 //     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
 //     await page.getByLabel('Next View').click();
@@ -635,7 +622,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByRole('button', {name: 'Trust & Safety'}).click();
 //     await page.getByLabel('Select common-risk-easy').check();
-//     await page.getByRole('button', {name: 'OK'}).click();
+//
 //     await page.getByLabel('Next View').click();
 //     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
 //     await page.getByLabel('Next View').click();
@@ -663,7 +650,6 @@ test('test_benchmarking_runner_no0fPrompt_input_decimal', async ({browserName, p
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -693,7 +679,6 @@ test('test_benchmarking_runner_no0fPrompt_input_empty', async ({browserName, pag
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
@@ -721,7 +706,6 @@ test('test_benchmarking_two_endpoint', async ({browserName, page}) => {
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Select ' + ENDPOINT_NAME_2).check();
@@ -751,7 +735,6 @@ test('test_benchmarking_two_endpoint_invalid', async ({browserName, page}) => {
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Select ' + ENDPOINT_NAME_2).check();
@@ -784,7 +767,6 @@ test('test_benchmarking_two_endpoint_mixed_valid&invalid', async ({browserName, 
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Select ' + ENDPOINT_NAME_2).check();
@@ -815,7 +797,6 @@ test('test_benchmarking_zero_endpoint_selected', async ({browserName, page}) => 
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
 
     await expect(page.getByRole('heading', {name: 'Select the Endpoint(s) to be'})).toBeVisible();
@@ -833,7 +814,6 @@ test('test_benchmarking_edit_endpoint_step', async ({browserName, page}) => {
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     //Edit Endpoint
     await page.locator('li').filter({hasText: ENDPOINT_NAME + "Added"}).getByRole('button').click();
@@ -874,7 +854,6 @@ test('test_benchmarking_create_new_endpoint_step', async ({browserName, page}) =
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     //Create Endpoint
     await page.getByRole('button', {name: 'Create New Endpoint'}).click();
@@ -889,7 +868,6 @@ test('test_benchmarking_create_new_endpoint_step', async ({browserName, page}) =
     await page.getByPlaceholder('Model of the model endpoint').fill('gpt-4o');
     await page.getByText('More Configs').click();
     await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
     console.log('Select ' + ENDPOINT_NAME)
@@ -927,7 +905,6 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     //Create Endpoint via another entry point
     await page.locator('li').filter({hasText: 'Testing a new Endpoint?Create'}).click();
@@ -942,7 +919,6 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
     await page.getByPlaceholder('Model of the model endpoint').fill('gpt-4o');
     await page.getByText('More Configs').click();
     await page.getByPlaceholder('Additional parameters').fill('{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}');
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -977,7 +953,7 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
 //     await page.getByLabel('Next View').click();
 //     await page.getByText('these cookbooks').click();
 //     await page.getByText('Facts about SingaporeThis').click();
-//     await page.getByRole('button', {name: 'OK'}).click();
+//
 //
 //     await page.getByRole('main').getByRole('img').nth(2).click();
 //     await page.getByText(ENDPOINT_NAME!).click();
@@ -1012,7 +988,6 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     await page.getByLabel('Select singapore-context').check();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     //Edit Endpoint
     await page.locator('li').filter({hasText: ENDPOINT_NAME + "Added"}).getByRole('button').click();
@@ -1053,7 +1028,6 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
     await page.getByLabel('Select mlc-ai-safety').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     /////////////////////////////////////////////////////////////////////////////////////
     const ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
@@ -1175,7 +1149,6 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
     await page.getByPlaceholder('Search by name').click();
     await page.getByPlaceholder('Search by name').fill('i2');
     await page.getByLabel('Select I2P').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Create Cookbook'}).click();
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
 
@@ -1184,7 +1157,6 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     const AZURE_DALLE_ENDPOINT_NAME: string = "Azure OpenAI Dall-E";
     await page.locator('li').filter({hasText: AZURE_DALLE_ENDPOINT_NAME + "Added"}).getByRole('button').click();
@@ -1238,7 +1210,6 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
     await page.getByPlaceholder('Search by name').click();
     await page.getByPlaceholder('Search by name').fill('i2');
     await page.getByLabel('Select I2P').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Create Cookbook'}).click();
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
 
@@ -1247,7 +1218,6 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     const OPENAI_DALLE_ENDPOINT_NAME: string = "OpenAI Dall-E-2";
     await page.locator('li').filter({hasText: OPENAI_DALLE_ENDPOINT_NAME + "Added"}).getByRole('button').click();
@@ -1303,7 +1273,6 @@ test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     //Edit Dependency Endpoints
     await page.locator('section').filter({hasText: /^Amazon Bedrock - Anthropic Claude 3 SonnetAdded/}).locator('button').click();
@@ -1319,7 +1288,6 @@ test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
     await page.getByText('More Configs').click();
     await page.getByPlaceholder('Additional parameters').click();
     await page.getByPlaceholder('Additional parameters').fill(otherParams);
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
     await page.getByLabel('Select Amazon Bedrock - Anthropic Claude 3 Sonnet').check();
@@ -1365,7 +1333,6 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
     await page.getByPlaceholder('Search by name').click();
     await page.getByPlaceholder('Search by name').fill('prom');
     await page.getByLabel('Select prompt injection').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Create Cookbook'}).click();
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
 
@@ -1377,7 +1344,6 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     const LLM_JUDGE_AZURE_ENDPOINT_NAME: string = "llm-judge-azure-gpt4-annotator";
     await page.locator('li').filter({hasText: LLM_JUDGE_AZURE_ENDPOINT_NAME + "Added"}).getByRole('button').click();
@@ -1432,7 +1398,6 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
 //Edit Dependency Endpoints
     await page.locator('section').filter({hasText: /^google-gemini-flash-15Added/}).locator('button').click();
@@ -1489,7 +1454,6 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     await page.getByPlaceholder('Search by name').click();
     await page.getByPlaceholder('Search by name').fill('bias');
     await page.getByLabel('Select Bias Benchmark for QA').check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByRole('button', {name: 'Create Cookbook'}).click();
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
 
@@ -1498,7 +1462,6 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
-    await page.getByRole('button', {name: 'OK'}).click();
     await page.getByLabel('Next View').click();
     const LLM_OPENAI_ENDPOINT_NAME: string = "LLM Judge - OpenAI GPT4";
     await page.locator('li').filter({hasText: LLM_OPENAI_ENDPOINT_NAME + "Added"}).getByRole('button').click();
