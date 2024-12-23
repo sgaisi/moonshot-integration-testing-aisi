@@ -93,7 +93,7 @@ export async function download_validation_steps(page) {
 }
 
 
-test.only('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
