@@ -8,8 +8,6 @@ export OPENAI_API_VERSION=$API_VERSION
 # Using forked tera-sample-files with RESTful API build
 # =====================================================
 # Clone the repositories
-git clone --branch snapshot_20241004 git@gitlab.com:imda_dsl/t2po/tech-analysis-tool/tera-backend.git
-git clone git@gitlab.com:imda_dsl/t2po/tera-sample-files.git
 
 # Extract the tar file
 cd tera-sample-files/data/ || { echo "Failed to change directory to tera-sample-files/data"; exit 1; }
