@@ -1,4 +1,4 @@
-import {test} from '@playwright/test';
+import {Page, test} from '@playwright/test';
 import {expect} from "@playwright/test";
 // import {create_endpoint_steps} from './endpoint.spec';
 import dotenv from 'dotenv';
@@ -7,6 +7,30 @@ import fs from "fs/promises";
 // Read from ".env" file.
 const __dirname: string = '.'
 dotenv.config({path: path.resolve(__dirname, '.env')});
+
+export async function setSliderValue(page: Page, sliderXPath: string, valueAsPercent: number) {
+    // Find the slider element using the provided XPath and obtain its bounding box
+    const sliderBound = await page.locator(sliderXPath).boundingBox();
+
+    // Use page.evaluate to obtain the current slider value from the HTML using the same XPath
+    const currentSliderValue = await page.evaluate(`document.evaluate("${sliderXPath}", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.value`);
+
+    // Calculate the target X and Y coordinates for the mouse cursor based on the current slider value
+    const targetX = sliderBound.x + (sliderBound.width * currentSliderValue / 100);
+    const targetY = sliderBound.y + sliderBound.height / 2;
+
+    // Move the mouse cursor to the calculated position
+    await page.mouse.move(targetX, targetY);
+
+    // Simulate a mouse click by pressing the mouse button
+    await page.mouse.down();
+
+    // Move the mouse cursor to the desired position by the provided valueAsPercent
+    await page.mouse.move(
+        sliderBound.x + (sliderBound.width * valueAsPercent) / 100,
+        sliderBound.y + sliderBound.height / 2,
+    );
+}
 
 export async function create_endpoint_steps(page, name, uri, token, connectorType, maxCallPerSec, maxConcurr, model, otherParams, uriSkipCheck?: boolean) {
     await page.goto('http://localhost:3000/endpoints/new');
@@ -72,15 +96,13 @@ export async function create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    // await page.getByRole('button', {name: 'Trust & Safety'}).click();
+    await page.getByLabel('Select singapore-context').check();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
 }
 
@@ -136,13 +158,47 @@ test('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browser
 
 });
 
-test('test_benchmarking_one_endpoint', async ({browserName, page}) => {
+test.only('test_benchmarking_one_endpoint', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+    //Check Detailss
+    await page.getByRole('button', {name: 'See Details'}).click();
+    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+    await expect(page.getByText('Description:')).toBeVisible();
+    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+    await page.getByRole('main').getByRole('img').nth(1).click();
+    // await download_validation_steps (page)
+    await page.getByRole('button', {name: 'View Report'}).click();
+    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+    await page.getByText(/back to home/i).click()
+
+});
+    test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browserName, page}) => {
+    test.setTimeout(1200000);
+    // Check if the browser is WebKit
+    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Facts About Singapore " + Math.floor(Math.random() * 1000000000);
+    ////////////////////////////////////////////////////////////////////////////
+    // Benchmarking
+    console.log('Benchmarking')
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await page.getByRole('listitem').nth(1).click();
+    await page.getByRole('button', {name: 'Start New Run'}).click();
+    await page.getByRole('button', {name: 'Trust & Safety'}).click();
+    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Next View').click();
+    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+    await page.getByLabel('Next View').click();
+    await page.getByPlaceholder('Give this session a unique').click();
+    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+    await page.getByRole('button', {name: 'Run'}).click();
+    ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     //Check Detailss
     await page.getByRole('button', {name: 'See Details'}).click();
@@ -176,8 +232,6 @@ test('test_benchmarking_one_endpoint_cookbook_singapore-context', async ({browse
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -213,8 +267,6 @@ test('test_benchmarking_one_endpoint_cookbook_medical-llm-leaderboard', async ({
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -250,8 +302,6 @@ test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({bro
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -287,8 +337,6 @@ test('test_benchmarking_one_endpoint_cookbook_tamil-language-cookbook', async ({
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -324,8 +372,6 @@ test('test_benchmarking_one_endpoint_cookbook_legal-summarisation', async ({brow
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -369,8 +415,6 @@ test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserNam
     await page.getByRole('button', {name: 'Yes'}).click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -407,8 +451,6 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browser
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -445,8 +487,6 @@ test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -472,16 +512,13 @@ test('test_benchmarking_with_invalid_endpoint', async ({browserName, page}) => {
     await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', 'gpt-4o', '{\n      "timeout": 300,\n   "max_attempts": 1,\n      "temperature": 0.5\n  }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill('Test ' + Math.floor(Math.random() * 1000000000));
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     // Assert Error Running Benchmarking
     await expect(page.getByRole('button', {name: 'View Errors'})).toBeVisible({timeout: 600000});
@@ -547,16 +584,13 @@ test('test_benchmarking_runner_name_input_empty', async ({browserName, page}) =>
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     // await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     // await expect(page.getByText('Name is required')).toBeVisible();
     // Select the Run button
     const runBtn = page.getByRole('button', {name: 'Run'});
@@ -574,8 +608,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -583,8 +616,6 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByPlaceholder('Description of this benchmark').fill('test');
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
 
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -605,8 +636,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
 //     await page.getByRole('listitem').nth(1).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
-//     await page.getByRole('button', {name: 'Trust & Safety'}).click();
-//     await page.getByLabel('Select common-risk-easy').check();
+//     await page.getByLabel('Select singapore-context').check();
 //     await page.getByRole('button', {name: 'OK'}).click();
 //     await page.getByLabel('Next View').click();
 //     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -614,7 +644,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     await page.getByPlaceholder('Give this session a unique').click();
 //     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
 //     await page.getByPlaceholder('Description of this benchmark').fill('test');
-//     await page.getByPlaceholder('Number of prompts per recipe.').click();
+//
 //     await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
 //     // Select the Run button
 //     const runBtn = page.getByRole('button', {name: 'Run'});
@@ -632,8 +662,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
 //     await page.getByRole('listitem').nth(1).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
-//     await page.getByRole('button', {name: 'Trust & Safety'}).click();
-//     await page.getByLabel('Select common-risk-easy').check();
+//     await page.getByLabel('Select singapore-context').check();
 //     await page.getByRole('button', {name: 'OK'}).click();
 //     await page.getByLabel('Next View').click();
 //     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -641,7 +670,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     await page.getByPlaceholder('Give this session a unique').click();
 //     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
 //     await page.getByPlaceholder('Description of this benchmark').fill('test');
-//     await page.getByPlaceholder('Number of prompts per recipe.').click();
+//
 //     await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
 //     // Select the Run button
 //     const runBtn = page.getByRole('button', {name: 'Run'});
@@ -660,8 +689,7 @@ test('test_benchmarking_runner_no0fPrompt_input_decimal', async ({browserName, p
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -669,7 +697,6 @@ test('test_benchmarking_runner_no0fPrompt_input_decimal', async ({browserName, p
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByPlaceholder('Description of this benchmark').fill('test');
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
     await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
     await page.getByPlaceholder('Number of prompts per recipe').fill('1.1');
     await page.getByText('Number of prompts per recipe').click();
@@ -690,8 +717,7 @@ test('test_benchmarking_runner_no0fPrompt_input_empty', async ({browserName, pag
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -699,7 +725,6 @@ test('test_benchmarking_runner_no0fPrompt_input_empty', async ({browserName, pag
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByPlaceholder('Description of this benchmark').fill('test');
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
     await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
     // Select the Run button
     const runBtn = page.getByRole('button', {name: 'Run'});
@@ -718,17 +743,13 @@ test('test_benchmarking_two_endpoint', async ({browserName, page}) => {
     await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI2, process.env.TOKEN2, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
-
+    await page.getByLabel('Select singapore-context').check();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Select ' + ENDPOINT_NAME_2).check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill('Test ' + Math.floor(Math.random() * 1000000000));
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     await page.getByRole('button', {name: 'View Report'}).click();
@@ -748,8 +769,7 @@ test('test_benchmarking_two_endpoint_invalid', async ({browserName, page}) => {
     await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n    "max_attempts": 3,\n      "temperature": 0.5\n  }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -757,8 +777,6 @@ test('test_benchmarking_two_endpoint_invalid', async ({browserName, page}) => {
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
 
     // Assert Error Running Benchmarking
@@ -781,8 +799,7 @@ test('test_benchmarking_two_endpoint_mixed_valid&invalid', async ({browserName, 
     await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n    "max_attempts": 3,\n      "temperature": 0.5\n }', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
@@ -790,8 +807,6 @@ test('test_benchmarking_two_endpoint_mixed_valid&invalid', async ({browserName, 
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
 
     // Assert Error Running Benchmarking
@@ -812,8 +827,7 @@ test('test_benchmarking_zero_endpoint_selected', async ({browserName, page}) => 
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
 
@@ -830,8 +844,7 @@ test('test_benchmarking_edit_endpoint_step', async ({browserName, page}) => {
     await create_endpoint_steps(page, ENDPOINT_NAME, "URI", process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     //Edit Endpoint
@@ -843,8 +856,6 @@ test('test_benchmarking_edit_endpoint_step', async ({browserName, page}) => {
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     //Check Details
@@ -871,8 +882,7 @@ test('test_benchmarking_create_new_endpoint_step', async ({browserName, page}) =
     await page.goto('http://localhost:3000/');
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     //Create Endpoint
@@ -896,8 +906,6 @@ test('test_benchmarking_create_new_endpoint_step', async ({browserName, page}) =
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     //Check Details
@@ -924,8 +932,7 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
     await page.goto('http://localhost:3000/');
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     //Create Endpoint via another entry point
@@ -948,8 +955,6 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     //Check Details
@@ -983,8 +988,8 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
 //     await page.locator('div:nth-child(3) > .flex > svg').click();
 //     await page.getByPlaceholder('Give this session a unique').click();
 //     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-//     await page.getByPlaceholder('Number of prompts per recipe.').click();
-//     await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
+//
+//
 //     await page.getByRole('button', {name: 'Run'}).click();
 //
 //
@@ -1019,12 +1024,10 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
-    await page.getByLabel('Select ' + ENDPOINT_NAME, { exact: true }).check();
+    await page.getByLabel('Select ' + ENDPOINT_NAME, {exact: true}).check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     //Check Details
@@ -1049,8 +1052,8 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     await page.goto('http://localhost:3000/');
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
+    await page.getByLabel('Select singapore-context').check();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
     await page.getByLabel('Select mlc-ai-safety').check();
 
     await page.getByLabel('Next View').click();
@@ -1067,13 +1070,11 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     await page.getByPlaceholder('Access token for the remote').fill(process.env.TOGETHER_TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
-    await page.getByLabel('Select ' + ENDPOINT_NAME, { exact: true }).check();
+    await page.getByLabel('Select ' + ENDPOINT_NAME, {exact: true}).check();
     await page.getByLabel('Next View').click();
     await page.getByRole('button', {name: 'Yes'}).click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
     //Check Details
@@ -1198,8 +1199,6 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -1257,8 +1256,6 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -1300,8 +1297,7 @@ test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
     await page.getByRole('listitem').nth(1).click();
     //Edit Dependency Endpoint
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
     //Edit Dependency Endpoints
@@ -1325,8 +1321,6 @@ test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -1390,8 +1384,6 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
     await page.getByRole('button', {name: 'Yes'}).click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
@@ -1428,8 +1420,7 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
 
 ////////////////////////////////////////////////
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
+    await page.getByLabel('Select singapore-context').check();
 
     await page.getByLabel('Next View').click();
 //Edit Dependency Endpoints
@@ -1443,8 +1434,6 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
 
@@ -1518,12 +1507,10 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     await page.getByRole('button', {name: 'Save'}).click();
     ///////////////////////////////////////////////////////////////////
 
-    await page.getByLabel('Select ' + AZURE_OPENAI_ENDPOINT_NAME,{exact:true}).check();
+    await page.getByLabel('Select ' + AZURE_OPENAI_ENDPOINT_NAME, {exact: true}).check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Number of prompts per recipe.').click();
-    await page.getByPlaceholder('Number of prompts per recipe.').fill('1');
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
