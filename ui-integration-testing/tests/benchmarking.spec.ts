@@ -8,30 +8,6 @@ import fs from "fs/promises";
 const __dirname: string = '.'
 dotenv.config({path: path.resolve(__dirname, '.env')});
 
-export async function setSliderValue(page: Page, sliderXPath: string, valueAsPercent: number) {
-    // Find the slider element using the provided XPath and obtain its bounding box
-    const sliderBound = await page.locator(sliderXPath).boundingBox();
-
-    // Use page.evaluate to obtain the current slider value from the HTML using the same XPath
-    const currentSliderValue = await page.evaluate(`document.evaluate("${sliderXPath}", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.value`);
-
-    // Calculate the target X and Y coordinates for the mouse cursor based on the current slider value
-    const targetX = sliderBound.x + (sliderBound.width * currentSliderValue / 100);
-    const targetY = sliderBound.y + sliderBound.height / 2;
-
-    // Move the mouse cursor to the calculated position
-    await page.mouse.move(targetX, targetY);
-
-    // Simulate a mouse click by pressing the mouse button
-    await page.mouse.down();
-
-    // Move the mouse cursor to the desired position by the provided valueAsPercent
-    await page.mouse.move(
-        sliderBound.x + (sliderBound.width * valueAsPercent) / 100,
-        sliderBound.y + sliderBound.height / 2,
-    );
-}
-
 export async function create_endpoint_steps(page, name, uri, token, connectorType, maxCallPerSec, maxConcurr, model, otherParams, uriSkipCheck?: boolean) {
     await page.goto('http://localhost:3000/endpoints/new');
     await page.getByPlaceholder('Name of the model').click();
@@ -158,6 +134,64 @@ test('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browser
 
 });
 
+test('test_benchmarking_one_endpoint_slider_percentage', async ({browserName, page}) => {
+    test.setTimeout(1200000);
+    // Check if the browser is WebKit
+    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+    //Start Benchmarking
+     // Benchmarking
+    console.log('Benchmarking')
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await page.getByRole('listitem').nth(1).click();
+    await page.getByRole('button', {name: 'Start New Run'}).click();
+    // await page.getByRole('button', {name: 'Trust & Safety'}).click();
+    await page.getByLabel('Select singapore-context').check();
+    await page.getByLabel('Next View').click();
+    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+    await page.getByLabel('Next View').click();
+    await page.getByPlaceholder('Give this session a unique').click();
+    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+    // Locate the slider handle
+    const sliderHandle = page.locator('.Slider_handle__AaqrC'); // Update with the actual selector of your slider handle
+
+    // Locate the slider track or an end position element if needed
+    const sliderTrack = page.locator('.Slider_slider__3olqj'); // Update with the slider's track selector
+
+    // Get the bounding box of the slider track
+    const sliderBox = await sliderTrack.boundingBox();
+    if (!sliderBox) {
+        throw new Error('Could not retrieve slider bounding box.');
+    }
+
+    // Drag the slider handle by simulating mouse events
+    const targetX = sliderBox.x + sliderBox.width * 0.5; // Move to the middle of the slider
+    const targetY = sliderBox.y + sliderBox.height / 2; // Center vertically
+
+    await sliderHandle.dragTo(sliderHandle, {
+        force: true,
+        targetPosition: {
+            x: 15,
+            y: targetY,
+        },
+    });
+
+    await page.getByRole('button', {name: 'Run'}).click();
+    //////////////////////////////////////////////////////////////
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+    //Check Details
+    await page.getByRole('button', {name: 'See Details'}).click();
+    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+    await expect(page.getByText('Description:')).toBeVisible();
+    await expect(page.getByText('Number of prompts to run:4')).toBeVisible();
+    await page.getByRole('main').getByRole('img').nth(1).click();
+    // await download_validation_steps (page)
+    await page.getByRole('button', {name: 'View Report'}).click();
+    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+    await page.getByText(/back to home/i).click()
+
+});
 test('test_benchmarking_one_endpoint', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
@@ -178,7 +212,7 @@ test('test_benchmarking_one_endpoint', async ({browserName, page}) => {
     await page.getByText(/back to home/i).click()
 
 });
-    test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
