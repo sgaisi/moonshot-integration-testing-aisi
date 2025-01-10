@@ -70,7 +70,7 @@ export async function create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     // await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select singapore-context').check();
@@ -144,7 +144,7 @@ test('test_benchmarking_one_endpoint_slider_percentage', async ({browserName, pa
      // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     // await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select singapore-context').check();
@@ -222,7 +222,7 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browser
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-easy').check();
@@ -257,7 +257,7 @@ test('test_benchmarking_one_endpoint_cookbook_singapore-context', async ({browse
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -292,7 +292,7 @@ test('test_benchmarking_one_endpoint_cookbook_medical-llm-leaderboard', async ({
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select medical-llm-leaderboard').check();
 
@@ -327,7 +327,7 @@ test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({bro
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select leaderboard-cookbook').check();
 
@@ -362,7 +362,7 @@ test('test_benchmarking_one_endpoint_cookbook_tamil-language-cookbook', async ({
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select tamil-language-cookbook').check();
 
@@ -397,7 +397,7 @@ test('test_benchmarking_one_endpoint_cookbook_legal-summarisation', async ({brow
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select legal-summarisation').check();
 
@@ -432,7 +432,7 @@ test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserNam
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select mlc-ai-safety').check();
@@ -475,7 +475,7 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browser
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-hard').check();
@@ -511,7 +511,7 @@ test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select chinese-safety-cookbook').check();
@@ -544,7 +544,7 @@ test('test_benchmarking_with_invalid_endpoint', async ({browserName, page}) => {
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', 'gpt-4o', '{\n      "timeout": 300,\n   "max_attempts": 1,\n      "temperature": 0.5\n  }', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -616,7 +616,7 @@ test('test_benchmarking_runner_name_input_empty', async ({browserName, page}) =>
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -640,7 +640,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -668,7 +668,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     // Benchmarking
 //     console.log('Benchmarking')
 //     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
-//     await page.getByRole('listitem').nth(1).click();
+//     await page.locator('li').filter({ hasText: 'benchmarking' }).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByLabel('Select singapore-context').check();
 //     await page.getByRole('button', {name: 'OK'}).click();
@@ -694,7 +694,7 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
 //     // Benchmarking
 //     console.log('Benchmarking')
 //     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
-//     await page.getByRole('listitem').nth(1).click();
+//     await page.locator('li').filter({ hasText: 'benchmarking' }).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByLabel('Select singapore-context').check();
 //     await page.getByRole('button', {name: 'OK'}).click();
@@ -721,7 +721,7 @@ test('test_benchmarking_runner_no0fPrompt_input_decimal', async ({browserName, p
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -749,7 +749,7 @@ test('test_benchmarking_runner_no0fPrompt_input_empty', async ({browserName, pag
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -775,7 +775,7 @@ test('test_benchmarking_two_endpoint', async ({browserName, page}) => {
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI2, process.env.TOKEN2, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
     await page.getByLabel('Next View').click();
@@ -801,7 +801,7 @@ test('test_benchmarking_two_endpoint_invalid', async ({browserName, page}) => {
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n "max_attempts": 3,\n      "temperature": 0.5\n  }', true)
     await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n    "max_attempts": 3,\n      "temperature": 0.5\n  }', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -831,7 +831,7 @@ test('test_benchmarking_two_endpoint_mixed_valid&invalid', async ({browserName, 
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await create_endpoint_steps(page, ENDPOINT_NAME_2, "URI", "Token123", 'azure-openai-connector', '2', '', '123', '{\n      "timeout": 300,\n    "max_attempts": 3,\n      "temperature": 0.5\n }', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -859,7 +859,7 @@ test('test_benchmarking_zero_endpoint_selected', async ({browserName, page}) => 
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -876,7 +876,7 @@ test('test_benchmarking_edit_endpoint_step', async ({browserName, page}) => {
     // Benchmarking
     console.log('Benchmarking')
     await create_endpoint_steps(page, ENDPOINT_NAME, "URI", process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -914,7 +914,7 @@ test('test_benchmarking_create_new_endpoint_step', async ({browserName, page}) =
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000/');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -964,7 +964,7 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000/');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
 
@@ -1008,7 +1008,7 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
 //     // Benchmarking
 //     console.log('Benchmarking')
 //     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
-//     await page.getByRole('listitem').nth(1).click();
+//     await page.locator('li').filter({ hasText: 'benchmarking' }).click();
 //     await page.getByRole('button', {name: 'Start New Run'}).click();
 //     await page.getByRole('button', {name: 'Hard test sets for Common'}).click();
 //     await page.getByRole('button', {name: 'MLCommons AI Safety'}).click();
@@ -1045,7 +1045,7 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     const ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     await page.goto('http://localhost:3000/');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -1084,7 +1084,7 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     const TOGETHER_ENDPOINT_NAME: string = "Together Llama Guard 7B Assistant";
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     await page.goto('http://localhost:3000/');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -1126,7 +1126,7 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
 test('test_benchmarking_run_with_zero_cookbook_step', async ({browserName, page}) => {
     test.setTimeout(1200000);
     await page.goto('http://localhost:3000/');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
     await page.getByLabel('Select singapore-context').uncheck();
@@ -1165,7 +1165,7 @@ test('test_benchmarking_run_with_view_past_run_btn', async ({browserName, page})
 test('test_benchmarking_run_with_view_cookbook_btn', async ({browserName, page}) => {
     test.setTimeout(1200000);
     await page.goto('http://localhost:3000/');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
     await page.getByPlaceholder('Search by name').click();
     await page.getByPlaceholder('Search by name').fill('Hard');
@@ -1178,7 +1178,7 @@ test('test_benchmarking_run_with_view_cookbook_btn', async ({browserName, page})
 test('test_benchmarking_run_with_view_recipes_btn', async ({browserName, page}) => {
     test.setTimeout(1200000);
     await page.goto('http://localhost:3000/');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'View Recipes'}).click();
     await page.getByPlaceholder('Search by name').click();
     await page.getByPlaceholder('Search by name').fill('squad');
@@ -1188,7 +1188,7 @@ test('test_benchmarking_run_with_view_recipes_btn', async ({browserName, page}) 
     await expect(page.locator('h3')).toContainText('squad-shifts-tnf');
 });
 
-test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, page}) => {
+test.only('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -1198,7 +1198,7 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     // Create i2p cookbook steps
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
     await page.goto('http://localhost:3000/benchmarking/cookbooks');
@@ -1214,7 +1214,7 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
 
     //Edit i2p endpoint
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
@@ -1259,7 +1259,7 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     // Create i2p cookbook steps
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
     await page.goto('http://localhost:3000/benchmarking/cookbooks');
@@ -1275,7 +1275,7 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
 
     //Edit i2p endpoint
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
@@ -1328,7 +1328,7 @@ test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
     const RUNNER_NAME: string = "Test Amazon Bedrock " + Math.floor(Math.random() * 1000000000);
     // Benchmarking
     console.log('Benchmarking')
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     //Edit Dependency Endpoint
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByLabel('Select singapore-context').check();
@@ -1381,7 +1381,7 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     // Create i2p cookbook steps
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
     await page.goto('http://localhost:3000/benchmarking/cookbooks');
@@ -1400,7 +1400,7 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     //Edit llm-judge-azure endpoint
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
@@ -1450,7 +1450,7 @@ test('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page
     // Benchmarking
     console.log('Benchmarking')
 
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
 
 ////////////////////////////////////////////////
     await page.getByRole('button', {name: 'Start New Run'}).click();
@@ -1499,7 +1499,7 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000');
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     // Create i2p cookbook steps
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
     await page.goto('http://localhost:3000/benchmarking/cookbooks');
@@ -1515,7 +1515,7 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
 
     //Edit LLM Judge - OpenAI GPT4 Evaluator endpoint
-    await page.getByRole('listitem').nth(1).click();
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
