@@ -9,6 +9,7 @@ load_dotenv()  # Load environment variables from .env file
 
 AZURE_OPENAI_URI = os.getenv('AZURE_OPENAI_URI')
 AZURE_OPENAI_TOKEN = os.getenv('AZURE_OPENAI_TOKEN')
+TOGETHER_TOKEN= os.getenv('TOGETHER_TOKEN')
 # CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
 CLI_DIR = os.getenv('CLI_DIR')
 # CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
@@ -38,6 +39,8 @@ def copy_and_move_file(source_path, destination_path):
         shutil.move(source_path, destination_path)
         print(f"File moved to '{destination_path}' successfully.")
     except Exception as e:
+        print(f"Error: {e}")
+
 
 def copy_file(file_path):
     # Get the file name and directory path
@@ -121,6 +124,69 @@ def test_cli_run_cookbook():
 
     # Get the last line of the output
     last_line = output_lines[-16]
+    print('=========================Output Last Line:', last_line)
+    assert last_line.replace(" ", "") == "CookbookResult"
+
+def test_cli_run_cookbook_mlc_ai_safety():
+    command = (
+        # 'cd .. &&'
+        # 'source venv/bin/activate &&'
+        # 'cd moonshot &&'
+        'python3 -m moonshot cli interactive'
+    )
+
+    process = subprocess.Popen(
+        command,
+        shell=True,  # Allows for complex shell commands
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        text=True,
+        cwd=str(CLI_DIR),
+        # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
+        # /home/runner/work/moonshot-data/moonshot-data for moonshot data repo
+        # /home/runner/work/moonshot/moonshot-data for moonshot repo
+    )
+    print('Path:', str(CLI_DIR))
+    # Ensure process.stdin is not None
+    if process.stdin is None:
+        raise RuntimeError("Failed to create stdin for the subprocess")
+
+    # Update Endpoints
+    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
+        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
+        AZURE_OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
+
+    # Update Evaluation Endpoint
+    command = 'update_endpoint together-llama-guard-7b-assistant "[(\'token\', \'' + str(TOGETHER_TOKEN) + '\')]"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
+
+    # Generate a random number between 0 and 999,999,999 (inclusive)
+    random_number = int(random.random() * 1000000000)
+    nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
+    nameOfRunnerName = "my benchmarking runner " + str(random_number)
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'mlc-ai-safety\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    print('Command:', command)
+    # Example command to send to the process
+    process.stdin.write(command)
+    process.stdin.flush()
+
+    # Capture the output and errors
+    stdout, stderr = process.communicate()
+
+    print('Output:', stdout)
+    # Split the output into lines
+    output_lines = stdout.splitlines()
+
+    # Get the last line of the output
+    last_line = output_lines[-26]
     print('=========================Output Last Line:', last_line)
     assert last_line.replace(" ", "") == "CookbookResult"
 

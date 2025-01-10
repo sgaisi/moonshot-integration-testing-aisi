@@ -92,523 +92,523 @@ export async function download_validation_steps(page) {
 }
 
 
-test('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
-    // Locate the element
-    const locator = page.locator('p.text-white.text-\\[1\\.1rem\\].w-\\[90\\%\\]');
-
-    // Poll for the text content to change from "0%" to "100%"
-    let currentText = await locator.textContent();
-
-    // Loop until the text becomes "100%"
-    while (currentText !== '100%') {
-        console.log(`Current percentage: ${currentText}`); // Log progress (optional)
-
-        // Wait for a short time before checking again (e.g., 500ms)
-        await page.waitForTimeout(500);
-
-        // Get the updated text content
-        currentText = await locator.textContent();
-    }
-
-    // Once it reaches "100%", execute some action
-    console.log('Reached 100%, executing action...');
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Details
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-
-
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_slider_percentage', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    //Start Benchmarking
-     // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    // await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select singapore-context').check();
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    // Locate the slider handle
-    const sliderHandle = page.locator('.Slider_handle__AaqrC'); // Update with the actual selector of your slider handle
-
-    // Locate the slider track or an end position element if needed
-    const sliderTrack = page.locator('.Slider_slider__3olqj'); // Update with the slider's track selector
-
-    // Get the bounding box of the slider track
-    const sliderBox = await sliderTrack.boundingBox();
-    if (!sliderBox) {
-        throw new Error('Could not retrieve slider bounding box.');
-    }
-
-    // Drag the slider handle by simulating mouse events
-    const targetX = sliderBox.x + sliderBox.width * 0.5; // Move to the middle of the slider
-    const targetY = sliderBox.y + sliderBox.height / 2; // Center vertically
-
-    await sliderHandle.dragTo(sliderHandle, {
-        force: true,
-        targetPosition: {
-            x: 15,
-            y: targetY,
-        },
-    });
-
-    await page.getByRole('button', {name: 'Run'}).click();
-    //////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Details
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:4')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-test('test_benchmarking_one_endpoint', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Common Risk Easy " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-easy').check();
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_singapore-context', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Facts About Singapore " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select singapore-context').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_medical-llm-leaderboard', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Medical " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select medical-llm-leaderboard').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Leaderboard " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select leaderboard-cookbook').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_tamil-language-cookbook', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Tamil " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select tamil-language-cookbook').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_legal-summarisation', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Legal Summarization " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select legal-summarisation').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test MLC " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select mlc-ai-safety').check();
-
-    await page.getByLabel('Next View').click();
-    //Edit Endpoint
-    const TOGETHER_ENDPOINT_NAME: string = "Together Llama Guard 7B Assistant";
-    await page.locator('li').filter({hasText: TOGETHER_ENDPOINT_NAME + "Added"}).getByRole('button').click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOGETHER_TOKEN);
-    await page.getByRole('button', {name: 'Save'}).click();
-    //////////////////////////////////////////////////
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByRole('button', {name: 'Yes'}).click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Hard CookBook " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select common-risk-hard').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Clcc " + Math.floor(Math.random() * 1000000000);
-    ////////////////////////////////////////////////////////////////////////////
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
-    await page.getByLabel('Select chinese-safety-cookbook').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByRole('button', {name: 'Run'}).click();
-    ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    //Check Detailss
-    await page.getByRole('button', {name: 'See Details'}).click();
-    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
-    await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(1).click();
-    // await download_validation_steps (page)
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-
-});
-
-
-test('test_benchmarking_with_invalid_endpoint', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', 'gpt-4o', '{\n      "timeout": 300,\n   "max_attempts": 1,\n      "temperature": 0.5\n  }', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select singapore-context').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill('Test ' + Math.floor(Math.random() * 1000000000));
-    await page.getByRole('button', {name: 'Run'}).click();
-    // Assert Error Running Benchmarking
-    await expect(page.getByRole('button', {name: 'View Errors'})).toBeVisible({timeout: 600000});
-    await expect(page.getByText('% (with error)')).toBeVisible();
-    await page.getByRole('button', {name: 'View Errors'}).click();
-    await expect(page.getByRole('heading', {name: 'Errors'})).toBeVisible();
-    await page.getByRole('button', {name: 'Close'}).click();
-    await page.getByText(/back to home/i).click()
-});
-
-test('test_benchmarking_runner_name_exist', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    // Check if the browser is WebKit
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const ENDPOINT_NAME2: string = "Azure OpenAI2 " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
-    // Run again
-    await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME2, RUNNER_NAME)
-    await expect(page.getByText('Unable to create and execute')).toBeVisible();
-    await expect(page.getByText('Errors')).toBeVisible();
-    await page.getByRole('button', {name: 'Close'}).click();
-});
-
-test('test_benchmarking_runner_name_input_integer', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "" + Math.floor(Math.random() * 1000000000);
-    await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-});
-
-test('test_benchmarking_runner_name_input_decimal', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = Math.floor(Math.random() * 100000) + "." + Math.floor(Math.random() * 100000);
-    await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-});
-
-test('test_benchmarking_runner_name_input_special_char', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "@" + Math.floor(Math.random() * 100000);
-    await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
-    await page.getByRole('button', {name: 'View Report'}).click();
-    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
-    await page.getByText(/back to home/i).click()
-});
+// test('test_benchmarking_one_endpoint_run_with_percentage_check', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+//     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
+//     // Locate the element
+//     const locator = page.locator('p.text-white.text-\\[1\\.1rem\\].w-\\[90\\%\\]');
+//
+//     // Poll for the text content to change from "0%" to "100%"
+//     let currentText = await locator.textContent();
+//
+//     // Loop until the text becomes "100%"
+//     while (currentText !== '100%') {
+//         console.log(`Current percentage: ${currentText}`); // Log progress (optional)
+//
+//         // Wait for a short time before checking again (e.g., 500ms)
+//         await page.waitForTimeout(500);
+//
+//         // Get the updated text content
+//         currentText = await locator.textContent();
+//     }
+//
+//     // Once it reaches "100%", execute some action
+//     console.log('Reached 100%, executing action...');
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Details
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//
+//
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_slider_percentage', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+//     //Start Benchmarking
+//      // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     // await page.getByRole('button', {name: 'Trust & Safety'}).click();
+//     await page.getByLabel('Select singapore-context').check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     // Locate the slider handle
+//     const sliderHandle = page.locator('.Slider_handle__AaqrC'); // Update with the actual selector of your slider handle
+//
+//     // Locate the slider track or an end position element if needed
+//     const sliderTrack = page.locator('.Slider_slider__3olqj'); // Update with the slider's track selector
+//
+//     // Get the bounding box of the slider track
+//     const sliderBox = await sliderTrack.boundingBox();
+//     if (!sliderBox) {
+//         throw new Error('Could not retrieve slider bounding box.');
+//     }
+//
+//     // Drag the slider handle by simulating mouse events
+//     const targetX = sliderBox.x + sliderBox.width * 0.5; // Move to the middle of the slider
+//     const targetY = sliderBox.y + sliderBox.height / 2; // Center vertically
+//
+//     await sliderHandle.dragTo(sliderHandle, {
+//         force: true,
+//         targetPosition: {
+//             x: 15,
+//             y: targetY,
+//         },
+//     });
+//
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     //////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Details
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:4')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+// test('test_benchmarking_one_endpoint', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+//     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+// test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Common Risk Easy " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByRole('button', {name: 'Trust & Safety'}).click();
+//     await page.getByLabel('Select common-risk-easy').check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_singapore-context', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Facts About Singapore " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByLabel('Select singapore-context').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_medical-llm-leaderboard', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Medical " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByLabel('Select medical-llm-leaderboard').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Leaderboard " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByLabel('Select leaderboard-cookbook').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_tamil-language-cookbook', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Tamil " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByLabel('Select tamil-language-cookbook').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_legal-summarisation', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Legal Summarization " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByLabel('Select legal-summarisation').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test MLC " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByRole('button', {name: 'Trust & Safety'}).click();
+//     await page.getByLabel('Select mlc-ai-safety').check();
+//
+//     await page.getByLabel('Next View').click();
+//     //Edit Endpoint
+//     const TOGETHER_ENDPOINT_NAME: string = "Together Llama Guard 7B Assistant";
+//     await page.locator('li').filter({hasText: TOGETHER_ENDPOINT_NAME + "Added"}).getByRole('button').click();
+//     await page.getByPlaceholder('Access token for the remote').fill(process.env.TOGETHER_TOKEN);
+//     await page.getByRole('button', {name: 'Save'}).click();
+//     //////////////////////////////////////////////////
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByRole('button', {name: 'Yes'}).click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Hard CookBook " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByRole('button', {name: 'Trust & Safety'}).click();
+//     await page.getByLabel('Select common-risk-hard').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+// test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test Clcc " + Math.floor(Math.random() * 1000000000);
+//     ////////////////////////////////////////////////////////////////////////////
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByRole('button', {name: 'Trust & Safety'}).click();
+//     await page.getByLabel('Select chinese-safety-cookbook').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     ////////////////////////////////////////////////////////////////////////////
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     //Check Detailss
+//     await page.getByRole('button', {name: 'See Details'}).click();
+//     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+//     await expect(page.getByText('Description:')).toBeVisible();
+//     await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+//     await page.getByRole('main').getByRole('img').nth(1).click();
+//     // await download_validation_steps (page)
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+//
+// });
+//
+//
+// test('test_benchmarking_with_invalid_endpoint', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     // Benchmarking
+//     console.log('Benchmarking')
+//     await create_endpoint_steps(page, ENDPOINT_NAME, "uri", "token123", 'azure-openai-connector', '2', '', 'gpt-4o', '{\n      "timeout": 300,\n   "max_attempts": 1,\n      "temperature": 0.5\n  }', true)
+//     await page.getByRole('listitem').nth(1).click();
+//     await page.getByRole('button', {name: 'Start New Run'}).click();
+//     await page.getByLabel('Select singapore-context').check();
+//
+//     await page.getByLabel('Next View').click();
+//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
+//     await page.getByLabel('Next View').click();
+//     await page.getByPlaceholder('Give this session a unique').click();
+//     await page.getByPlaceholder('Give this session a unique').fill('Test ' + Math.floor(Math.random() * 1000000000));
+//     await page.getByRole('button', {name: 'Run'}).click();
+//     // Assert Error Running Benchmarking
+//     await expect(page.getByRole('button', {name: 'View Errors'})).toBeVisible({timeout: 600000});
+//     await expect(page.getByText('% (with error)')).toBeVisible();
+//     await page.getByRole('button', {name: 'View Errors'}).click();
+//     await expect(page.getByRole('heading', {name: 'Errors'})).toBeVisible();
+//     await page.getByRole('button', {name: 'Close'}).click();
+//     await page.getByText(/back to home/i).click()
+// });
+//
+// test('test_benchmarking_runner_name_exist', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     // Check if the browser is WebKit
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const ENDPOINT_NAME2: string = "Azure OpenAI2 " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
+//     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
+//     // Run again
+//     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME2, RUNNER_NAME)
+//     await expect(page.getByText('Unable to create and execute')).toBeVisible();
+//     await expect(page.getByText('Errors')).toBeVisible();
+//     await page.getByRole('button', {name: 'Close'}).click();
+// });
+//
+// test('test_benchmarking_runner_name_input_integer', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "" + Math.floor(Math.random() * 1000000000);
+//     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+// });
+//
+// test('test_benchmarking_runner_name_input_decimal', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = Math.floor(Math.random() * 100000) + "." + Math.floor(Math.random() * 100000);
+//     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+// });
+//
+// test('test_benchmarking_runner_name_input_special_char', async ({browserName, page}) => {
+//     test.setTimeout(1200000);
+//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+//     const RUNNER_NAME: string = "@" + Math.floor(Math.random() * 100000);
+//     await create_single_endpoint_benchmark_steps(page, ENDPOINT_NAME, RUNNER_NAME)
+//     await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+//     await page.getByRole('button', {name: 'View Report'}).click();
+//     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+//     await page.getByText(/back to home/i).click()
+// });
 test('test_benchmarking_runner_name_input_empty', async ({browserName, page}) => {
     test.setTimeout(1200000);
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
@@ -657,113 +657,6 @@ test('test_benchmarking_runner_description_input_!empty', async ({browserName, p
     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
     await page.getByText(/back to home/i).click()
 
-});
-
-// Test cases cannot work anymore due to not able to fill in the inputs by FE
-// test('test_benchmarking_runner_no0fPrompt_input_String', async ({browserName, page}) => {
-//     test.setTimeout(1200000);
-//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-//     const NOOFPROMPT: string = "Test ";
-//     // Benchmarking
-//     console.log('Benchmarking')
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
-//     await page.getByRole('listitem').nth(1).click();
-//     await page.getByRole('button', {name: 'Start New Run'}).click();
-//     await page.getByLabel('Select singapore-context').check();
-//     await page.getByRole('button', {name: 'OK'}).click();
-//     await page.getByLabel('Next View').click();
-//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-//     await page.getByLabel('Next View').click();
-//     await page.getByPlaceholder('Give this session a unique').click();
-//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-//     await page.getByPlaceholder('Description of this benchmark').fill('test');
-//
-//     await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
-//     // Select the Run button
-//     const runBtn = page.getByRole('button', {name: 'Run'});
-//     // Check if the Save button is disabled
-//     await expect(runBtn).toBeDisabled();
-// });
-//
-// test('test_benchmarking_runner_no0fPrompt_input_special_char', async ({browserName, page}) => {
-//     test.setTimeout(1200000);
-//     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-//     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-//     const NOOFPROMPT: string = "@Test ";
-//     // Benchmarking
-//     console.log('Benchmarking')
-//     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '','gpt-4o', '{\n timeout": 300,\n max_attempts":300,\n temperature": 0.5\n ', true)
-//     await page.getByRole('listitem').nth(1).click();
-//     await page.getByRole('button', {name: 'Start New Run'}).click();
-//     await page.getByLabel('Select singapore-context').check();
-//     await page.getByRole('button', {name: 'OK'}).click();
-//     await page.getByLabel('Next View').click();
-//     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-//     await page.getByLabel('Next View').click();
-//     await page.getByPlaceholder('Give this session a unique').click();
-//     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-//     await page.getByPlaceholder('Description of this benchmark').fill('test');
-//
-//     await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
-//     // Select the Run button
-//     const runBtn = page.getByRole('button', {name: 'Run'});
-//     // Check if the Save button is disabled
-//     await expect(runBtn).toBeDisabled();
-// });
-
-
-test('test_benchmarking_runner_no0fPrompt_input_decimal', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    const NOOFPROMPT: string = "1.1";
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select singapore-context').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Description of this benchmark').fill('test');
-    await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
-    await page.getByPlaceholder('Number of prompts per recipe').fill('1.1');
-    await page.getByText('Number of prompts per recipe').click();
-    await expect(page.getByText('Number of prompts per recipe')).toBeVisible();
-    // Select the Run button
-    const runBtn = page.getByRole('button', {name: 'Run'});
-    // Check if the Save button is disabled
-    await expect(runBtn).toBeDisabled();
-});
-
-test('test_benchmarking_runner_no0fPrompt_input_empty', async ({browserName, page}) => {
-    test.setTimeout(1200000);
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    const NOOFPROMPT: string = "";
-    // Benchmarking
-    console.log('Benchmarking')
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await page.getByRole('listitem').nth(1).click();
-    await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select singapore-context').check();
-
-    await page.getByLabel('Next View').click();
-    await page.getByLabel('Select ' + ENDPOINT_NAME).check();
-    await page.getByLabel('Next View').click();
-    await page.getByPlaceholder('Give this session a unique').click();
-    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
-    await page.getByPlaceholder('Description of this benchmark').fill('test');
-    await page.getByPlaceholder('Number of prompts per recipe.').fill(NOOFPROMPT);
-    // Select the Run button
-    const runBtn = page.getByRole('button', {name: 'Run'});
-    // Check if the Save button is disabled
-    await expect(runBtn).toBeDisabled();
 });
 test('test_benchmarking_two_endpoint', async ({browserName, page}) => {
     test.setTimeout(1200000);
@@ -1075,8 +968,8 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
     await page.getByText(/back to home/i).click()
 });
-test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
-    test.setTimeout(1200000);
+test.only('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
+    test.setTimeout(1800000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     // Check if the browser is WebKit
@@ -1110,7 +1003,7 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
