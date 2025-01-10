@@ -1188,7 +1188,7 @@ test('test_benchmarking_run_with_view_recipes_btn', async ({browserName, page}) 
     await expect(page.locator('h3')).toContainText('squad-shifts-tnf');
 });
 
-test.only('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -1249,7 +1249,7 @@ test.only('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserNa
 
 });
 
-test.only('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
