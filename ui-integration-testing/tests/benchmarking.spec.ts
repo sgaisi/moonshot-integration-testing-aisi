@@ -217,7 +217,7 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browser
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
-    const RUNNER_NAME: string = "Test Facts About Singapore " + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Common Risk Easy " + Math.floor(Math.random() * 1000000000);
     ////////////////////////////////////////////////////////////////////////////
     // Benchmarking
     console.log('Benchmarking')
