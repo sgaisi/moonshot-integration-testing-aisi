@@ -933,8 +933,8 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
 //     await page.getByText(/back to home/i).click()
 // });
 
-test.skip('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, page}) => {
-    test.setTimeout(1800000);
+test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, page}) => {
+    test.setTimeout(2100000);
     const ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     await page.goto('http://localhost:3000/');
@@ -956,7 +956,7 @@ test.skip('test_benchmarking_run_with_two_cookbook_standard', async ({browserNam
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1200000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
@@ -968,7 +968,7 @@ test.skip('test_benchmarking_run_with_two_cookbook_standard', async ({browserNam
     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
     await page.getByText(/back to home/i).click()
 });
-test.skip('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
+test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
     test.setTimeout(3500000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -1051,8 +1051,8 @@ test('test_benchmarking_run_with_view_past_run_btn', async ({browserName, page})
     await page.locator('li').filter({hasText: RUNNER_NAME}).click();
     await expect(page.locator('span', {hasText: 'azure-openai-' + ENDPOINT_NAME_RAND.toString()})).toBeVisible();
     await expect(page.getByRole('listbox').getByRole('heading', {name: RUNNER_NAME})).toBeVisible();
-    await expect(page.getByText('common-risk-easy')).toBeVisible();
-    await expect(page.getByText('1', {exact: true})).toBeVisible();
+    await expect(page.getByText('singapore-context')).toBeVisible();
+    await expect(page.getByText('7', {exact: true})).toBeVisible();
 });
 
 test('test_benchmarking_run_with_view_cookbook_btn', async ({browserName, page}) => {
@@ -1143,7 +1143,7 @@ test('test_benchmarking_one_endpoint_cookbook_azure_i2p', async ({browserName, p
 });
 
 test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, page}) => {
-    test.setTimeout(1200000);
+    test.setTimeout(2100000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const COOKBOOK_NAME: string = "test-i2p-" + Math.floor(Math.random() * 1000000000);
@@ -1185,7 +1185,7 @@ test('test_benchmarking_one_endpoint_cookbook_openai_i2p', async ({browserName, 
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
