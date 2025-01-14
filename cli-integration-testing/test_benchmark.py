@@ -123,7 +123,7 @@ def test_cli_run_cookbook():
     output_lines = stdout.splitlines()
 
     # Get the last line of the output
-    last_line = output_lines[-16]
+    last_line = output_lines[-14]
     print('=========================Output Last Line:', last_line)
     assert last_line.replace(" ", "") == "CookbookResult"
 
@@ -1265,7 +1265,7 @@ def test_cli_view_cookbook():
     # Get the last line of the output
     last_line = output_lines[12]
     print('=========================Output Last Line:', last_line)
-    assert last_line.replace(" ", "") == "Cookbook\"Mynewcookbook" + timestamp_int + "\""
+    assert last_line.replace(" ", "") == "Cookbook:\"Mynewcookbook" + timestamp_int + "\""
 
 def test_cli_view_recipe():
     command = (
