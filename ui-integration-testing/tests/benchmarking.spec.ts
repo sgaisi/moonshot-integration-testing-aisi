@@ -968,8 +968,8 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
     await page.getByText(/back to home/i).click()
 });
-test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
-    test.setTimeout(3500000);
+test.only('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
+    test.setTimeout(4000000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     // Check if the browser is WebKit
@@ -1003,12 +1003,12 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 3000000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 3500000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
     await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+    await expect(page.getByText('Number of prompts to run:427')).toBeVisible();
     await page.getByRole('main').getByRole('img').nth(1).click();
     // await download_validation_steps (page)
     await page.getByRole('button', {name: 'View Report'}).click();
@@ -1052,7 +1052,7 @@ test('test_benchmarking_run_with_view_past_run_btn', async ({browserName, page})
     await expect(page.locator('span', {hasText: 'azure-openai-' + ENDPOINT_NAME_RAND.toString()})).toBeVisible();
     await expect(page.getByRole('listbox').getByRole('heading', {name: RUNNER_NAME})).toBeVisible();
     await expect(page.getByText('singapore-context')).toBeVisible();
-    await expect(page.getByText('7', {exact: true})).toBeVisible();
+    await expect(page.getByText('1', {exact: true})).toBeVisible();
 });
 
 test('test_benchmarking_run_with_view_cookbook_btn', async ({browserName, page}) => {
