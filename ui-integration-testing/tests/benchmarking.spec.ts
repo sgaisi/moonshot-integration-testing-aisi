@@ -968,7 +968,7 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
     await page.getByText(/back to home/i).click()
 });
-test.only('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
+test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
     test.setTimeout(4000000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
