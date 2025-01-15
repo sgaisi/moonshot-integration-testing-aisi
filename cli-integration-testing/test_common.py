@@ -3,42 +3,13 @@ from dotenv import load_dotenv
 import os
 import time
 import shutil
+from util.utils import *
 load_dotenv()  # Load environment variables from .env file
 
 AZURE_OPENAI_URI = os.getenv('URI')
 AZURE_OPENAI_TOKEN = os.getenv('TOKEN')
 # CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
 CLI_DIR = os.getenv('CLI_DIR')
-
-
-def copy_file(file_path):
-    # Get the file name and directory path
-    directory, filename = os.path.split(file_path)
-
-    # Create a new file name by appending "_copy" to the original file name
-    new_filename = f"copy_of_{filename}"
-
-    # Create the full path for the new file
-    new_file_path = os.path.join(directory, new_filename)
-
-    # Copy the file to the new location
-    shutil.copy(file_path, new_file_path)
-
-    print(f"File copied to: {new_file_path}")
-
-
-def rename_file(current_path, new_name):
-    # Get the directory path from the current file path
-    directory = os.path.dirname(current_path)
-
-    # Create the new file path with the new name
-    new_file_path = os.path.join(directory, new_name)
-
-    # Rename the file
-    os.rename(current_path, new_file_path)
-
-    print(f"File renamed to: {new_file_path}")
-    return new_file_path  # Optionally return the new file path
 
 def test_cli_list_endpoints():
     command = (

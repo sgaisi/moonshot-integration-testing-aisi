@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 import http.client
 import json
+from util.utils import *
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -14,6 +15,13 @@ AZURE_OPENAI_TOKEN = os.getenv('AZURE_OPENAI_TOKEN')
 # CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
 # CLI_DIR = os.getenv('CLI_DIR')
 CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
+
+def test_replace_file_content():
+    # Example Usage
+    file_path = "example.txt"
+    new_content = "This is the new content of the file.\nIt will replace the old content."
+
+    replace_file_content(file_path, new_content)
 
 def test_api_create_recipe():
     conn = http.client.HTTPConnection("127.0.0.1", 5000)
