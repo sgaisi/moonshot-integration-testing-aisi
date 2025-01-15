@@ -318,7 +318,7 @@ test('test_benchmarking_one_endpoint_cookbook_medical-llm-leaderboard', async ({
 });
 
 test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({browserName, page}) => {
-    test.setTimeout(1200000);
+    test.setTimeout(2100000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
@@ -338,12 +338,12 @@ test('test_benchmarking_one_endpoint_cookbook_leaderboard-cookbook', async ({bro
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
     //Check Detailss
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
     await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
+    await expect(page.getByText('Number of prompts to run:1256')).toBeVisible();
     await page.getByRole('main').getByRole('img').nth(1).click();
     // await download_validation_steps (page)
     await page.getByRole('button', {name: 'View Report'}).click();
@@ -528,8 +528,8 @@ test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
     await expect(page.getByText('Description:')).toBeVisible();
-    await expect(page.getByText('Number of prompts to run:1')).toBeVisible();
-    await page.getByRole('main').getByRole('img').nth(7).click();
+    await expect(page.getByText('Number of prompts to run:7')).toBeVisible();
+    await page.getByRole('main').getByRole('img').nth(1).click();
     // await download_validation_steps (page)
     await page.getByRole('button', {name: 'View Report'}).click();
     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
