@@ -471,9 +471,9 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browser
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
+    await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select common-risk-hard').check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
@@ -506,9 +506,9 @@ test('test_benchmarking_one_endpoint_cookbook_chinese-safety-cookbook', async ({
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + ENDPOINT_NAME).check();
     await page.getByLabel('Next View').click();
+    await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select chinese-safety-cookbook').check();
     await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
@@ -741,9 +741,6 @@ test('test_benchmarking_zero_endpoint_selected', async ({browserName, page}) => 
     await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    await page.getByLabel('Select singapore-context').check();
-
-    await page.getByLabel('Next View').click();
 
     await expect(page.getByRole('heading', {name: 'Select the Endpoint(s) to be'})).toBeVisible();
 
@@ -1308,7 +1305,7 @@ test('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserName, pa
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
     await page.getByLabel('Select ' + COOKBOOK_NAME).check();
     await page.getByLabel('Next View').click();
-
+    await page.getByLabel('Next View').click();
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
