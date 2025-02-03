@@ -1,12 +1,5 @@
-import random
-import subprocess
-
-import pytest
 from dotenv import load_dotenv
 import os
-import http.client
-import json
-from util.utils import *
 
 load_dotenv()  # Load environment variables from .env file
 
