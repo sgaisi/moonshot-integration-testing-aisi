@@ -26,7 +26,7 @@ def test_cli_list_endpoints():
         stderr=subprocess.PIPE,
         stdin=subprocess.PIPE,
         text=True,
-        cwd="/Users/jacksonboey/PycharmProjects/moonshot",
+        cwd=str(CLI_DIR),
         # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
         #/home/runner/work/moonshot-data/moonshot-data for moonshot data repo
         #/home/runner/work/moonshot/moonshot-data for moonshot repo
