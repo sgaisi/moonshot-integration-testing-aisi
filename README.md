@@ -1,4 +1,4 @@
-# Moonshot Integration Testing
+# Moonshot Integration Automation Test
 
 ## Overview
 
@@ -11,6 +11,7 @@ Before running the integration tests, ensure you have the following installed:
 - **Python**: Version 3.11 or later
 - **Node.js**: Version 20.11.1 LTS or later (if testing the Web UI)
 - **Git**: For version control
+- **Moonshot**: Moonshot Setup consist of Moonshot , Moonshot-Data & Moonshot UI
 
 ## Installation
 
@@ -22,6 +23,7 @@ Before running the integration tests, ensure you have the following installed:
    ```
 
 ## Running the CLI Integration Tests
+__*Make sure Moonshot is already Setup__
 
 To execute the integration tests:
 
@@ -188,10 +190,3 @@ Please ensure that your contributions align with the project's coding standards 
 ## License
 
 This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-Special thanks to all contributors and the AI Verify Foundation for their support in developing and maintaining the Moonshot project.
-```
-
-This template provides a comprehensive guide for users and contributors, covering installation, usage, and contribution guidelines. Feel free to customize it further based on the specific details and requirements of your project. 
