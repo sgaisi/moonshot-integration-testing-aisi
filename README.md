@@ -48,13 +48,26 @@ To execute the integration tests:
    ```
 3. **Setup Env File**:
 
-   Install the required Python packages:
+   Create a .env file:
 
    ```bash
    touch .env
    ```
+
+   Open the .env file in a text editor and define your environment variables:
    ```bash
-   touch .env
+   # .env
+   AZURE_OPENAI_URI =
+   AZURE_OPENAI_TOKEN =
+   URI2 = 
+   TOKEN2 = 
+   ADDITIONAL_PARAMETERS = '{"timeout": 300, "max_attempts": 3,"temperature": 0.5 }'
+   TOGETHER_TOKEN = 
+   OPENAI_TOKEN = 
+   AWS_ACCESS_KEY_ID=""
+   AWS_SECRET_ACCESS_KEY=""
+   GOOGLE_TOKEN = ""
+   CLI_DIR = ''# Path of Moonshot Library
    ```
 
 4. **Run Tests**:
@@ -101,8 +114,29 @@ To execute the integration tests:
    ```bash
    npm install
    ```
+4. **Setup Env File**:
 
-4. **Run Tests**:
+   Create a .env file:
+
+   ```bash
+   touch .env
+   ```
+
+   Open the .env file in a text editor and define your environment variables:
+   ```bash
+   # .env
+   URI =
+   TOKEN =
+   URI2 =
+   TOKEN2 =
+   ADDITIONAL_PARAMETERS = '{"timeout": 300, "max_attempts": 3,"temperature": 0.5 }'
+   TOGETHER_TOKEN =
+   OPENAI_TOKEN = 
+   AWS_ACCESS_KEY_ID=""
+   AWS_SECRET_ACCESS_KEY=""
+   GOOGLE_TOKEN = 
+   ```
+5. **Run Tests**:
 
    Use the following command to run all tests:
 
