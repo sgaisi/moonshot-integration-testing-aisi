@@ -141,12 +141,12 @@ To execute the integration tests:
    Use the following command to run all tests:
 
    ```bash
-   npx playwright test
+   npx playwright test tests
    ```
    To run a specific test module:
 
    ```bash
-   npx playwright test_module.spec.ts
+   npx playwright test tests/test_module.spec.ts
    ```
    
 ## Directory Structure
