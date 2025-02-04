@@ -14,13 +14,22 @@ Before running the integration tests, ensure you have the following installed:
 
 ## Installation
 
-1. **Clone the Repository**:
+**Clone the Repository**:
 
    ```bash
    git clone https://github.com/aiverify-foundation/moonshot-integration-testing.git
    cd moonshot-integration-testing
    ```
 
+## Running the CLI Integration Tests
+
+To execute the integration tests:
+
+1. **Navigate to the Test Directory**:
+
+   ```bash
+   cd cli-integration-testing
+   ```
 2. **Set Up the Virtual Environment**:
 
    It's recommended to use a virtual environment to manage dependencies:
@@ -37,93 +46,96 @@ Before running the integration tests, ensure you have the following installed:
    ```bash
    pip install -r requirements.txt
    ```
+3. **Setup Env File**:
 
-4. **Install Node.js Dependencies** (if applicable):
-
-   If your integration tests involve the Moonshot Web UI:
+   Install the required Python packages:
 
    ```bash
-   cd path_to_moonshot_web_ui
+   touch .env
+   ```
+   ```bash
+   touch .env
+   ```
+
+4. **Run Tests**:
+
+   Use the following command to run all tests:
+
+   ```bash
+   pytest
+   ```
+
+   For more detailed output:
+
+   ```bash
+   pytest -v
+   ```
+
+   To run a specific test module:
+
+   ```bash
+   pytest test_module.py
+   ```
+## Running the UI Integration Tests
+
+To execute the integration tests:
+
+1. **Navigate to the Test Directory**:
+
+   ```bash
+   cd ui-integration-testing
+   ```
+2. **Set Up the Virtual Environment**:
+
+   It's recommended to use a virtual environment to manage dependencies:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
+
+3. **Install Node Dependencies**:
+
+   Install the required Python packages:
+
+   ```bash
    npm install
    ```
 
-## Running the CLI Integration Tests
-
-To execute the integration tests:
-
-1. **Navigate to the Test Directory**:
-
-   ```bash
-   cd cli-integration-testing
-   ```
-
-2. **Run Tests**:
+4. **Run Tests**:
 
    Use the following command to run all tests:
 
    ```bash
-   pytest
+   npx playwright test
    ```
-
-   For more detailed output:
-
-   ```bash
-   pytest -v
-   ```
-
    To run a specific test module:
 
    ```bash
-   pytest test_module.py
+   npx playwright test_module.spec.ts
    ```
-## Running the CLI Integration Tests
-
-To execute the integration tests:
-
-1. **Navigate to the Test Directory**:
-
-   ```bash
-   cd cli-integration-testing
-   ```
-
-2. **Run Tests**:
-
-   Use the following command to run all tests:
-
-   ```bash
-   pytest
-   ```
-
-   For more detailed output:
-
-   ```bash
-   pytest -v
-   ```
-
-   To run a specific test module:
-
-   ```bash
-   pytest test_module.py
-   ```
-
+   
 ## Directory Structure
 
 A brief overview of the repository structure:
 
 ```
-moonshot-integration-testing/
-├── ui-integration-testing/                   # Integration test cases
-│   ├── __init__.py
-│   ├── test_cli.py          # Tests for the CLI
-│   ├── test_ui.py           # Tests for the Web UI
+moonshot-integration-testing/         # Integration test cases
+├── cli-integration-testing/                   
+│   ├── utils                         # Common Utils Functions to support automation on Data Preparation
+│   ├── test_api.py                   # Tests for the Moonshot APIs
+│   ├── test_benchmark.py             # Tests for the CLI Command - Moonshot Benchmarking CLI Commands Scope
+│   ├── test_common.py                # Tests for the CLI Command - Moonshot Common CLI Commands Scope
+│   ├── test_red_team.py              # Tests for the CLI Command - Moonshot Red Teaming CLI Commands Scope
 │   └── 
-├── cli-integration-testing/                   # Integration test cases
+├── ui-integration-testing/           # Moonshot UI Integration test cases
 │   ├── tests/
-│   ├── ├── benchmarking.spec.ts          # Tests for the Web UI - Moonshot Benchmarking
-│   ├── ├── red_teaming.spec.ts          # Tests for the Web UI - Moonshot Benchmarking
+│   ├── ├── benchmarking.spec.ts      # Tests for the Web UI - Moonshot Benchmarking Scope
+│   ├── ├── endpoint.spec.ts          # Tests for the Web UI - Moonshot Endpoint Scope
+│   ├── ├── homepage.spec.ts          # Tests for the Web UI - Moonshot Homepage Scope
+│   ├── ├── red_teaming.spec.ts       # Tests for the Web UI - Moonshot Red Teaming Scope
 │   └── 
 ├── .gitignore
-├── requirements.txt         # Python dependencies
 ├── README.md                # Project documentation
 └── LICENSE                  # License information
 ```
