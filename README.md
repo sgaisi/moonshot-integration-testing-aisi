@@ -1,4 +1,4 @@
-# Moonshot Integration Testing
+# Moonshot Integration Automation Test
 
 ## Overview
 
@@ -11,6 +11,7 @@ Before running the integration tests, ensure you have the following installed:
 - **Python**: Version 3.11 or later
 - **Node.js**: Version 20.11.1 LTS or later (if testing the Web UI)
 - **Git**: For version control
+- **Moonshot**: Moonshot Setup consist of Moonshot , Moonshot-Data & Moonshot UI
 
 ## Installation
 
@@ -22,6 +23,7 @@ Before running the integration tests, ensure you have the following installed:
    ```
 
 ## Running the CLI Integration Tests
+__*Make sure Moonshot is already Setup__
 
 To execute the integration tests:
 
