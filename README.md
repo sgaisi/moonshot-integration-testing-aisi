@@ -190,10 +190,3 @@ Please ensure that your contributions align with the project's coding standards 
 ## License
 
 This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-Special thanks to all contributors and the AI Verify Foundation for their support in developing and maintaining the Moonshot project.
-```
-
-This template provides a comprehensive guide for users and contributors, covering installation, usage, and contribution guidelines. Feel free to customize it further based on the specific details and requirements of your project. 
