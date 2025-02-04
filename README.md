@@ -1,6 +1,3 @@
-Here's a `README.md` template for the [moonshot-integration-testing](https://github.com/aiverify-foundation/moonshot-integration-testing) repository:
-
-```markdown
 # Moonshot Integration Testing
 
 ## Overview
