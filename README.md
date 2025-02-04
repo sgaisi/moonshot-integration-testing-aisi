@@ -109,7 +109,7 @@ To execute the integration tests:
 
 3. **Install Node Dependencies**:
 
-   Install the required Python packages:
+   Install the required Node packages:
 
    ```bash
    npm install
