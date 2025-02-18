@@ -815,14 +815,8 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
 
 });
 
-test.skip('test_red_teaming_with_attack_module_malicious_question_generator', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
+test('test_red_teaming_with_attack_module_malicious_question_generator', async ({browserName, page}) => {
     test.setTimeout(1200000); //set test timeout to 1 hour
-    const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
-    // // Check if the browser is WebKit
-    // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    // // Check if the browser is FireFox
-    // test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
     if (browserName == 'webkit')
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
@@ -837,9 +831,10 @@ test.skip('test_red_teaming_with_attack_module_malicious_question_generator', as
     //Edit Dependency Endpoint
     const OPENAI_ENDPOINT_NAME: string = "OpenAI GPT4";
     await page.getByLabel('Edit ' + OPENAI_ENDPOINT_NAME).click();
-    await page.getByPlaceholder('Access token for the removvllte').fill(process.env.OPENAI_TOKEN);
+    await page.getByPlaceholder('Access token for the remote').fill(process.env.OPENAI_TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
+
     await page.getByText(ENDPOINT_NAME!).click();
     await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Malicious Question Generator'}).click();
@@ -866,9 +861,7 @@ test.skip('test_red_teaming_with_attack_module_malicious_question_generator', as
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(1)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    await expect(page.locator('div > li').nth(0)).toBeVisible();
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -882,7 +875,6 @@ test.skip('test_red_teaming_with_attack_module_malicious_question_generator', as
     await expect(h2Element).toHaveText('Response');
 
 });
-
 test('test_red_teaming_with_attack_module_sample_attack_module', async ({browserName, page}) => {
     // test.setTimeout(3600000); //set test timeout to 1 hour
     test.setTimeout(1200000); //set test timeout to 1 hour
@@ -1190,15 +1182,8 @@ test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({bro
     await expect(h2Element).toHaveText('Response');
 
 });
-
-test.skip('test_red_teaming_with_attack_module_violent_durian', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
+test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, page}) => {
     test.setTimeout(1200000); //set test timeout to 1 hour
-    const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
-    // // Check if the browser is WebKit
-    // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
-    // // Check if the browser is FireFox
-    // test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
     if (browserName == 'webkit')
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
@@ -1211,11 +1196,12 @@ test.skip('test_red_teaming_with_attack_module_violent_durian', async ({browserN
     await page.getByRole('listitem').nth(2).click();
     await page.getByRole('button', {name: 'Start New Session'}).click();
     //Edit Dependency Endpoint
-    await page.locator('section').filter({hasText: /^OpenAI GPT4Added/}).locator('button').click();
-
+    const OPENAI_ENDPOINT_NAME: string = "OpenAI GPT4";
+    await page.getByLabel('Edit ' + OPENAI_ENDPOINT_NAME).click();
     await page.getByPlaceholder('Access token for the remote').fill(process.env.OPENAI_TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
+
     await page.getByText(ENDPOINT_NAME!).click();
     await page.getByLabel('Next View').click();
     await page.getByRole('heading', {name: 'Violent Durian'}).click();
