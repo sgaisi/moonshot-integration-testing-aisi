@@ -1452,7 +1452,7 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
 
 });
 
-test.only('test_benchmarking_one_endpoint_cookbook_jailbreak_prompts', async ({browserName, page}) => {
+test('test_benchmarking_one_endpoint_cookbook_jailbreak_prompts', async ({browserName, page}) => {
     test.setTimeout(2100000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
