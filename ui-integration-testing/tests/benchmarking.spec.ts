@@ -1451,3 +1451,71 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     await page.getByText(/back to home/i).click()
 
 });
+
+test.only('test_benchmarking_one_endpoint_cookbook_jailbreak_prompts', async ({browserName, page}) => {
+    test.setTimeout(2100000);
+    // Check if the browser is WebKit
+    test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
+    const COOKBOOK_NAME: string = "test-jailbreak-prompts-" + Math.floor(Math.random() * 1000000000);
+    const RUNNER_NAME: string = "Test Jailbreak Prompts " + Math.floor(Math.random() * 1000000000);
+    ////////////////////////////////////////////////////////////////////////////
+    // Benchmarking
+    console.log('Benchmarking')
+    await page.goto('http://localhost:3000');
+    await page.getByRole('listitem').nth(1).click();
+    // Create i2p cookbook steps
+    await page.getByRole('button', {name: 'View Cookbooks'}).click();
+    await page.goto('http://localhost:3000/benchmarking/cookbooks');
+    await page.getByRole('button', {name: 'Create New Cookbook'}).click();
+    await page.getByPlaceholder('Give this cookbook a unique').click();
+    await page.getByPlaceholder('Give this cookbook a unique').fill(COOKBOOK_NAME);
+    await page.getByRole('button', {name: 'Select Recipes'}).click();
+    await page.getByPlaceholder('Search by name').click();
+    await page.getByPlaceholder('Search by name').fill('jailbreak pro');
+    await page.getByLabel('Select Jailbreak Prompts').check();
+    await page.getByRole('button', {name: 'OK'}).click();
+    await page.getByRole('button', {name: 'Create Cookbook'}).click();
+    await page.getByRole('button', {name: 'View Cookbooks'}).click();
+
+    await page.locator('li').filter({ hasText: 'benchmarking' }).click();
+    await page.getByRole('button', {name: 'Start New Run'}).click();
+
+    //Edit i2p endpoint
+    const REFUSAL_EVALUATOR_ENDPOINT_NAME: string = "Refusal Evaluator";
+    await page.locator('li').filter({hasText: REFUSAL_EVALUATOR_ENDPOINT_NAME + "Added"}).getByRole('button').click();
+    await page.getByPlaceholder('Access token for the remote').fill("" + process.env.OPENAI_TOKEN + "");
+    await page.getByRole('button', {name: 'Save'}).click();
+    //////////////////////////////////////////////////
+    //Edit Target Endpoint
+    const AZURE_OPENAI_ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
+    await page.locator('li').filter({hasText: AZURE_OPENAI_ENDPOINT_NAME + "Added"}).getByRole('button').click();
+    // await page.getByPlaceholder('URI of the remote model').fill(process.env.URI);
+    await page.getByPlaceholder('URI of the remote model').click();
+    await page.getByPlaceholder('URI of the remote model').fill('' + process.env.URI + '');
+    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
+    await page.getByRole('button', {name: 'Save'}).click();
+    ///////////////////////////////////////////////////////////////////
+    await page.getByLabel('Select ' + AZURE_OPENAI_ENDPOINT_NAME, {exact: true}).check();
+    await page.getByLabel('Next View').click();
+
+    await page.getByRole('button', {name: 'Trust & Safety'}).click();
+    await page.getByLabel('Select ' + COOKBOOK_NAME).check();
+    await page.getByLabel('Next View').click();
+    await page.getByLabel('Next View').click();
+    await page.getByPlaceholder('Give this session a unique').click();
+    await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
+    await page.getByRole('button', {name: 'Run'}).click();
+    ////////////////////////////////////////////////////////////////////////////
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
+    //Check Details
+    await page.getByRole('button', {name: 'See Details'}).click();
+    await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
+    await expect(page.getByText('Description:')).toBeVisible();
+    await expect(page.getByText('Number of prompts to run:36')).toBeVisible();
+    await page.getByRole('main').getByRole('img').nth(1).click();
+    // await download_validation_steps (page)
+    await page.getByRole('button', {name: 'View Report'}).click();
+    await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
+    await page.getByText(/back to home/i).click()
+
+});
