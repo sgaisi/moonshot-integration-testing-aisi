@@ -6,7 +6,7 @@ import random
 load_dotenv()  # Load environment variables from .env file
 
 OPENAI_TOKEN = os.getenv('OPENAI_TOKEN')
-MOON_V1_CLI_DIR = os.getenv('CLI_DIR')
+MOON_V1_CLI_DIR = os.getenv('MOON_V1_CLI_DIR')
 def test_cli_run_benchmarking():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
