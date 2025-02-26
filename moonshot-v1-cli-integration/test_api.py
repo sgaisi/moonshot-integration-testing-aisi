@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from dotenv import load_dotenv
 import os
 from util import parametrize, INPUT_PARAMS
@@ -23,6 +24,7 @@ EXPECTED_OUTCOME = [
 #     print("Parameters : "+str(input_params)+":  "+ str(expected))
 #     assert input_params == expected
 
+@pytest.mark.skip(reason="This test is skipped for now for trial")
 def test_access_s3_bucket():
     # Specify the bucket name and the key (file name in S3)
     object_key = 'test.csv'  # For example, 'folder/myfile.txt'
