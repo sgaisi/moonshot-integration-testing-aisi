@@ -30,9 +30,9 @@ def test_cli_run_benchmarking():
         stderr=subprocess.PIPE,
         stdin=subprocess.PIPE,
         text=True,
-        cwd=str(CLI_DIR),
+        cwd=str(MOON_V1_CLI_DIR),
     )
-    print('Path:', str(CLI_DIR))
+    print('Path:', str(MOON_V1_CLI_DIR))
     # Ensure process.stdin is not None
     if process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
