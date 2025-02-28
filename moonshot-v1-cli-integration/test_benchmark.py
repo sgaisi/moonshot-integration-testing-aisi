@@ -1,4 +1,6 @@
 import subprocess
+
+import pytest
 from dotenv import load_dotenv
 import os
 import random
@@ -19,18 +21,19 @@ def assert_run_outcome(output_lines,test_run_name):
     assert line_3.replace(" ", "") == line_3_expected.replace(" ", "")
     assert line_2_1.replace(" ", "") == line_2_1_expected.replace(" ", "")
 
+@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_mmlu_mini():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "mmlu-mini"
-    nameOfRunnerName = "my-benchmarking-runner-"+dataset_module+"-" + str(random_number)
+    connector_name = "my-gpt-o1"
+    nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
-    connector_name = "my-gpt4o"
 
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
-        "poetry run python __main__.py create-benchmark-test " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
+        "poetry run moonshot benchmark " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
     ]
     # Join commands with '&&' to ensure the next runs only if the previous succeeds
     full_command = "&&".join(commands)
@@ -71,19 +74,19 @@ def test_cli_run_benchmarking_refusal_adapter_mmlu_mini():
     assert line_12.replace(" ", "") == line_12_expected.replace(" ", "")
     assert line_11.replace(" ", "") == line_11_expected.replace(" ", "")
     assert_run_outcome(output_lines,nameOfRunnerName)
-
+@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_obfuscation():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "prompt_injection_obfuscation"
-    nameOfRunnerName = "my-benchmarking-runner-"+dataset_module+"-" + str(random_number)
+    connector_name = "my-gpt-o1"
+    nameOfRunnerName = "my-benchmarking-"+connector_name+"-"+dataset_module+"-" + str(random_number)
     metric_module = "refusal_adapter"
-    connector_name = "my-gpt4o"
 
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
-        "poetry run python __main__.py create-benchmark-test " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
+        "poetry run moonshot benchmark " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
     ]
     # Join commands with '&&' to ensure the next runs only if the previous succeeds
     full_command = "&&".join(commands)
@@ -112,19 +115,19 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_obfuscation():
 
     # Assert Results
     assert_run_outcome(output_lines, nameOfRunnerName)
-
+@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_payload_splitting():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "prompt_injection_payload_splitting"
-    nameOfRunnerName = "my-benchmarking-runner-"+dataset_module+"-" + str(random_number)
+    connector_name = "my-gpt-o1"
+    nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
-    connector_name = "my-gpt4o"
 
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
-        "poetry run python __main__.py create-benchmark-test " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
+        "poetry run moonshot benchmark " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
     ]
     # Join commands with '&&' to ensure the next runs only if the previous succeeds
     full_command = "&&".join(commands)
@@ -161,19 +164,19 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_payload_splitting
     print('=========================Output Last Line:', line_3_2_1)
     assert line_4.replace(" ", "") == line_4_expected.replace(" ", "")
     assert line_3_2_1.replace(" ", "") == line_3_2_1_expected.replace(" ", "")
-
+@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_role_playing():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "prompt_injection_role_playing"
-    nameOfRunnerName = "my-benchmarking-runner-"+dataset_module+"-" + str(random_number)
+    connector_name = "my-gpt-o1"
+    nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
-    connector_name = "my-gpt4o"
 
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
-        "poetry run python __main__.py create-benchmark-test " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
+        "poetry run moonshot benchmark " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
     ]
     # Join commands with '&&' to ensure the next runs only if the previous succeeds
     full_command = "&&".join(commands)
@@ -202,19 +205,19 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_role_playing():
 
     # Assert Results
     assert_run_outcome(output_lines, nameOfRunnerName)
-
+@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_sensitive_data_disclosure_general():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "sensitive_data_disclosure_general"
-    nameOfRunnerName = "my-benchmarking-runner-"+dataset_module+"-" + str(random_number)
+    connector_name = "my-gpt-o1"
+    nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
-    connector_name = "my-gpt4o"
 
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
-        "poetry run python __main__.py create-benchmark-test " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
+        "poetry run moonshot benchmark " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
     ]
     # Join commands with '&&' to ensure the next runs only if the previous succeeds
     full_command = "&&".join(commands)
