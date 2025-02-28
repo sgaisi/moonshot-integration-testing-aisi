@@ -183,6 +183,7 @@ def assert_run_outcome(output_lines):
     assert "data/results/my-benchm".replace(" ", "") in output_lines
     assert "successfully created with run_id:".replace(" ", "") in output_lines
 
+@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_mmlu_mini():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)

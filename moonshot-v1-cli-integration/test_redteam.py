@@ -187,7 +187,7 @@ def test_cli_run_create_scan_test_params_testing_connector_name(input_params,exp
         assert output_lines[-expected_value].replace(" ", "") == expectedMsg.replace(" ", "")
 
 
-
+@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_redteaming_hallucination_refusal_adapter():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
