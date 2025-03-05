@@ -12,16 +12,15 @@ MOON_V1_CLI_DIR = os.getenv('MOON_V1_CLI_DIR')
 
 
 EXPECTED_OUTCOME = [
-    ("No valid file found for 1 in ", 14),  # Expected result for 1
-    ("No valid file found for 1.1 in", 14),  # Expected result for 1.1
-    ("", 0),  # Expected result for -1
-    ("No valid file found for 0 in", 14),  # Expected result for 0
-    ("No valid file found for @1 in", 14),  # Expected result for "@1"
-    ("No valid file found for test in", 14)  # Expected result for "test"
+    ("No valid file found for 1 in "),  # Expected result for 1
+    ("No valid file found for 1.1 in"),  # Expected result for 1.1
+    (""),  # Expected result for -1
+    ("No valid file found for 0 in"),  # Expected result for 0
+    ("No valid file found for @1 in"),  # Expected result for "@1"
+    ("No valid file found for test in")  # Expected result for "test"
 ]
-@parametrize("input_params, expected", zip(INPUT_PARAMS, EXPECTED_OUTCOME))
-def test_cli_run_benchmarking_params_testing_dataset_module(input_params,expected):
-    expectedMsg, expected_value = expected  # Extract the second value
+@parametrize("input_params, expectedMsg", zip(INPUT_PARAMS, EXPECTED_OUTCOME))
+def test_cli_run_benchmarking_params_testing_dataset_module(input_params,expectedMsg):
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = str(input_params)
@@ -67,16 +66,15 @@ def test_cli_run_benchmarking_params_testing_dataset_module(input_params,expecte
         assert expectedMsg.replace(" ", "") in output_lines
 
 CONNECTOR_EXPECTED_OUTCOME = [
-    ("ERROR    [TaskManager] Error loading the task_manager.py:483", 6),  # Expected result for 1
-    ("ERROR    [TaskManager] Error loading the task_manager.py:483", 6),  # Expected result for 1.1
-    ("", 0),  # Expected result for -1
-    ("ERROR    [TaskManager] Error loading the task_manager.py:483", 6),  # Expected result for 0
-    ("ERROR    [TaskManager] Error loading the task_manager.py:483", 6),  # Expected result for "@1"
-    ("ERROR    [TaskManager] Error loading the task_manager.py:483", 6)  # Expected result for "test"
+    ("ERROR    [TaskManager] Error loading the task_manager.py:485"),  # Expected result for 1
+    ("ERROR    [TaskManager] Error loading the task_manager.py:485"),  # Expected result for 1.1
+    (""),  # Expected result for -1
+    ("ERROR    [TaskManager] Error loading the task_manager.py:485"),  # Expected result for 0
+    ("ERROR    [TaskManager] Error loading the task_manager.py:485"),  # Expected result for "@1"
+    ("ERROR    [TaskManager] Error loading the task_manager.py:485")  # Expected result for "test"
 ]
-@parametrize("input_params, expected", zip(INPUT_PARAMS, CONNECTOR_EXPECTED_OUTCOME))
-def test_cli_run_benchmarking_params_testing_connector_name(input_params,expected):
-    expectedMsg, expected_value = expected  # Extract the second value
+@parametrize("input_params, expectedMsg", zip(INPUT_PARAMS, CONNECTOR_EXPECTED_OUTCOME))
+def test_cli_run_benchmarking_params_testing_connector_name(input_params,expectedMsg):
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "s3://s3-aiss-moonshot-dev-app-lite/data/dataset-mini/prompt_injection_payload_splitting"
@@ -122,16 +120,15 @@ def test_cli_run_benchmarking_params_testing_connector_name(input_params,expecte
         assert expectedMsg.replace(" ", "") in output_lines
 
 METRIC_MODULE_EXPECTED_OUTCOME = [
-    ("Error loading metric", 6),  # Expected result for 1
-    ("Error loading metric", 6),  # Expected result for 1.1
-    ("", 0),  # Expected result for -1
-    ("Error loading metric", 6),  # Expected result for 0
-    ("Error loading metric", 6),  # Expected result for "@1"
-    ("Error loading metric", 6)  # Expected result for "test"
+    ("Error loading metric"),  # Expected result for 1
+    ("Error loading metric"),  # Expected result for 1.1
+    (""),  # Expected result for -1
+    ("Error loading metric"),  # Expected result for 0
+    ("Error loading metric"),  # Expected result for "@1"
+    ("Error loading metric")  # Expected result for "test"
 ]
-@parametrize("input_params, expected", zip(INPUT_PARAMS, METRIC_MODULE_EXPECTED_OUTCOME))
-def test_cli_run_benchmarking_params_testing_metric_module(input_params,expected):
-    expectedMsg, expected_value = expected  # Extract the second value
+@parametrize("input_params, expectedMsg", zip(INPUT_PARAMS, METRIC_MODULE_EXPECTED_OUTCOME))
+def test_cli_run_benchmarking_params_testing_metric_module(input_params,expectedMsg):
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "s3://s3-aiss-moonshot-dev-app-lite/data/dataset-mini/prompt_injection_payload_splitting"
@@ -183,48 +180,6 @@ def assert_run_outcome(output_lines):
     assert "data/results/my-benchm".replace(" ", "") in output_lines
     assert "successfully created with".replace(" ", "") in output_lines
 
-# @pytest.mark.skip(reason="This test is skipped for now")
-# def test_cli_run_benchmarking_refusal_adapter_mmlu_mini():
-#
-#     # Generate a random number between 0 and 999,999,999 (inclusive)
-#     random_number = int(random.random() * 1000000000)
-#     dataset_module = "mmlu-mini"
-#     connector_name = "my-gpt4o-mini"
-#     nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
-#     metric_module = "refusal_adapter"
-#
-#     commands = [
-#         "export OPENAI_API_KEY="+OPENAI_TOKEN,
-#         "poetry run moonshot benchmark " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
-#     ]
-#     # Join commands with '&&' to ensure the next runs only if the previous succeeds
-#     full_command = "&&".join(commands)
-#     print(f"Running combined command: {full_command}")
-#
-#     process = subprocess.Popen(
-#         full_command,
-#         shell=True,  # Allows for complex shell commands
-#         stdout=subprocess.PIPE,
-#         stderr=subprocess.PIPE,
-#         stdin=subprocess.PIPE,
-#         text=True,
-#         cwd=str(MOON_V1_CLI_DIR),
-#     )
-#     print('Path:', str(MOON_V1_CLI_DIR))
-#     # Ensure process.stdin is not None
-#     if process.stdin is None:
-#         raise RuntimeError("Failed to create stdin for the subprocess")
-#
-#     # Capture the output and errors
-#     stdout, stderr = process.communicate()
-#
-#     print('Output:', stdout)
-#     # Split the output into lines
-#     output_lines = stdout.splitlines()
-#     # Assert Results
-#     assert_run_outcome(output_lines)
-
-@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_obfuscation():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
@@ -265,7 +220,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_obfuscation():
 
     # Assert Results
     assert_run_outcome(output_lines)
-@pytest.mark.skip(reason="This test is skipped for now")
+
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_payload_splitting():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
@@ -306,7 +261,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_payload_splitting
 
     # Assert Results
     assert_run_outcome(output_lines)
-@pytest.mark.skip(reason="This test is skipped for now")
+
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_role_playing():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
@@ -347,7 +302,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_role_playing():
 
     # Assert Results
     assert_run_outcome(output_lines)
-@pytest.mark.skip(reason="This test is skipped for now")
+
 def test_cli_run_benchmarking_refusal_adapter_sensitive_data_disclosure_general():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)

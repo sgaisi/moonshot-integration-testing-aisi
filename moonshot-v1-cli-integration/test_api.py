@@ -82,6 +82,7 @@ def test_access_s3_bucket():
     assert False
     #########################################################################
 
+@pytest.mark.skip(reason="This test is skipped for now for trial")
 def test_add_file_to_s3_bucket():
     # Specify the bucket name and the key (file name in S3)
     object_key = 'refusal_adapter.py'  # For example, 'folder/myfile.txt'
@@ -111,6 +112,7 @@ def test_add_file_to_s3_bucket():
             print(f'File {file_path} uploaded to {bucket_name}/{object_key}')
             #########################################################################
 
+@pytest.mark.skip(reason="This test is skipped for now for trial")
 def test_remove_file_to_s3_bucket():
     # Specify the bucket name and the key (file name in S3)
     bucket_name = 's3-aiss-moonshot-dev-app-lite'

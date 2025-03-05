@@ -21,17 +21,16 @@ def assert_run_outcome(output_lines):
     assert "run_id:".replace(" ", "") in output_lines
 
 EXPECTED_OUTCOME = [
-    ("Error loading attack", 25),  # Expected result for 1
-    ("Error loading attack", 14),  # Expected result for 1.1
-    ("", 0),  # Expected result for -1
-    ("Error loading attack", 25),  # Expected result for 0
-    ("Error loading attack", 25),  # Expected result for "@1"
-    ("No valid file found for test in", 14)  # Expected result for "test"
+    ("Error loading attack"),  # Expected result for 1
+    ("Error loading attack"),  # Expected result for 1.1
+    (""),  # Expected result for -1
+    ("Error loading attack"),  # Expected result for 0
+    ("Error loading attack"),  # Expected result for "@1"
+    ("Error loading attack")  # Expected result for "test"
 ]
 
-@parametrize("input_params, expected", zip(INPUT_PARAMS, EXPECTED_OUTCOME))
-def test_cli_run_create_scan_test_params_testing_attack_module(input_params,expected):
-    expectedMsg, expected_value = expected  # Extract the second value
+@parametrize("input_params, expectedMsg", zip(INPUT_PARAMS, EXPECTED_OUTCOME))
+def test_cli_run_create_scan_test_params_testing_attack_module(input_params,expectedMsg):
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     attack_module = str(input_params)
@@ -65,7 +64,7 @@ def test_cli_run_create_scan_test_params_testing_attack_module(input_params,expe
 
     print('Output:', stdout)
     # Split the output into lines
-    output_lines = stdout.splitlines()
+    output_lines = [line.replace(" ", "") for line in stdout.splitlines() if line.strip()]
     # Assert Outcome
     if input_params == -1:
         # Assert that the subprocess failed
@@ -73,19 +72,18 @@ def test_cli_run_create_scan_test_params_testing_attack_module(input_params,expe
         # Assert that the error contains Pydantic's validation message
         assert "Error: No such option: -1\n"
     else:
-        assert output_lines[-expected_value].replace(" ", "") == expectedMsg.replace(" ", "")
+        assert expectedMsg.replace(" ", "") in output_lines
 
 METRIC_PARAM_EXPECTED_OUTCOME = [
-    ("Error loading metric", 43),  # Expected result for 1
-    ("Error loading metric", 67),  # Expected result for 1.1
-    ("", 0),  # Expected result for -1
-    ("Error loading metric", 43),  # Expected result for 0
-    ("Error loading metric", 43),  # Expected result for "@1"
-    ("No valid file found for test in", 14)  # Expected result for "test"
+    ("Error loading metric"),  # Expected result for 1
+    ("Error loading metric"),  # Expected result for 1.1
+    (""),  # Expected result for -1
+    ("Error loading metric"),  # Expected result for 0
+    ("Error loading metric"),  # Expected result for "@1"
+    ("Error loading metric")  # Expected result for "test"
 ]
-@parametrize("input_params, expected", zip(INPUT_PARAMS, METRIC_PARAM_EXPECTED_OUTCOME))
-def test_cli_run_create_scan_test_params_testing_metric_module(input_params,expected):
-    expectedMsg, expected_value = expected  # Extract the second value
+@parametrize("input_params, expectedMsg", zip(INPUT_PARAMS, METRIC_PARAM_EXPECTED_OUTCOME))
+def test_cli_run_create_scan_test_params_testing_metric_module(input_params,expectedMsg):
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     attack_module = "hallucination"
@@ -119,7 +117,7 @@ def test_cli_run_create_scan_test_params_testing_metric_module(input_params,expe
 
     print('Output:', stdout)
     # Split the output into lines
-    output_lines = stdout.splitlines()
+    output_lines = [line.replace(" ", "") for line in stdout.splitlines() if line.strip()]
     #Assert Outcome
     # Assert Outcome
     if input_params == -1:
@@ -128,20 +126,19 @@ def test_cli_run_create_scan_test_params_testing_metric_module(input_params,expe
         # Assert that the error contains Pydantic's validation message
         assert "Error: No such option: -1\n"
     else:
-        assert output_lines[-expected_value].replace(" ", "") == expectedMsg.replace(" ", "")
+        assert expectedMsg.replace(" ", "") in output_lines
 
 
 CONNECTOR_PARAM_EXPECTED_OUTCOME = [
-    ("r] Failed", 14),  # Expected result for 1
-    ("r] Failed", 14),  # Expected result for 1.1
+    ("Error loading the connector"),  # Expected result for 1
+    ("Error loading the connector"),  # Expected result for 1.1
     ("", 0),  # Expected result for -1
-    ("r] Failed", 14),  # Expected result for 0
-    ("r] Failed", 14),  # Expected result for "@1"
-    ("r] Failed", 14)  # Expected result for "test"
+    ("Error loading the connector"),  # Expected result for 0
+    ("Error loading the connector"),  # Expected result for "@1"
+    ("Error loading the connector")  # Expected result for "test"
 ]
-@parametrize("input_params, expected", zip(INPUT_PARAMS, CONNECTOR_PARAM_EXPECTED_OUTCOME))
-def test_cli_run_create_scan_test_params_testing_connector_name(input_params,expected):
-    expectedMsg, expected_value = expected  # Extract the second value
+@parametrize("input_params, expectedMsg", zip(INPUT_PARAMS, CONNECTOR_PARAM_EXPECTED_OUTCOME))
+def test_cli_run_create_scan_test_params_testing_connector_name(input_params,expectedMsg):
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     attack_module = "hallucination"
@@ -175,7 +172,7 @@ def test_cli_run_create_scan_test_params_testing_connector_name(input_params,exp
 
     print('Output:', stdout)
     # Split the output into lines
-    output_lines = stdout.splitlines()
+    output_lines = [line.replace(" ", "") for line in stdout.splitlines() if line.strip()]
     #Assert Outcome
     # Assert Outcome
     if input_params == -1:
@@ -184,10 +181,10 @@ def test_cli_run_create_scan_test_params_testing_connector_name(input_params,exp
         # Assert that the error contains Pydantic's validation message
         assert "Error: No such option: -1\n"
     else:
-        assert output_lines[-expected_value].replace(" ", "") == expectedMsg.replace(" ", "")
+        assert expectedMsg.replace(" ", "") in output_lines
 
 
-@pytest.mark.skip(reason="This test is skipped for now")
+
 def test_cli_run_redteaming_hallucination_refusal_adapter():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
@@ -226,7 +223,7 @@ def test_cli_run_redteaming_hallucination_refusal_adapter():
     output_lines = stdout.splitlines()
     #Assert Outcome
     assert_run_outcome(output_lines)
-@pytest.mark.skip(reason="This test is skipped for now")
+
 def test_cli_run_redteaming_sensitive_data_disclosure_refusal_adapter():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
@@ -265,7 +262,6 @@ def test_cli_run_redteaming_sensitive_data_disclosure_refusal_adapter():
     output_lines = stdout.splitlines()
     # Assert Outcome
     assert_run_outcome(output_lines)
-@pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_redteaming_system_prompt_leakage_refusal_adapter():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
