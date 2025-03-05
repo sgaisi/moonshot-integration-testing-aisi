@@ -36,7 +36,7 @@ def test_cli_run_create_scan_test_params_testing_attack_module(input_params,expe
     random_number = int(random.random() * 1000000000)
     attack_module = str(input_params)
     metric_module = "refusal_adapter"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "test_run_" + connector_name + "_" + attack_module + "_" + str(random_number)
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
@@ -90,7 +90,7 @@ def test_cli_run_create_scan_test_params_testing_metric_module(input_params,expe
     random_number = int(random.random() * 1000000000)
     attack_module = "hallucination"
     metric_module = str(input_params)
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "test_run_" + connector_name + "_" + attack_module + "_" + str(random_number)
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
@@ -194,7 +194,7 @@ def test_cli_run_redteaming_hallucination_refusal_adapter():
     random_number = int(random.random() * 1000000000)
     attack_module = "hallucination"
     metric_module = "refusal_adapter"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "test_run_" + connector_name + "_" + attack_module + "_" + str(random_number)
     commands = [
         "export OPENAI_API_KEY="+OPENAI_TOKEN,
@@ -232,7 +232,7 @@ def test_cli_run_redteaming_sensitive_data_disclosure_refusal_adapter():
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     attack_module = "sensitive_data_disclosure"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "test_run_" + connector_name + "_" + attack_module + "_" + str(random_number)
     metric_module = "refusal_adapter"
     commands = [
@@ -271,7 +271,7 @@ def test_cli_run_redteaming_system_prompt_leakage_refusal_adapter():
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     attack_module = "system_prompt_leakage"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "test_run_"+connector_name+"_"+attack_module+"_" + str(random_number)
     metric_module = "refusal_adapter"
     commands = [

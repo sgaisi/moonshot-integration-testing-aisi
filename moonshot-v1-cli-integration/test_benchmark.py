@@ -25,7 +25,7 @@ def test_cli_run_benchmarking_params_testing_dataset_module(input_params,expecte
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = str(input_params)
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
 
@@ -135,7 +135,7 @@ def test_cli_run_benchmarking_params_testing_metric_module(input_params,expected
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "mmlu-mini"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = str(input_params)
 
@@ -181,7 +181,7 @@ def assert_run_outcome(output_lines):
     assert "File written".replace(" ", "") in output_lines
     assert "successfully at:".replace(" ", "") in output_lines
     assert "data/results/my-benchm".replace(" ", "") in output_lines
-    assert "successfully created with run_id:".replace(" ", "") in output_lines
+    assert "successfully created with".replace(" ", "") in output_lines
 
 @pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_mmlu_mini():
@@ -189,7 +189,7 @@ def test_cli_run_benchmarking_refusal_adapter_mmlu_mini():
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "mmlu-mini"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
 
@@ -223,13 +223,14 @@ def test_cli_run_benchmarking_refusal_adapter_mmlu_mini():
     output_lines = stdout.splitlines()
     # Assert Results
     assert_run_outcome(output_lines)
+
 @pytest.mark.skip(reason="This test is skipped for now")
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_obfuscation():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "prompt_injection_obfuscation"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "my-benchmarking-"+connector_name+"-"+dataset_module+"-" + str(random_number)
     metric_module = "refusal_adapter"
 
@@ -270,7 +271,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_payload_splitting
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "prompt_injection_payload_splitting"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
 
@@ -311,7 +312,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_role_playing():
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "prompt_injection_role_playing"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
 
@@ -352,7 +353,7 @@ def test_cli_run_benchmarking_refusal_adapter_sensitive_data_disclosure_general(
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     dataset_module = "sensitive_data_disclosure_general"
-    connector_name = "my-gpt4o"
+    connector_name = "my-gpt4o-mini"
     nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
     metric_module = "refusal_adapter"
 
