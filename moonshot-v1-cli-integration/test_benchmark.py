@@ -3,7 +3,7 @@ import pytest
 from dotenv import load_dotenv
 import os
 import random
-from util import parametrize, INPUT_PARAMS
+from util import *
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -220,6 +220,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_obfuscation():
 
     # Assert Results
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR+"/data/results/"+nameOfRunnerName+".json")
 
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_payload_splitting():
 
@@ -261,6 +262,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_payload_splitting
 
     # Assert Results
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR + "/data/results/" + nameOfRunnerName + ".json")
 
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_role_playing():
 
@@ -302,6 +304,7 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_role_playing():
 
     # Assert Results
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR + "/data/results/" + nameOfRunnerName + ".json")
 
 def test_cli_run_benchmarking_refusal_adapter_sensitive_data_disclosure_general():
 
@@ -343,6 +346,7 @@ def test_cli_run_benchmarking_refusal_adapter_sensitive_data_disclosure_general(
 
     # Assert Results
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR + "/data/results/" + nameOfRunnerName + ".json")
 
 def test_cli_run_benchmarking_refusal_adapter_prompt_injection_jailbreak():
 
@@ -384,3 +388,4 @@ def test_cli_run_benchmarking_refusal_adapter_prompt_injection_jailbreak():
 
     # Assert Results
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR + "/data/results/" + nameOfRunnerName + ".json")

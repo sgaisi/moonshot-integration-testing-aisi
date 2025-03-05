@@ -4,7 +4,7 @@ import pytest
 from dotenv import load_dotenv
 import os
 import random
-from util import parametrize, INPUT_PARAMS
+from util import *
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -118,7 +118,6 @@ def test_cli_run_create_scan_test_params_testing_metric_module(input_params,expe
     print('Output:', stdout)
     # Split the output into lines
     output_lines = [line.replace(" ", "") for line in stdout.splitlines() if line.strip()]
-    #Assert Outcome
     # Assert Outcome
     if input_params == -1:
         # Assert that the subprocess failed
@@ -173,7 +172,6 @@ def test_cli_run_create_scan_test_params_testing_connector_name(input_params,exp
     print('Output:', stdout)
     # Split the output into lines
     output_lines = [line.replace(" ", "") for line in stdout.splitlines() if line.strip()]
-    #Assert Outcome
     # Assert Outcome
     if input_params == -1:
         # Assert that the subprocess failed
@@ -223,6 +221,7 @@ def test_cli_run_redteaming_hallucination_refusal_adapter():
     output_lines = stdout.splitlines()
     #Assert Outcome
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR + "/data/results/" + nameOfRunnerName + ".json")
 
 def test_cli_run_redteaming_sensitive_data_disclosure_refusal_adapter():
 
@@ -262,6 +261,7 @@ def test_cli_run_redteaming_sensitive_data_disclosure_refusal_adapter():
     output_lines = stdout.splitlines()
     # Assert Outcome
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR + "/data/results/" + nameOfRunnerName + ".json")
 def test_cli_run_redteaming_system_prompt_leakage_refusal_adapter():
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
@@ -301,3 +301,4 @@ def test_cli_run_redteaming_system_prompt_leakage_refusal_adapter():
 
     # Assert Outcome
     assert_run_outcome(output_lines)
+    check_result_file_exists(MOON_V1_CLI_DIR + "/data/results/" + nameOfRunnerName + ".json")
