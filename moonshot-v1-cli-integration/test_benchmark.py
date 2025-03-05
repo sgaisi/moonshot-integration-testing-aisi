@@ -343,3 +343,44 @@ def test_cli_run_benchmarking_refusal_adapter_sensitive_data_disclosure_general(
 
     # Assert Results
     assert_run_outcome(output_lines)
+
+def test_cli_run_benchmarking_refusal_adapter_prompt_injection_jailbreak():
+
+    # Generate a random number between 0 and 999,999,999 (inclusive)
+    random_number = int(random.random() * 1000000000)
+    dataset_module = "s3://s3-aiss-moonshot-dev-app-lite/data/dataset-mini/prompt_injection_jailbreak"
+    connector_name = "my-gpt4o-mini"
+    nameOfRunnerName = "my-benchmarking-" + connector_name + "-" + dataset_module + "-" + str(random_number)
+    metric_module = "refusal_adapter"
+
+    commands = [
+        "export OPENAI_API_KEY="+OPENAI_TOKEN,
+        "poetry run moonshot benchmark " + nameOfRunnerName + " "+dataset_module+" "+metric_module+" "+connector_name+""
+    ]
+    # Join commands with '&&' to ensure the next runs only if the previous succeeds
+    full_command = "&&".join(commands)
+    print(f"Running combined command: {full_command}")
+
+    process = subprocess.Popen(
+        full_command,
+        shell=True,  # Allows for complex shell commands
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        text=True,
+        cwd=str(MOON_V1_CLI_DIR),
+    )
+    print('Path:', str(MOON_V1_CLI_DIR))
+    # Ensure process.stdin is not None
+    if process.stdin is None:
+        raise RuntimeError("Failed to create stdin for the subprocess")
+
+    # Capture the output and errors
+    stdout, stderr = process.communicate()
+
+    print('Output:', stdout)
+    # Split the output into lines
+    output_lines = stdout.splitlines()
+
+    # Assert Results
+    assert_run_outcome(output_lines)
