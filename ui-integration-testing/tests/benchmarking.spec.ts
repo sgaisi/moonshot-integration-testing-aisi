@@ -22,17 +22,12 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     await page.getByPlaceholder('Access token for the remote').fill(token);
     await page.getByText('More Configs').click();
     if (maxCallPerSec != '') {
-        const maxCallPerSecDropDownLocator = page.locator('.aiv__input-container')
-        await maxCallPerSecDropDownLocator.first().click();
+        await page.locator('.aiv__input-container').first().click();
         await page.getByRole('option', {name: maxCallPerSec}).click();
-        const dropdownLocator = page.locator('div.dropdown-selector'); // Your dropdown selector
-        await maxCallPerSecDropDownLocator.locator('text="' + maxCallPerSec + '"'); // The specific option
-
     }
     if (maxConcurr != '') {
-        const maxConcurrDropDownLocator = page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container')
-        await maxConcurrDropDownLocator.click();
-        await maxConcurrDropDownLocator.locator('text="' + maxConcurr + '"'); // The specific option
+        await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container')
+        await page.getByRole('option', {name: maxConcurr}).click();
     }
     await page.getByPlaceholder('Additional parameters').click();
     await page.getByPlaceholder('Additional parameters').fill(otherParams);
