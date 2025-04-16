@@ -1221,9 +1221,9 @@ test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
         '    "timeout": 300,\n' +
         '    "max_attempts": 3,\n' +
         '    "temperature": 0.5,\n' +
-        '    "model": "anthropic.claude-3-sonnet-20240229-v1:0",\n' +
+        '    "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n' +
         '    "session": {\n' +
-        '        "region_name": "us-east-1"\n' +
+        '        "region_name": "us-east-2"\n' +
         '    }\n' +
         '}'
     await page.getByText('More Configs').click();
