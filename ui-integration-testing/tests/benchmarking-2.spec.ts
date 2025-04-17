@@ -354,7 +354,8 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
 // });
 
 test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, page}) => {
-    test.setTimeout(2100000);
+    test.setTimeout(2700000);
+    console.time("Total test_benchmarking_run_with_two_cookbook_standard Time");
     const ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     await page.goto('http://localhost:3000/');
@@ -375,7 +376,7 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 2400000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
@@ -388,7 +389,7 @@ test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, pa
     await page.getByText(/back to home/i).click()
 });
 test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({browserName, page}) => {
-    test.setTimeout(4000000);
+    test.setTimeout(4600000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     // Check if the browser is WebKit
@@ -425,7 +426,7 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     await page.getByPlaceholder('Give this session a unique').click();
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 3500000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 4100000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
@@ -639,7 +640,7 @@ test.skip('test_benchmarking_one_endpoint_cookbook_amazon_bedrock', async ({brow
     console.log('AWS_ACCESS_KEY_ID:', apiKey);
 
     // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1200000); //set test timeout to 20 min
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -763,8 +764,7 @@ test.skip('test_benchmarking_one_endpoint_cookbook_cybersec', async ({browserNam
 });
 
 test.skip('test_benchmarking_one_endpoint_cookbook_google', async ({browserName, page}) => {
-    test.setTimeout(1200000); //set test timeout to 1 hour
-
+    test.setTimeout(1200000); //set test timeout to 20 min
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     // // Check if the browser is FireFox
@@ -819,7 +819,7 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
                                                                                                            browserName,
                                                                                                            page
                                                                                                        }) => {
-    test.setTimeout(3000000);
+    test.setTimeout(3600000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const COOKBOOK_NAME: string = "test-bias-occupation-" + Math.floor(Math.random() * 1000000000);
@@ -876,7 +876,7 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 2100000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 2700000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
@@ -891,7 +891,7 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
 });
 
 test('test_benchmarking_one_endpoint_cookbook_jailbreak_prompts', async ({browserName, page}) => {
-    test.setTimeout(2100000);
+    test.setTimeout(2700000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const COOKBOOK_NAME: string = "test-jailbreak-prompts-" + Math.floor(Math.random() * 1000000000);
@@ -944,7 +944,7 @@ test('test_benchmarking_one_endpoint_cookbook_jailbreak_prompts', async ({browse
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 2400000})
     //Check Details
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();

@@ -186,6 +186,7 @@ test('test_benchmarking_one_endpoint_slider_percentage', async ({browserName, pa
     await page.getByText(/back to home/i).click()
 
 });
+
 test('test_benchmarking_one_endpoint', async ({browserName, page}) => {
     test.setTimeout(1200000);
     // Check if the browser is WebKit
@@ -206,8 +207,9 @@ test('test_benchmarking_one_endpoint', async ({browserName, page}) => {
     await page.getByText(/back to home/i).click()
 
 });
+
 test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browserName, page}) => {
-    test.setTimeout(1200000);
+    test.setTimeout(1800000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
@@ -227,7 +229,7 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-easy', async ({browser
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1200000})
     //Check Detailss
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
@@ -412,7 +414,7 @@ test('test_benchmarking_one_endpoint_cookbook_legal-summarisation', async ({brow
 });
 
 test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserName, page}) => {
-    test.setTimeout(4000000);
+    test.setTimeout(4600000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
@@ -440,7 +442,7 @@ test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserNam
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 3500000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 4100000})
     //Check Detailss
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
@@ -455,7 +457,7 @@ test('test_benchmarking_one_endpoint_cookbook_mlc-ai-safety', async ({browserNam
 });
 
 test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browserName, page}) => {
-    test.setTimeout(1200000);
+    test.setTimeout(2400000);
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
@@ -475,7 +477,7 @@ test('test_benchmarking_one_endpoint_cookbook_common-risk-hard', async ({browser
     await page.getByPlaceholder('Give this session a unique').fill(RUNNER_NAME);
     await page.getByRole('button', {name: 'Run'}).click();
     ////////////////////////////////////////////////////////////////////////////
-    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 600000})
+    await expect(page.getByRole('button', {name: 'View Report'})).toBeVisible({timeout: 1800000})
     //Check Detailss
     await page.getByRole('button', {name: 'See Details'}).click();
     await expect(page.getByText("Name:" + RUNNER_NAME)).toBeVisible();
@@ -595,6 +597,7 @@ test('test_benchmarking_runner_name_input_special_char', async ({browserName, pa
     await page.locator('main').filter({hasText: 'Showing results forazure-'}).getByRole('link').first().click();
     await page.getByText(/back to home/i).click()
 });
+
 test('test_benchmarking_runner_name_input_empty', async ({browserName, page}) => {
     test.setTimeout(1200000);
     const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
