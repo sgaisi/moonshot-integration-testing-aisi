@@ -355,18 +355,12 @@ test('test_benchmarking_create_endpoint_entry_point_2', async ({browserName, pag
 
 test('test_benchmarking_run_with_two_cookbook_standard', async ({browserName, page}) => {
     test.setTimeout(2700000);
-    console.time("Total test_benchmarking_run_with_two_cookbook_standard Time");
-    const ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
+    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     await page.goto('http://localhost:3000/');
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    //Edit Endpoint
-    await page.locator('li').filter({hasText: ENDPOINT_NAME + "Added"}).getByRole('button').click();
-    await page.getByPlaceholder('URI of the remote model').fill(process.env.URI);
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
-    await page.getByRole('button', {name: 'Save'}).click();
-    //////////////////////////////////////////////////
     await page.getByLabel('Select ' + ENDPOINT_NAME, {exact: true}).check();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select singapore-context').check();
@@ -394,20 +388,14 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     // Check if the browser is WebKit
     test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
-    const TOGETHER_ENDPOINT_NAME: string = "Together Llama Guard 7B Assistant";
+    // const TOGETHER_ENDPOINT_NAME: string = "Together Llama Guard 3 8B Assistant";
+    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
     await page.goto('http://localhost:3000/');
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     await page.getByRole('listitem').nth(1).click();
     await page.getByRole('button', {name: 'Start New Run'}).click();
-    /////////////////////////////////////////////////////////////////////////////////////
-    const ENDPOINT_NAME: string = 'Azure OpenAI GPT4o';
-    //Edit Endpoint
-    await page.locator('li').filter({hasText: ENDPOINT_NAME + "Added"}).getByRole('button').click();
-    await page.getByPlaceholder('URI of the remote model').fill(process.env.URI);
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
-    await page.getByRole('button', {name: 'Save'}).click();
-    /////////////////////////////////////////////////////////////////////////////////////
-     await page.getByLabel('Select ' + ENDPOINT_NAME, {exact: true}).check();
+    await page.getByLabel('Select ' + ENDPOINT_NAME, {exact: true}).check();
     await page.getByLabel('Next View').click();
     await page.getByLabel('Select singapore-context').check();
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -415,7 +403,7 @@ test('test_benchmarking_run_with_two_cookbook_standard_with_mlc_type', async ({b
 
     await page.getByLabel('Next View').click();
 
-    //Edit Endpoint
+    //Edit Llama Guard Evaluator Endpoint
     // await page.locator('li').filter({hasText: TOGETHER_ENDPOINT_NAME + "Added"}).getByRole('button').click();
     await page.getByRole('button', { name: 'Configure' }).click();
     await page.getByPlaceholder('Access token for the remote').fill(process.env.TOGETHER_TOKEN);
@@ -828,6 +816,11 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000');
+    //Edit Target Endpoint
+    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    //////////////////////////////////////////////////
+    await page.goto('http://localhost:3000');
     await page.getByRole('listitem').nth(1).click();
     // Create i2p cookbook steps
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
@@ -853,18 +846,8 @@ test('test_benchmarking_one_endpoint_cookbook_llm_judge_openai_gpt4_annotator_bi
     await page.getByPlaceholder('URI of the remote model').fill('' + process.env.URI + '');
     await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
-
-    //////////////////////////////////////////////////
-    //Edit Target Endpoint
-    const AZURE_OPENAI_ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
-    await page.locator('li').filter({hasText: AZURE_OPENAI_ENDPOINT_NAME + "Added"}).getByRole('button').click();
-    // await page.getByPlaceholder('URI of the remote model').fill(process.env.URI);
-    await page.getByPlaceholder('URI of the remote model').click();
-    await page.getByPlaceholder('URI of the remote model').fill('' + process.env.URI + '');
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
-    await page.getByRole('button', {name: 'Save'}).click();
-    ///////////////////////////////////////////////////////////////////
-    await page.getByLabel('Select ' + AZURE_OPENAI_ENDPOINT_NAME, {exact: true}).check();
+    
+    await page.getByLabel('Select ' + ENDPOINT_NAME, {exact: true}).check();
     await page.getByLabel('Next View').click();
 
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
@@ -900,6 +883,11 @@ test('test_benchmarking_one_endpoint_cookbook_jailbreak_prompts', async ({browse
     // Benchmarking
     console.log('Benchmarking')
     await page.goto('http://localhost:3000');
+    //Edit Target Endpoint
+    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    //////////////////////////////////////////////////
+    await page.goto('http://localhost:3000');
     await page.getByRole('listitem').nth(1).click();
     // Create i2p cookbook steps
     await page.getByRole('button', {name: 'View Cookbooks'}).click();
@@ -922,18 +910,8 @@ test('test_benchmarking_one_endpoint_cookbook_jailbreak_prompts', async ({browse
     const REFUSAL_EVALUATOR_ENDPOINT_NAME: string = "Refusal Evaluator";
     await page.locator('li').filter({hasText: REFUSAL_EVALUATOR_ENDPOINT_NAME + "Added"}).getByRole('button').click();
     await page.getByPlaceholder('Access token for the remote').fill("" + process.env.TOKEN + "");
-    await page.getByRole('button', {name: 'Save'}).click();
-    //////////////////////////////////////////////////
-    //Edit Target Endpoint
-    const AZURE_OPENAI_ENDPOINT_NAME: string = "Azure OpenAI GPT4o";
-    await page.locator('li').filter({hasText: AZURE_OPENAI_ENDPOINT_NAME + "Added"}).getByRole('button').click();
-    // await page.getByPlaceholder('URI of the remote model').fill(process.env.URI);
-    await page.getByPlaceholder('URI of the remote model').click();
-    await page.getByPlaceholder('URI of the remote model').fill('' + process.env.URI + '');
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
-    await page.getByRole('button', {name: 'Save'}).click();
-    ///////////////////////////////////////////////////////////////////
-    await page.getByLabel('Select ' + AZURE_OPENAI_ENDPOINT_NAME, {exact: true}).check();
+    await page.getByRole('button', {name: 'Save'}).click()
+    await page.getByLabel('Select ' + ENDPOINT_NAME, {exact: true}).check();
     await page.getByLabel('Next View').click();
 
     await page.getByRole('button', {name: 'Trust & Safety'}).click();
