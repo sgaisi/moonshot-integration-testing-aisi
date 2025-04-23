@@ -8,8 +8,8 @@ from util.utils import *
 
 load_dotenv()  # Load environment variables from .env file
 
-AZURE_OPENAI_URI = os.getenv('AZURE_OPENAI_URI')
-AZURE_OPENAI_TOKEN = os.getenv('AZURE_OPENAI_TOKEN')
+OPENAI_URI = os.getenv('OPENAI_URI')
+OPENAI_TOKEN = os.getenv('OPENAI_TOKEN')
 TOGETHER_TOKEN= os.getenv('TOGETHER_TOKEN')
 # CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
 CLI_DIR = os.getenv('CLI_DIR')
@@ -41,9 +41,9 @@ def test_cli_run_cookbook():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -53,13 +53,14 @@ def test_cli_run_cookbook():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'singapore-context\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'singapore-context\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     # Capture the output and errors
     stdout, stderr = process.communicate()
+    print("ERROR:::: "+ stderr)
 
     print('Output:', stdout)
     # Split the output into lines
@@ -70,68 +71,68 @@ def test_cli_run_cookbook():
     print('=========================Output Last Line:', last_line)
     assert last_line.replace(" ", "") == "CookbookResult"
 
-def test_cli_run_cookbook_mlc_ai_safety():
-    command = (
-        # 'cd .. &&'
-        # 'source venv/bin/activate &&'
-        # 'cd moonshot &&'
-        'python3 -m moonshot cli interactive'
-    )
+# def test_cli_run_cookbook_mlc_ai_safety():
+#     command = (
+#         # 'cd .. &&'
+#         # 'source venv/bin/activate &&'
+#         # 'cd moonshot &&'
+#         'python -m moonshot cli interactive'
+#     )
 
-    process = subprocess.Popen(
-        command,
-        shell=True,  # Allows for complex shell commands
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        text=True,
-        cwd=str(CLI_DIR),
-        # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
-        # /home/runner/work/moonshot-data/moonshot-data for moonshot data repo
-        # /home/runner/work/moonshot/moonshot-data for moonshot repo
-    )
-    print('Path:', str(CLI_DIR))
-    # Ensure process.stdin is not None
-    if process.stdin is None:
-        raise RuntimeError("Failed to create stdin for the subprocess")
+#     process = subprocess.Popen(
+#         command,
+#         shell=True,  # Allows for complex shell commands
+#         stdout=subprocess.PIPE,
+#         stderr=subprocess.PIPE,
+#         stdin=subprocess.PIPE,
+#         text=True,
+#         cwd=str(CLI_DIR),
+#         # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
+#         # /home/runner/work/moonshot-data/moonshot-data for moonshot data repo
+#         # /home/runner/work/moonshot/moonshot-data for moonshot repo
+#     )
+#     print('Path:', str(CLI_DIR))
+#     # Ensure process.stdin is not None
+#     if process.stdin is None:
+#         raise RuntimeError("Failed to create stdin for the subprocess")
 
-    # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
+#     # Update Endpoints
+#     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+#         OPENAI_URI) + '\'), (\'token\', \'' + str(
+#         OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+#     print('Command:', command)
+#     # Example command to send to the process
+#     process.stdin.write(command)
+#     process.stdin.flush()
 
-    # Update Evaluation Endpoint
-    command = 'update_endpoint together-llama-guard-7b-assistant "[(\'token\', \'' + str(TOGETHER_TOKEN) + '\')]"\n'
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
+#     # Update Evaluation Endpoint
+#     command = 'update_endpoint together-llama-guard-7b-assistant "[(\'token\', \'' + str(TOGETHER_TOKEN) + '\')]"\n'
+#     print('Command:', command)
+#     # Example command to send to the process
+#     process.stdin.write(command)
+#     process.stdin.flush()
 
-    # Generate a random number between 0 and 999,999,999 (inclusive)
-    random_number = int(random.random() * 1000000000)
-    nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
-    nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'mlc-ai-safety\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
+#     # Generate a random number between 0 and 999,999,999 (inclusive)
+#     random_number = int(random.random() * 1000000000)
+#     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
+#     nameOfRunnerName = "my benchmarking runner " + str(random_number)
+#     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'mlc-ai-safety\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+#     print('Command:', command)
+#     # Example command to send to the process
+#     process.stdin.write(command)
+#     process.stdin.flush()
 
-    # Capture the output and errors
-    stdout, stderr = process.communicate()
+#     # Capture the output and errors
+#     stdout, stderr = process.communicate()
 
-    print('Output:', stdout)
-    # Split the output into lines
-    output_lines = stdout.splitlines()
+#     print('Output:', stdout)
+#     # Split the output into lines
+#     output_lines = stdout.splitlines()
 
-    # Get the last line of the output
-    last_line = output_lines[-26]
-    print('=========================Output Last Line:', last_line)
-    assert last_line.replace(" ", "") == "CookbookResult"
+#     # Get the last line of the output
+#     last_line = output_lines[-26]
+#     print('=========================Output Last Line:', last_line)
+#     assert last_line.replace(" ", "") == "CookbookResult"
 
 # def test_cli_run_rag_cookbook():
 #     command = (
@@ -168,9 +169,9 @@ def test_cli_run_cookbook_mlc_ai_safety():
 #
 #
 #     # Update Endpoints
-#     command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-#         AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-#         AZURE_OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+#     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+#         OPENAI_URI) + '\'), (\'token\', \'' + str(
+#         OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
 #     print('Command:', command)
 #     # Example command to send to the process
 #     process.stdin.write(command)
@@ -180,7 +181,7 @@ def test_cli_run_cookbook_mlc_ai_safety():
 #     random_number = int(random.random() * 1000000000)
 #     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
 #     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-#     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'singapore-context\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+#     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'singapore-context\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
 #     # Example command to send to the process
 #     process.stdin.write(command)
 #     process.stdin.flush()
@@ -223,9 +224,9 @@ def test_cli_run_recipe():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -235,7 +236,7 @@ def test_cli_run_recipe():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-new-recipe-runner-" + str(random_number)
     nameOfRunnerName = "my new recipe runner " + str(random_number)
-    command = 'run_recipe "' + nameOfRunnerName + '" "[\'bbq\',\'mmlu\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_recipe "' + nameOfRunnerName + '" "[\'bbq\',\'mmlu\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -433,7 +434,7 @@ def test_cli_delete_metric():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Copy file
-    copy_file(CLI_DIR + '/moonshot-data/metrics/advglue.py')
+    copy_file(CLI_DIR + '/moonshot-data-aisi/metrics/advglue.py')
 
     command = 'delete_metric advglue \n'
 
@@ -460,66 +461,7 @@ def test_cli_delete_metric():
     last_line = output_lines[11]
     print('=========================Output Last Line:', last_line)
     # Restore file
-    current_path = CLI_DIR + "/moonshot-data/metrics/copy_of_advglue.py"  # Replace with the current file path
-    new_name = "advglue.py"  # Specify the new file name
-    rename_file(current_path, new_name)
-    assert last_line.replace(" ", "") == "Areyousureyouwanttodeletethemetric(y/N)?[delete_metric]:Metricdeleted."
-
-
-def test_cli_delete_metric():
-    command = (
-        # 'cd .. &&'
-        # 'source venv/bin/activate &&'
-        # 'cd moonshot &&'
-        'python3 -m moonshot cli interactive'
-    )
-
-    process = subprocess.Popen(
-        command,
-        shell=True,  # Allows for complex shell commands
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        text=True,
-        cwd=str(CLI_DIR),
-        # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
-        # /home/runner/work/moonshot-data/moonshot-data for moonshot data repo
-        # /home/runner/work/moonshot/moonshot-data for moonshot repo
-    )
-    print('Path:', str(CLI_DIR))
-    # Ensure process.stdin is not None
-    if process.stdin is None:
-        raise RuntimeError("Failed to create stdin for the subprocess")
-
-    # Copy file
-    copy_file(CLI_DIR + '/moonshot-data/metrics/advglue.py')
-
-    command = 'delete_metric advglue \n'
-
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
-
-    command = 'y\n'
-
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
-
-    # Capture the output and errors
-    stdout, stderr = process.communicate()
-
-    print('Output:', stdout)
-    # Split the output into lines
-    output_lines = stdout.splitlines()
-
-    # Get the last line of the output
-    last_line = output_lines[11]
-    print('=========================Output Last Line:', last_line)
-    # Restore file
-    current_path = CLI_DIR + "/moonshot-data/metrics/copy_of_advglue.py"  # Replace with the current file path
+    current_path = CLI_DIR + "/moonshot-data-aisi/metrics/copy_of_advglue.py"  # Replace with the current file path
     new_name = "advglue.py"  # Specify the new file name
     rename_file(current_path, new_name)
     assert last_line.replace(" ", "") == "Areyousureyouwanttodeletethemetric(y/N)?[delete_metric]:Metricdeleted."
@@ -555,9 +497,9 @@ def test_cli_delete_result():
     # process.stdin.flush()
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -567,7 +509,7 @@ def test_cli_delete_result():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -607,7 +549,7 @@ def test_cli_delete_runner():
         'python3 -m moonshot cli interactive'
     )
 
-    process = subprocess.Popen(
+    run_recipe_process = subprocess.Popen(
         command,
         shell=True,  # Allows for complex shell commands
         stdout=subprocess.PIPE,
@@ -615,133 +557,77 @@ def test_cli_delete_runner():
         stdin=subprocess.PIPE,
         text=True,
         cwd=str(CLI_DIR),
-        # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
-        # /home/runner/work/moonshot-data/moonshot-data for moonshot data repo
-        # /home/runner/work/moonshot/moonshot-data for moonshot repo
     )
     print('Path:', str(CLI_DIR))
     # Ensure process.stdin is not None
-    if process.stdin is None:
+    if run_recipe_process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
 
-    # # Example command to send to the process
-    # process.stdin.write('list_cookbooks\n')
-    # process.stdin.flush()
-
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
+    run_recipe_process.stdin.write(command)
+    run_recipe_process.stdin.flush()
 
     # Generate a random number between 0 and 999,999,999 (inclusive)
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_recipe "' + nameOfRunnerName + '" "[\'cbbq-lite\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
-
-    # Update Endpoints
-    command = 'delete_runner ' + nameOfRunnerFileName + '\n'
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
-
-    # Update Endpoints
-    command = 'y\n'
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
+    run_recipe_process.stdin.write(command)
+    run_recipe_process.stdin.flush()
 
     # Capture the output and errors
-    stdout, stderr = process.communicate()
+    stdout, stderr = run_recipe_process.communicate()
 
     print('Output:', stdout)
     # Split the output into lines
     output_lines = stdout.splitlines()
 
-    # Get the last line of the output
-    last_line = output_lines[-2]
-    print('=========================Output Last Line:', last_line)
-    assert last_line.replace(" ", "") == "Areyousureyouwanttodeletetherunner(y/N)?[delete_runner]:Runnerdeleted."
-
-
-def test_cli_delete_runner():
-    command = (
-        # 'cd .. &&'
-        # 'source venv/bin/activate &&'
-        # 'cd moonshot &&'
-        'python3 -m moonshot cli interactive'
-    )
-
-    process = subprocess.Popen(
-        command,
+    delete_runner_process = subprocess.Popen(
+        ('python3 -m moonshot cli interactive'),
         shell=True,  # Allows for complex shell commands
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         stdin=subprocess.PIPE,
         text=True,
         cwd=str(CLI_DIR),
-        # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
-        # /home/runner/work/moonshot-data/moonshot-data for moonshot data repo
-        # /home/runner/work/moonshot/moonshot-data for moonshot repo
     )
     print('Path:', str(CLI_DIR))
     # Ensure process.stdin is not None
-    if process.stdin is None:
+    if delete_runner_process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
-
-        # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
-
-    # Generate a random number between 0 and 999,999,999 (inclusive)
-    random_number = int(random.random() * 1000000000)
-    nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
-    nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
 
     # Update Endpoints
     command = 'delete_runner ' + nameOfRunnerFileName + '\n'
     print('Command:', command)
     # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
+    delete_runner_process.stdin.write(command)
+    delete_runner_process.stdin.flush()
 
     # Update Endpoints
     command = 'y\n'
     print('Command:', command)
     # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
+    delete_runner_process.stdin.write(command)
+    delete_runner_process.stdin.flush()
 
     # Capture the output and errors
-    stdout, stderr = process.communicate()
+    stdout, stderr = delete_runner_process.communicate()
+    print("ERROR::" + stderr)
 
     print('Output:', stdout)
     # Split the output into lines
-    output_lines = stdout.splitlines()
+    output_lines += stdout.splitlines()
 
     # Get the last line of the output
     last_line = output_lines[-2]
     print('=========================Output Last Line:', last_line)
     assert last_line.replace(" ", "") == "Areyousureyouwanttodeletetherunner(y/N)?[delete_runner]:Runnerdeleted."
-
 
 def test_cli_list_cookbooks():
     command = (
@@ -953,9 +839,9 @@ def test_cli_list_results():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -965,7 +851,7 @@ def test_cli_list_results():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1014,9 +900,9 @@ def test_cli_list_runs():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -1026,7 +912,7 @@ def test_cli_list_runs():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1417,9 +1303,9 @@ def test_cli_view_result():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -1429,7 +1315,7 @@ def test_cli_view_result():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1477,9 +1363,9 @@ def test_cli_view_run():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -1489,7 +1375,7 @@ def test_cli_view_run():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
@@ -1537,9 +1423,9 @@ def test_cli_view_runner():
         raise RuntimeError("Failed to create stdin for the subprocess")
 
     # Update Endpoints
-    command = 'update_endpoint azure-openai-gpt4o "[(\'name\', \'Azure OpenAI GPT4o\'), (\'uri\', \'' + str(
-        AZURE_OPENAI_URI) + '\'), (\'token\', \'' + str(
-        AZURE_OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
+    command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
+        OPENAI_URI) + '\'), (\'token\', \'' + str(
+        OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     print('Command:', command)
     # Example command to send to the process
     process.stdin.write(command)
@@ -1549,7 +1435,7 @@ def test_cli_view_runner():
     random_number = int(random.random() * 1000000000)
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
-    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'azure-openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
+    command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
     # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()

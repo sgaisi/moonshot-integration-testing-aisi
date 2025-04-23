@@ -24,17 +24,12 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
     await page.getByPlaceholder('Model of the model endpoint').fill(model);
     await page.getByText('More Configs').click();
     if (maxCallPerSec != '') {
-        const maxCallPerSecDropDownLocator = page.locator('.aiv__input-container')
-        await maxCallPerSecDropDownLocator.first().click();
+        await page.locator('.aiv__input-container').first().click();
         await page.getByRole('option', {name: maxCallPerSec}).click();
-        const dropdownLocator = page.locator('div.dropdown-selector'); // Your dropdown selector
-        await maxCallPerSecDropDownLocator.locator('text="' + maxCallPerSec + '"'); // The specific option
-
     }
     if (maxConcurr != '') {
-        const maxConcurrDropDownLocator = page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container')
-        await maxConcurrDropDownLocator.click();
-        await maxConcurrDropDownLocator.locator('text="' + maxConcurr + '"'); // The specific option
+        await page.locator('div:nth-child(2) > label > .css-fyq6mk-container > .aiv__control > .aiv__value-container > .aiv__input-container').click()
+        await page.getByRole('option', {name: maxConcurr}).click();
     }
     await page.getByPlaceholder('Additional parameters').click();
     await page.getByPlaceholder('Additional parameters').fill(otherParams);
@@ -79,9 +74,9 @@ test('test_red_teaming', async ({browserName, page}) => {
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -124,9 +119,9 @@ test('test_red_teaming_invalid_endpoint', async ({browserName, page}) => {
     // Check if the browser is FireFox
     test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
 
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -152,9 +147,9 @@ test('test_red_teaming_invalid_endpoint_auto', async ({browserName, page}) => {
     // Check if the browser is FireFox
     test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
 
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, 'uri', process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -195,9 +190,9 @@ test('test_red_teaming_spinner_check', async ({browserName, page}) => {
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -262,9 +257,9 @@ test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, pag
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -321,9 +316,9 @@ test('test_red_teaming_with_attack_module_runner_name_exist', async ({browserNam
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -365,15 +360,15 @@ test('test_red_teaming_run_two_endpoint', async ({browserName, page}) => {
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
     const RND_4_ENDPOINT_1 = Math.floor(Math.random() * 1000000000)
-    const ENDPOINT_NAME_1: string = "Azure OpenAI " + RND_4_ENDPOINT_1;
-    const RED_TEAMING_ENDPOINT_NAME_1: string = "azure-openai-" + RND_4_ENDPOINT_1;
+    const ENDPOINT_NAME_1: string = "OpenAI " + RND_4_ENDPOINT_1;
+    const RED_TEAMING_ENDPOINT_NAME_1: string = "openai-" + RND_4_ENDPOINT_1;
     const RND_4_ENDPOINT_2 = Math.floor(Math.random() * 1000000000)
-    const ENDPOINT_NAME_2: string = "Azure OpenAI " + RND_4_ENDPOINT_2;
-    const RED_TEAMING_ENDPOINT_NAME_2: string = "azure-openai-" + RND_4_ENDPOINT_2;
+    const ENDPOINT_NAME_2: string = "OpenAI " + RND_4_ENDPOINT_2;
+    const RED_TEAMING_ENDPOINT_NAME_2: string = "openai-" + RND_4_ENDPOINT_2;
     const RND_4_RUNNER = Math.floor(Math.random() * 1000000000)
     const RUNNER_NAME: string = "Test " + RND_4_RUNNER;
-    await create_endpoint_steps(page, ENDPOINT_NAME_1, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
-    await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_1, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME_2, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -440,15 +435,15 @@ test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
     // Check if the browser is FireFox
     test.skip(browserName === 'firefox', 'This test is skipped on WebKit');
     const RND_4_ENDPOINT = Math.floor(Math.random() * 1000000000)
-    const RED_TEAMING_ENDPOINT_NAME: string = "azure-openai-" + RND_4_ENDPOINT;
+    const RED_TEAMING_ENDPOINT_NAME: string = "openai-" + RND_4_ENDPOINT;
     // if (browserName == 'webkit')
     //     await page.waitForTimeout(60000)
     // else if (browserName == 'firefox')
     //     await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + RND_4_ENDPOINT;
+    const ENDPOINT_NAME: string = "OpenAI " + RND_4_ENDPOINT;
     const RND_4_RUNNER = Math.floor(Math.random() * 1000000000)
     const RUNNER_NAME: string = "Test " + RND_4_RUNNER;
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -523,9 +518,9 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -583,9 +578,9 @@ test('test_red_teaming_with_attack_module_colloquial_wordswap_attack', async ({b
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -643,9 +638,9 @@ test('test_red_teaming_with_attack_module_homoglyph_attack', async ({browserName
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -703,9 +698,9 @@ test('test_red_teaming_with_attack_module_insert_punctuation_attack', async ({br
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -765,9 +760,9 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -821,9 +816,9 @@ test('test_red_teaming_with_attack_module_malicious_question_generator', async (
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -831,7 +826,7 @@ test('test_red_teaming_with_attack_module_malicious_question_generator', async (
     //Edit Dependency Endpoint
     const OPENAI_ENDPOINT_NAME: string = "OpenAI GPT4";
     await page.getByLabel('Edit ' + OPENAI_ENDPOINT_NAME).click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.OPENAI_TOKEN);
+    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
 
@@ -887,9 +882,9 @@ test('test_red_teaming_with_attack_module_sample_attack_module', async ({browser
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -951,9 +946,9 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -984,7 +979,7 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
     await expect(page.locator('div > li').nth(4)).toBeVisible();
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
@@ -1012,9 +1007,9 @@ test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserNam
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -1072,9 +1067,9 @@ test('test_red_teaming_with_attack_module_textfooler_attack', async ({browserNam
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -1133,9 +1128,9 @@ test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({bro
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -1188,9 +1183,9 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
         await page.waitForTimeout(30000)
-    const ENDPOINT_NAME: string = "Azure OpenAI " + Math.floor(Math.random() * 1000000000);
+    const ENDPOINT_NAME: string = "OpenAI " + Math.floor(Math.random() * 1000000000);
     const RUNNER_NAME: string = "Test " + Math.floor(Math.random() * 1000000000);
-    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'azure-openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
+    await create_endpoint_steps(page, ENDPOINT_NAME, process.env.URI, process.env.TOKEN, 'openai-connector', '2', '', 'gpt-4o', '{\n "timeout": 300,\n "max_attempts": 3,\n "temperature": 0.5\n}', true)
     // Red Teaming
     console.log('Red Teaming')
     await page.getByRole('listitem').nth(2).click();
@@ -1198,7 +1193,7 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
     //Edit Dependency Endpoint
     const OPENAI_ENDPOINT_NAME: string = "OpenAI GPT4";
     await page.getByLabel('Edit ' + OPENAI_ENDPOINT_NAME).click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.OPENAI_TOKEN);
+    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
 

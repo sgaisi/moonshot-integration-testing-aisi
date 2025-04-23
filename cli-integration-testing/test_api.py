@@ -10,11 +10,9 @@ from util.utils import *
 
 load_dotenv()  # Load environment variables from .env file
 
-AZURE_OPENAI_URI = os.getenv('AZURE_OPENAI_URI')
-AZURE_OPENAI_TOKEN = os.getenv('AZURE_OPENAI_TOKEN')
-# CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
-# CLI_DIR = os.getenv('CLI_DIR')
-CLI_DIR = '/Users/jacksonboey/PycharmProjects/moonshot'
+OPENAI_URI = os.getenv('OPENAI_URI')
+OPENAI_TOKEN = os.getenv('OPENAI_TOKEN')
+CLI_DIR = os.getenv('CLI_DIR')
 
 # def test_replace_file_content():
 #     # Example Usage
