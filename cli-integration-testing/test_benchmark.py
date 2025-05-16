@@ -514,17 +514,13 @@ def test_cli_delete_result():
     process.stdin.write(command)
     process.stdin.flush()
 
-    # Update Endpoints
+    # Execute delete_result
     command = 'delete_result ' + nameOfRunnerFileName + '\n'
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
-
-    # Update Endpoints
     command = 'y\n'
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -602,17 +598,13 @@ def test_cli_delete_runner():
     if delete_runner_process.stdin is None:
         raise RuntimeError("Failed to create stdin for the subprocess")
 
-    # Update Endpoints
+    # Execute delete_runner
     command = 'delete_runner ' + nameOfRunnerFileName + '\n'
     print('Command:', command)
-    # Example command to send to the process
     delete_runner_process.stdin.write(command)
     delete_runner_process.stdin.flush()
-
-    # Update Endpoints
     command = 'y\n'
     print('Command:', command)
-    # Example command to send to the process
     delete_runner_process.stdin.write(command)
     delete_runner_process.stdin.flush()
 
@@ -1190,49 +1182,6 @@ def test_cli_view_dataset():
     last_line = output_lines[12]
     print('=========================Output Last Line:', last_line)
     assert last_line.replace(" ", "") == "ListofDatasets"
-
-def test_cli_view_metric():
-    command = (
-        # 'cd .. &&'
-        # 'source venv/bin/activate &&'
-        # 'cd moonshot &&'
-        'python3 -m moonshot cli interactive'
-    )
-
-    process = subprocess.Popen(
-        command,
-        shell=True,  # Allows for complex shell commands
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        text=True,
-        cwd=str(CLI_DIR),
-        # cwd="/Users/jacksonboey/PycharmProjects/moonshot",
-        # /home/runner/work/moonshot-data/moonshot-data for moonshot data repo
-        # /home/runner/work/moonshot/moonshot-data for moonshot repo
-    )
-    print('Path:', str(CLI_DIR))
-    # Ensure process.stdin is not None
-    if process.stdin is None:
-        raise RuntimeError("Failed to create stdin for the subprocess")
-
-    command = ('view_metric advglue\n')
-    print('Command:', command)
-    # Example command to send to the process
-    process.stdin.write(command)
-    process.stdin.flush()
-
-    # Capture the output and errors
-    stdout, stderr = process.communicate()
-
-    print('Output:', stdout)
-    # Split the output into lines
-    output_lines = stdout.splitlines()
-
-    # Get the last line of the output
-    last_line = output_lines[12]
-    print('=========================Output Last Line:', last_line)
-    assert last_line.replace(" ", "") == "ListofMetrics"
 
 def test_cli_view_metric():
     command = (
