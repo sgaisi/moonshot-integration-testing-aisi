@@ -56,6 +56,44 @@ def test_api_create_recipe():
 
     assert response == "{\"message\":\"Recipe created successfully\"}"
 
+def test_api_create_recipe_with_tools():
+    conn = http.client.HTTPConnection("127.0.0.1", 5000)
+    # Generate a random number between 0 and 999,999,999 (inclusive)
+    random_number = int(random.random() * 1000000000)
+
+    payload = json.dumps({
+        "name": "test-recipe-"+str(random_number),
+        "tags": [
+            ""
+        ],
+        "categories": [
+            ""
+        ],
+        "datasets": [
+            "sg-university-tutorial-questions-legal"
+        ],
+        "prompt_templates": [
+            ""
+        ],
+        "metrics": [
+            "samplemetric"
+        ],
+        "grading_scale": {},
+        "tools": [
+            "sample_tools"
+        ]
+    })
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    conn.request("POST", "/api/v1/recipes", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    response = data.decode("utf-8")
+    print("Output : "+response)
+
+    assert response == "{\"message\":\"Recipe created successfully\"}"
+
 def test_api_create_recipe_invalid_dataset():
     conn = http.client.HTTPConnection("127.0.0.1", 5000)
     # Generate a random number between 0 and 999,999,999 (inclusive)
@@ -90,38 +128,3 @@ def test_api_create_recipe_invalid_dataset():
     print("Output : "+response)
     error_message = '{"detail":"Failed to create recipe: [ServiceException] UnexpectedError in create_recipe - An unexpected error occurred: [Recipe] Dataset data-set does not exist."}'
     assert response == error_message
-
-def test_api_create_recipe():
-    conn = http.client.HTTPConnection("127.0.0.1", 5000)
-    # Generate a random number between 0 and 999,999,999 (inclusive)
-    random_number = int(random.random() * 1000000000)
-
-    payload = json.dumps({
-        "name": "test-recipe-"+str(random_number),
-        "tags": [
-            ""
-        ],
-        "categories": [
-            ""
-        ],
-        "datasets": [
-            "sg-university-tutorial-questions-legal"
-        ],
-        "prompt_templates": [
-            ""
-        ],
-        "metrics": [
-            "samplemetric"
-        ],
-        "grading_scale": {}
-    })
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    conn.request("POST", "/api/v1/recipes", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    response = data.decode("utf-8")
-    print("Output : "+response)
-
-    assert response == "{\"message\":\"Recipe created successfully\"}"
