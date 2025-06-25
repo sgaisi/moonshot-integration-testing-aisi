@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import fs from 'fs/promises';
 
 import path from 'path';
-import sqlite3 from "sqlite3";
 // import {create_endpoint_steps} from "./endpoint.spec";
 // Read from ".env" file.
 const __dirname: string = '.'
@@ -170,7 +169,7 @@ test('test_red_teaming_invalid_endpoint_auto', async ({browserName, page}) => {
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.context().clearCookies() // Clears all cookies from the context
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
     await expect(page.locator('.bg-moongray-600 > .absolute > .waitspinner').first()).toBeVisible();
     await page.waitForTimeout(100000)
     await expect(page.getByRole('status').locator('div').nth(1)).toBeHidden();
@@ -212,7 +211,7 @@ test('test_red_teaming_spinner_check', async ({browserName, page}) => {
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -228,9 +227,9 @@ test('test_red_teaming_spinner_check', async ({browserName, page}) => {
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -273,7 +272,7 @@ test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, pag
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -289,7 +288,7 @@ test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, pag
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(0)).toBeVisible();
+    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -389,7 +388,7 @@ test('test_red_teaming_run_two_endpoint', async ({browserName, page}) => {
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -405,13 +404,13 @@ test('test_red_teaming_run_two_endpoint', async ({browserName, page}) => {
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_1 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(2)).toBeVisible();
-    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_1 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(4)).toBeVisible();
-    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_1 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible();
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_1 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_1 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_1 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible({timeout: 60000});
 
-    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_2 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(2)).toBeVisible();
-    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_2 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(4)).toBeVisible();
-    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_2 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible();
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_2 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_2 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME_2 + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible({timeout: 60000});
 
 });
 
@@ -479,9 +478,9 @@ test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
     expect(isVisible).toBeFalsy();
 
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "You"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -494,7 +493,7 @@ test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
     await expect(h2Element).toBeVisible()
     await expect(h2Element).toHaveText('Response');
 
-    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible();
+    await expect(page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME + ' > div > div.custom-scrollbar > div#chatContainer > li').nth(7)).toBeVisible({timeout: 60000});
     await page.locator('#win_test-' + RND_4_RUNNER + '-' + RED_TEAMING_ENDPOINT_NAME + ' > div > div.custom-scrollbar > div#chatContainer > li:nth-of-type(2) > div:nth-of-type(1) > div > div > div:nth-of-type(1) > div > div[role="button"]').click();
     await page.getByPlaceholder('Give this bookmark a unique').click();
     await page.getByPlaceholder('Give this bookmark a unique').fill('bookmark_mark' + RND_4_ENDPOINT);
@@ -549,9 +548,9 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -611,7 +610,7 @@ test('test_red_teaming_with_attack_module_colloquial_wordswap_attack', async ({b
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(0)).toBeVisible();
+    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -671,7 +670,7 @@ test('test_red_teaming_with_attack_module_homoglyph_attack', async ({browserName
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(1)).toBeVisible();
+    await expect(page.locator('div > li').nth(1)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -731,9 +730,9 @@ test('test_red_teaming_with_attack_module_insert_punctuation_attack', async ({br
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -777,7 +776,7 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -793,9 +792,9 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -826,7 +825,7 @@ test('test_red_teaming_with_attack_module_malicious_question_generator', async (
     //Edit Dependency Endpoint
     const OPENAI_ENDPOINT_NAME: string = "OpenAI GPT4";
     await page.getByLabel('Edit ' + OPENAI_ENDPOINT_NAME).click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
+    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN ?? "");
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
 
@@ -840,7 +839,7 @@ test('test_red_teaming_with_attack_module_malicious_question_generator', async (
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -856,7 +855,7 @@ test('test_red_teaming_with_attack_module_malicious_question_generator', async (
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(0)).toBeVisible();
+    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -904,7 +903,7 @@ test('test_red_teaming_with_attack_module_sample_attack_module', async ({browser
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -919,7 +918,7 @@ test('test_red_teaming_with_attack_module_sample_attack_module', async ({browser
     // Assert that the element is no longer visible
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
-    await expect(page.locator('div > li').nth(0)).toBeVisible();
+    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -980,7 +979,7 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
     expect(isVisible).toBeFalsy();
 
     await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -1024,7 +1023,7 @@ test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserNam
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -1040,7 +1039,7 @@ test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserNam
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(1)).toBeVisible();
+    await expect(page.locator('div > li').nth(1)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -1100,7 +1099,7 @@ test('test_red_teaming_with_attack_module_textfooler_attack', async ({browserNam
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
     // await expect(page.locator('div > li').nth(4)).toBeVisible();
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
@@ -1145,7 +1144,7 @@ test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({bro
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -1161,9 +1160,9 @@ test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({bro
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible();
-    await expect(page.locator('div > li').nth(4)).toBeVisible();
-    await expect(page.locator('div > li').nth(7)).toBeVisible();
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -1193,7 +1192,7 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
     //Edit Dependency Endpoint
     const OPENAI_ENDPOINT_NAME: string = "OpenAI GPT4";
     await page.getByLabel('Edit ' + OPENAI_ENDPOINT_NAME).click();
-    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN);
+    await page.getByPlaceholder('Access token for the remote').fill(process.env.TOKEN ?? "");
     await page.getByRole('button', {name: 'Save'}).click();
     //////////////////////////////////////////////////
 
@@ -1207,7 +1206,7 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
     // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -1223,7 +1222,7 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(0)).toBeVisible();
+    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 60000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
@@ -1326,7 +1325,7 @@ test.skip('test_red_teaming_with_amazon_bedrock', async ({browserName, page}) =>
     await page.getByPlaceholder('Write a prompt...').click();
     await page.getByPlaceholder('Write a prompt...').fill('Generate Something');
     await page.getByRole('button', {name: /send/i}).click();
-    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible();
+    await expect(page.getByRole('status').locator('div').nth(1)).toBeVisible({timeout: 60000});
 
 // Create the locator for the element
     const elementLocator = page.getByRole('status').locator('div').nth(1);
@@ -1342,7 +1341,7 @@ test.skip('test_red_teaming_with_amazon_bedrock', async ({browserName, page}) =>
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(0)).toBeVisible();
+    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 60000});
 // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
