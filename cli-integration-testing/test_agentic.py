@@ -128,6 +128,7 @@ def test_cli_run_cookbook_agentic():
 
     # Capture the output and errors
     stdout, stderr = process.communicate()
+    print('STDERR:', stderr)
 
     # Validate output
     print('Output:', stdout)
@@ -167,6 +168,7 @@ def test_cli_run_recipe_agentic():
 
     # Capture the output and errors
     stdout, stderr = process.communicate()
+    print('STDERR:', stderr)
 
     # Validate output
     print('Output:', stdout)
