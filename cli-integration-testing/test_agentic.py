@@ -117,7 +117,6 @@ def test_cli_run_cookbook_agentic():
         f'(\'uri\', \'{str(OPENAI_URI)}\'), (\'token\', \'{str(OPENAI_TOKEN)}\'), '
         '(\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     )
-    print('Command:', command)
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -157,7 +156,6 @@ def test_cli_run_recipe_agentic():
         f'(\'uri\', \'{str(OPENAI_URI)}\'), (\'token\', \'{str(OPENAI_TOKEN)}\'), '
         '(\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
     )
-    print('Command:', command)
     process.stdin.write(command)
     process.stdin.flush()
 
