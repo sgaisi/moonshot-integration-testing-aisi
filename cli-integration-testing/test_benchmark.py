@@ -107,8 +107,6 @@ def test_cli_run_cookbook():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -118,7 +116,6 @@ def test_cli_run_cookbook():
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = ('run_cookbook "' + nameOfRunnerName + '" "[\'' + COOKBOOK_NAME + '\']" "[\'openai-gpt4o\']"'
                ' -n 1 -r 1 -s "You are an intelligent AI"\n')
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -164,15 +161,11 @@ def test_cli_run_cookbook():
 #     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
 #         OPENAI_URI) + '\'), (\'token\', \'' + str(
 #         OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-#     print('Command:', command)
-#     # Example command to send to the process
 #     process.stdin.write(command)
 #     process.stdin.flush()
 
 #     # Update Evaluation Endpoint
 #     command = 'update_endpoint together-llama-guard-7b-assistant "[(\'token\', \'' + str(TOGETHER_TOKEN) + '\')]"\n'
-#     print('Command:', command)
-#     # Example command to send to the process
 #     process.stdin.write(command)
 #     process.stdin.flush()
 
@@ -182,7 +175,6 @@ def test_cli_run_cookbook():
 #     nameOfRunnerName = "my benchmarking runner " + str(random_number)
 #     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'mlc-ai-safety\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
 #     print('Command:', command)
-#     # Example command to send to the process
 #     process.stdin.write(command)
 #     process.stdin.flush()
 
@@ -236,8 +228,6 @@ def test_cli_run_cookbook():
 #     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
 #         OPENAI_URI) + '\'), (\'token\', \'' + str(
 #         OPENAI_TOKEN) + '\'), (\'model\', \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-#     print('Command:', command)
-#     # Example command to send to the process
 #     process.stdin.write(command)
 #     process.stdin.flush()
 #
@@ -246,7 +236,6 @@ def test_cli_run_cookbook():
 #     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
 #     nameOfRunnerName = "my benchmarking runner " + str(random_number)
 #     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'singapore-context\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-#     # Example command to send to the process
 #     process.stdin.write(command)
 #     process.stdin.flush()
 #
@@ -284,8 +273,6 @@ def test_cli_run_recipe():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -294,7 +281,6 @@ def test_cli_run_recipe():
     nameOfRunnerFileName = "my-new-recipe-runner-" + str(random_number)
     nameOfRunnerName = "my new recipe runner " + str(random_number)
     command = 'run_recipe "' + nameOfRunnerName + '" "[\'bbq\',\'mmlu\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -403,14 +389,12 @@ def test_cli_delete_metric():
     command = 'delete_metric advglue \n'
 
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = 'y\n'
 
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -453,8 +437,6 @@ def test_cli_delete_result():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -463,7 +445,6 @@ def test_cli_delete_result():
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -509,8 +490,6 @@ def test_cli_delete_runner():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     run_recipe_process.stdin.write(command)
     run_recipe_process.stdin.flush()
 
@@ -519,7 +498,6 @@ def test_cli_delete_runner():
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = 'run_recipe "' + nameOfRunnerName + '" "[\'cbbq-lite\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     run_recipe_process.stdin.write(command)
     run_recipe_process.stdin.flush()
 
@@ -589,7 +567,6 @@ def test_cli_list_cookbooks():
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
     command = ('list_cookbooks -f "risk"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -628,7 +605,6 @@ def test_cli_list_datasets():
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
     command = ('list_datasets -f "bbq"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -667,7 +643,6 @@ def test_cli_list_metrics():
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
     command = ('list_metrics\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -706,7 +681,6 @@ def test_cli_list_recipes():
     timestamp_int = str(int(timestamp))  # Remove the decimal part by converting to an integer
     command = ('list_recipes\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -745,8 +719,6 @@ def test_cli_list_results():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -755,12 +727,10 @@ def test_cli_list_results():
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = 'list_results -f "' + nameOfRunnerFileName + '"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -842,8 +812,6 @@ def test_cli_list_runs():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -852,12 +820,10 @@ def test_cli_list_runs():
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = 'list_runs -f "run"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -897,14 +863,12 @@ def test_cli_update_cookbook():
             'add_cookbook \'My new cookbook ' + timestamp_int + '\' \'I am cookbook description\' "[\'analogical-similarity\','
                                                                 '\'auto-categorisation\']"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = (
             'update_cookbook \'my-new-cookbook-' + timestamp_int + '\' "[(\'name\', \'Updated Cookbook Name ' + timestamp_int + '\'), (\'description\', \'Updated description\'), (\'recipes\', [\'analogical-similarity\'])]"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -944,13 +908,11 @@ def test_cli_update_recipe():
     command = (
             'add_recipe \'My new recipe ' + timestamp_int + '\' \'I am recipe description\' "[\'category1\',\'category2\']" "[\'bbq-lite-age-ambiguous\']" "[\'bertscore\',\'bleuscore\']" -p "[\'analogical-similarity\',\'mmlu\']" -t "[\'tag1\',\'tag2\']" -g "{\'A\':[80,100],\'B\':[60,79],\'C\':[40,59],\'D\':[20,39],\'E\':[0,19]}"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
     command = (
             'update_recipe my-new-recipe-' + timestamp_int + ' "[(\'name\', \'My Updated Recipe ' + timestamp_int + '\'), (\'tags\', [\'fairness\', \'bbq\'])]"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -991,13 +953,11 @@ def test_cli_view_cookbook():
             'add_cookbook \'My new cookbook ' + timestamp_int + '\' \'I am cookbook description\' "[\'analogical-similarity\','
                                                                 '\'auto-categorisation\']"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = ('view_cookbook my-new-cookbook-' + timestamp_int + ' \n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1037,13 +997,11 @@ def test_cli_view_recipe():
     command = (
             'add_recipe \'My new recipe ' + timestamp_int + '\' \'I am recipe description\' "[\'category1\',\'category2\']" "[\'bbq-lite-age-ambiguous\']" "[\'bertscore\',\'bleuscore\']" -p "[\'analogical-similarity\',\'mmlu\']" -t "[\'tag1\',\'tag2\']" -g "{\'A\':[80,100],\'B\':[60,79],\'C\':[40,59],\'D\':[20,39],\'E\':[0,19]}"\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = ('view_recipe my-new-recipe-' + timestamp_int + '\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1079,7 +1037,6 @@ def test_cli_view_dataset():
 
     command = ('view_dataset bbq-lite-age-ambiguous\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1115,7 +1072,6 @@ def test_cli_view_metric():
 
     command = ('view_metric advglue\n')
     print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1153,8 +1109,6 @@ def test_cli_view_result():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1163,12 +1117,10 @@ def test_cli_view_result():
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = 'view_result '+nameOfRunnerFileName+'\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1206,8 +1158,6 @@ def test_cli_view_run():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1216,12 +1166,10 @@ def test_cli_view_run():
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = 'view_run '+nameOfRunnerFileName+'\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1259,8 +1207,6 @@ def test_cli_view_runner():
     command = 'update_endpoint openai-gpt4o "[(\'name\', \'OpenAI GPT4o\'), (\'uri\', \'' + str(
         OPENAI_URI) + '\'), (\'token\', \'' + str(
         OPENAI_TOKEN) + '\'), (\'model\': \'gpt-4o\'), (\'params\', {\'timeout\': 300,\'max_attempts\': 3, \'temperature\': 0.5})]"\n'
-    print('Command:', command)
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
@@ -1269,12 +1215,10 @@ def test_cli_view_runner():
     nameOfRunnerFileName = "my-benchmarking-runner-" + str(random_number)
     nameOfRunnerName = "my benchmarking runner " + str(random_number)
     command = 'run_cookbook "' + nameOfRunnerName + '" "[\'chinese-safety-cookbook\']" "[\'openai-gpt4o\']" -n 1 -r 1 -s "You are an intelligent AI"\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
     command = 'view_runner '+nameOfRunnerFileName+'\n'
-    # Example command to send to the process
     process.stdin.write(command)
     process.stdin.flush()
 
