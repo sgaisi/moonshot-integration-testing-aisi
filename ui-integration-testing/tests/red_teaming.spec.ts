@@ -63,7 +63,7 @@ export async function create_endpoint_steps(page, name, uri, token, connectorTyp
 }
 
 test('test_red_teaming', async ({browserName, page}) => {
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 2-3 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -112,7 +112,7 @@ test('test_red_teaming', async ({browserName, page}) => {
 
 });
 test('test_red_teaming_invalid_endpoint', async ({browserName, page}) => {
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(300_000); //set test timeout to 5 minutes (average time is 1 minute)
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     // Check if the browser is FireFox
@@ -140,7 +140,7 @@ test('test_red_teaming_invalid_endpoint', async ({browserName, page}) => {
 });
 
 test('test_red_teaming_invalid_endpoint_auto', async ({browserName, page}) => {
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 2-3 minutes)
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
     // Check if the browser is FireFox
@@ -178,8 +178,7 @@ test('test_red_teaming_invalid_endpoint_auto', async ({browserName, page}) => {
 });
 
 test('test_red_teaming_spinner_check', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1200_000); //set test timeout to 20 minutes (average time is 3-7 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -245,8 +244,7 @@ test('test_red_teaming_spinner_check', async ({browserName, page}) => {
 });
 
 test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1 minute)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -304,8 +302,7 @@ test('test_red_teaming_with_attack_module_manual_mode', async ({browserName, pag
 });
 
 test('test_red_teaming_with_attack_module_runner_name_exist', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1 minute)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -347,8 +344,7 @@ test('test_red_teaming_with_attack_module_runner_name_exist', async ({browserNam
 
 });
 test('test_red_teaming_run_two_endpoint', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1500_000); //set test timeout to 25 minutes (average time is 4-8 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -427,7 +423,7 @@ test('test_red_teaming_run_two_endpoint', async ({browserName, page}) => {
 // });
 test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
     console.log(path.resolve(__dirname, '.env'))
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1200_000); //set test timeout to 20 minutes (average time is 6-8 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // Check if the browser is WebKit
     test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -505,9 +501,8 @@ test('test_red_teaming_bookmark_click', async ({browserName, page}) => {
 });
 
 test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1 minute)
     await page.setViewportSize({width: 1440, height: 900});
-    test.setTimeout(1200000); //set test timeout to 1 hour
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -566,8 +561,7 @@ test('test_red_teaming_with_attack_module_charswap_attack', async ({browserName,
 });
 
 test('test_red_teaming_with_attack_module_colloquial_wordswap_attack', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1 minute)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -626,8 +620,7 @@ test('test_red_teaming_with_attack_module_colloquial_wordswap_attack', async ({b
 });
 
 test('test_red_teaming_with_attack_module_homoglyph_attack', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1-3 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -686,8 +679,7 @@ test('test_red_teaming_with_attack_module_homoglyph_attack', async ({browserName
 });
 
 test('test_red_teaming_with_attack_module_insert_punctuation_attack', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1 minute)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -748,8 +740,7 @@ test('test_red_teaming_with_attack_module_insert_punctuation_attack', async ({br
 });
 
 test('test_red_teaming_with_attack_module_job_role_generator', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1-2 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -810,7 +801,7 @@ test('test_red_teaming_with_attack_module_job_role_generator', async ({browserNa
 });
 
 test('test_red_teaming_with_attack_module_malicious_question_generator', async ({browserName, page}) => {
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1 minute)
     if (browserName == 'webkit')
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
@@ -870,8 +861,7 @@ test('test_red_teaming_with_attack_module_malicious_question_generator', async (
 
 });
 test('test_red_teaming_with_attack_module_sample_attack_module', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1 minute)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -934,8 +924,7 @@ test('test_red_teaming_with_attack_module_sample_attack_module', async ({browser
 });
 
 test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(600_000); //set test timeout to 10 minutes (average time is 1-2 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -995,8 +984,7 @@ test('test_red_teaming_with_attack_module_sg_sentence_generator', async ({browse
 });
 
 test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1200_000); //set test timeout to 20 minutes
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -1039,24 +1027,23 @@ test('test_red_teaming_with_attack_module_textbugger_attack', async ({browserNam
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(1)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(1)).toBeVisible({timeout: 600000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
     // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
-    await expect(h1Element).toBeVisible({timeout: 1200000});
+    await expect(h1Element).toBeVisible({timeout: 600000});
     await expect(h1Element).toHaveText('Automated red teaming agent');
     // Locate the <h1> element with class "text-left" and text "Response"
     const h2Element = page.locator('h1.text-left').nth(0);
 
-    await expect(h2Element).toBeVisible({timeout: 1200000})
+    await expect(h2Element).toBeVisible({timeout: 600000})
     await expect(h2Element).toHaveText('Response');
 
 });
 
 test('test_red_teaming_with_attack_module_textfooler_attack', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1200_000); //set test timeout to 20 minutes
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -1099,25 +1086,24 @@ test('test_red_teaming_with_attack_module_textfooler_attack', async ({browserNam
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 600_000});
     // await expect(page.locator('div > li').nth(4)).toBeVisible();
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
     // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
-    await expect(h1Element).toBeVisible({timeout: 1200000});
+    await expect(h1Element).toBeVisible({timeout: 600_000});
     await expect(h1Element).toHaveText('Automated red teaming agent');
     // Locate the <h1> element with class "text-left" and text "Response"
     const h2Element = page.locator('h1.text-left').nth(0);
 
-    await expect(h2Element).toBeVisible({timeout: 1200000})
+    await expect(h2Element).toBeVisible({timeout: 600_000})
     await expect(h2Element).toHaveText('Response');
 
 });
 
 test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({browserName, page}) => {
-    // test.setTimeout(3600000); //set test timeout to 1 hour
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1200_000); //set test timeout to 20 minutes (average time is 6-7 minutes)
     const FIRE_RED_TEAMING_BTN: number = Math.floor(Math.random() * 1000000000)
     // // Check if the browser is WebKit
     // test.skip(browserName === 'webkit', 'This test is skipped on WebKit');
@@ -1160,24 +1146,24 @@ test('test_red_teaming_with_attack_module_toxic_sentence_generator', async ({bro
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 60000});
-    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 60000});
-    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(2)).toBeVisible({timeout: 300_000});
+    await expect(page.locator('div > li').nth(4)).toBeVisible({timeout: 300_000});
+    await expect(page.locator('div > li').nth(7)).toBeVisible({timeout: 300_000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
     // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
-    await expect(h1Element).toBeVisible({timeout: 1200000});
+    await expect(h1Element).toBeVisible({timeout: 600_000});
     await expect(h1Element).toHaveText('Automated red teaming agent');
     // Locate the <h1> element with class "text-left" and text "Response"
     const h2Element = page.locator('h1.text-left').nth(0);
 
-    await expect(h2Element).toBeVisible({timeout: 1200000})
+    await expect(h2Element).toBeVisible({timeout: 600_000})
     await expect(h2Element).toHaveText('Response');
 
 });
 test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, page}) => {
-    test.setTimeout(1200000); //set test timeout to 1 hour
+    test.setTimeout(1200_000); //set test timeout to 20 minutes (average time is 3-4 minutes)
     if (browserName == 'webkit')
         await page.waitForTimeout(60000)
     else if (browserName == 'firefox')
@@ -1222,17 +1208,17 @@ test('test_red_teaming_with_attack_module_violent_durian', async ({browserName, 
     const isVisible = await elementLocator.isVisible();
     expect(isVisible).toBeFalsy();
 
-    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 60000});
+    await expect(page.locator('div > li').nth(0)).toBeVisible({timeout: 600_000});
     // Locate the <h1> element with class "text-right" and text "Automated red teaming agent"
     const h1Element = page.locator('h1.text-right').nth(0);
 
     // Assert that the <h1> element with class "text-right" contains the text "Automated red teaming agent"
-    await expect(h1Element).toBeVisible({timeout: 1200000});
+    await expect(h1Element).toBeVisible({timeout: 600_000});
     await expect(h1Element).toHaveText('Automated red teaming agent');
     // Locate the <h1> element with class "text-left" and text "Response"
     const h2Element = page.locator('h1.text-left').nth(0);
 
-    await expect(h2Element).toBeVisible({timeout: 1200000})
+    await expect(h2Element).toBeVisible({timeout: 600_000})
     await expect(h2Element).toHaveText('Response');
 
 });
